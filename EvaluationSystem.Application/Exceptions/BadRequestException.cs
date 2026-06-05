@@ -1,4 +1,4 @@
-﻿namespace EvaluationSystem.Domain.Exceptions
+﻿namespace EvaluationSystem.Application.Exceptions
 {
     public class BadRequestException:Exception
     {
