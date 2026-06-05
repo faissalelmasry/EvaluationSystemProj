@@ -1,6 +1,6 @@
 ﻿using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Domain.Models;
-using EvaluationSystem.Infrastructure.Repositories.interfaces;
+using EvaluationSystem.Application.interfaces;
 
 namespace EvaluationSystem.Infrastructure.Repositories
 {

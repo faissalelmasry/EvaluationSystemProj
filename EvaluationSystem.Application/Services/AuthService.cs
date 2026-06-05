@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Application.DTOs.Auth;
-using EvaluationSystem.Application.Exceptions;
+using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EvaluationSystem.Application\EvaluationSystem.Application.csproj" />
     <ProjectReference Include="..\EvaluationSystem.Domain\EvaluationSystem.Domain.csproj" />
   </ItemGroup>
 
