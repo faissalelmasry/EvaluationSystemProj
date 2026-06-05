@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EvaluationSystem.Domain.BaseModels;
+using EvaluationSystem.Domain.Enums;
 
 namespace EvaluationSystem.Domain.Models
 {
