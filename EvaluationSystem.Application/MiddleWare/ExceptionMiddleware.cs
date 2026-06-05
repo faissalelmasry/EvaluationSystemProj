@@ -1,4 +1,4 @@
-﻿using EvaluationSystem.Application.Exceptions;
+﻿using EvaluationSystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
