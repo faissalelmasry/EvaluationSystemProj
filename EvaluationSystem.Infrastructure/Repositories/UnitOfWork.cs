@@ -1,0 +1,22 @@
+﻿using EvaluationSystem.Infrastructure.Data;
+using EvaluationSystem.Domain.Models;
+using EvaluationSystem.Infrastructure.Repositories.interfaces;
+
+namespace EvaluationSystem.Infrastructure.Repositories
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly ApplicationDbContext _context;
+        public IGenericRepo<Department> Departments { get; }
+        public UnitOfWork(ApplicationDbContext context)
+        {
+            _context = context;
+            Departments = new GenericRepo<Department>(_context);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+    }
+}
