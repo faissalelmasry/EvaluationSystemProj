@@ -9,14 +9,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EvaluationSystem.Infrastructure.EntityConfigs
 {
-    public class EvaluationCriteriaConfig : IEntityTypeConfiguration<EvaluationCriteria>
+    public class EvaluationSectionConfig : IEntityTypeConfiguration<EvaluationSection>
     {
-        public void Configure(EntityTypeBuilder<EvaluationCriteria> builder)
+        public void Configure(EntityTypeBuilder<EvaluationSection> builder)
         {
-            builder.Property(c => c.QuestionType)
-            .HasConversion<string>()
-            .IsRequired()
-            .HasMaxLength(50);
         }
     }
 }
