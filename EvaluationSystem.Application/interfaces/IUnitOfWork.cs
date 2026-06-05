@@ -1,6 +1,6 @@
 ﻿using EvaluationSystem.Domain.Models;
 
-namespace EvaluationSystem.Infrastructure.Repositories.interfaces
+namespace EvaluationSystem.Application.interfaces
 {
     public interface IUnitOfWork
     {

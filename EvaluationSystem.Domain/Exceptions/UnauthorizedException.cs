@@ -1,4 +1,4 @@
-﻿namespace EvaluationSystem.Application.Exceptions
+﻿namespace EvaluationSystem.Domain.Exceptions
 {
     public class UnauthorizedException:Exception
     {
