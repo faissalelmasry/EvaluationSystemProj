@@ -1,3 +1,4 @@
+using AutoMapper;
 using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Domain.Models;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
-using EvaluationSystem.Application.MiddleWare;
+using EvaluationSystem.Api.MiddleWare;
 
 namespace EvaluationSystem.Api
 {
@@ -43,8 +44,7 @@ namespace EvaluationSystem.Api
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            builder.Services.AddAutoMapper(typeof(Program));
-
+            builder.Services.AddAutoMapper(op=>op.AddProfile<AuthProfile>());
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =
