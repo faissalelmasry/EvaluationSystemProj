@@ -2,8 +2,9 @@
 
 namespace EvaluationSystem.Domain.Models
 {
-    public class RefreshToken:BaseEntity
+    public class RefreshToken
     {
+        public int Id { get; set; }
         public string Token { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ExpiresOn { get; set; }

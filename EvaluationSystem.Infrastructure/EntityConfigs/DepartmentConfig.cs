@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using EvaluationSystem.Domain.Models;
@@ -13,6 +14,8 @@ namespace EvaluationSystem.Infrastructure.EntityConfigs
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
+            builder.HasQueryFilter(d => !d.IsDeleted);
+
         }
     }
 }

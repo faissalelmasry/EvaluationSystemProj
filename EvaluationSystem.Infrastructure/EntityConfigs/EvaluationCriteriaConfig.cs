@@ -17,6 +17,7 @@ namespace EvaluationSystem.Infrastructure.EntityConfigs
             .HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);
+            builder.HasQueryFilter(t => !t.IsDeleted);
         }
     }
 }

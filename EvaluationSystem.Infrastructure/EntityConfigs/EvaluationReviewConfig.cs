@@ -13,7 +13,11 @@ namespace EvaluationSystem.Infrastructure.EntityConfigs
     {
         public void Configure(EntityTypeBuilder<EvaluationReview> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(r => r.Status)
+            .HasConversion<string>()
+            .IsRequired()
+            .HasMaxLength(50);
+            builder.HasQueryFilter(t => !t.IsDeleted);
         }
     }
 }

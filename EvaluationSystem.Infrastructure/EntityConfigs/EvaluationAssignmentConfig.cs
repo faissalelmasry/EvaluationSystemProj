@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using EvaluationSystem.Domain.Models;
@@ -17,6 +18,7 @@ namespace EvaluationSystem.Infrastructure.EntityConfigs
             .HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);
+            builder.HasQueryFilter(t => !t.IsDeleted);
         }
     }
 }

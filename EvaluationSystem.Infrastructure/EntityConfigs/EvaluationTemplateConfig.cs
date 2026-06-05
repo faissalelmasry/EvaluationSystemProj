@@ -13,6 +13,7 @@ namespace EvaluationSystem.Infrastructure.EntityConfigs
     {
         public void Configure(EntityTypeBuilder<EvaluationTemplate> builder)
         {
+            builder.HasQueryFilter(t => !t.IsDeleted);
         }
     }
 }
