@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Application.DTOs.Auth;
 using EvaluationSystem.Application.Exceptions;
 using EvaluationSystem.Application.Helpers;

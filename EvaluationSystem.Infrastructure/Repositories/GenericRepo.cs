@@ -1,5 +1,5 @@
 ﻿using EvaluationSystem.Infrastructure.Data;
-using EvaluationSystem.Infrastructure.Repositories.interfaces;
+using EvaluationSystem.Application.interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

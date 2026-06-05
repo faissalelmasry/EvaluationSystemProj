@@ -2,7 +2,7 @@ using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Domain.Models;
 using EvaluationSystem.Infrastructure.Repositories;
-using EvaluationSystem.Infrastructure.Repositories.interfaces;
+using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Infrastructure.Seeds;
 using EvaluationSystem.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
-using EvaluationSystem.Application.MiddleWare;
+using EvaluationSystem.Api.MiddleWare;
 
 namespace EvaluationSystem.Api
 {

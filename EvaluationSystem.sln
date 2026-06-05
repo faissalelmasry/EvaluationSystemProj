@@ -1,22 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35521.163 d17.12
+VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Api", "..\Project\EvaluationSystem\EvaluationSystem.Api.csproj", "{3FC6DADD-B5F2-4116-AFCE-A82B17860E35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Api", "EvaluationSystem\EvaluationSystem.Api.csproj", "{3FC6DADD-B5F2-4116-AFCE-A82B17860E35}"
 	ProjectSection(ProjectDependencies) = postProject
 		{55E1D7F4-5BE0-4DF7-AB31-723CA310C730} = {55E1D7F4-5BE0-4DF7-AB31-723CA310C730}
 		{C34644A2-6329-4DCC-8EA9-4835178FD2FA} = {C34644A2-6329-4DCC-8EA9-4835178FD2FA}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Domain", "..\Project\EvaluationSystem.Domain\EvaluationSystem.Domain.csproj", "{ECC918A2-7CA3-40A5-8DBE-2ED45B53D127}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Domain", "EvaluationSystem.Domain\EvaluationSystem.Domain.csproj", "{ECC918A2-7CA3-40A5-8DBE-2ED45B53D127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Infrastructure", "..\Project\EvaluationSystem.Infrastructure\EvaluationSystem.Infrastructure.csproj", "{C34644A2-6329-4DCC-8EA9-4835178FD2FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Infrastructure", "EvaluationSystem.Infrastructure\EvaluationSystem.Infrastructure.csproj", "{C34644A2-6329-4DCC-8EA9-4835178FD2FA}"
 	ProjectSection(ProjectDependencies) = postProject
+		{55E1D7F4-5BE0-4DF7-AB31-723CA310C730} = {55E1D7F4-5BE0-4DF7-AB31-723CA310C730}
 		{ECC918A2-7CA3-40A5-8DBE-2ED45B53D127} = {ECC918A2-7CA3-40A5-8DBE-2ED45B53D127}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Application", "..\Project\EvaluationSystem.Application\EvaluationSystem.Application.csproj", "{55E1D7F4-5BE0-4DF7-AB31-723CA310C730}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Application", "EvaluationSystem.Application\EvaluationSystem.Application.csproj", "{55E1D7F4-5BE0-4DF7-AB31-723CA310C730}"
 	ProjectSection(ProjectDependencies) = postProject
 		{ECC918A2-7CA3-40A5-8DBE-2ED45B53D127} = {ECC918A2-7CA3-40A5-8DBE-2ED45B53D127}
 	EndProjectSection
