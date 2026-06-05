@@ -16,7 +16,7 @@ namespace EvaluationSystem.Domain.Models
 
         public int CreatedById { get; set; }
         [ForeignKey(nameof(CreatedById))]
-        public virtual User User { get; set; } = null!;
+        public virtual User CreatedBy { get; set; } = null!;
         public ICollection<EvaluationSection>? EvaluationSections { get; set; }
 
         public ICollection<EvaluationAssignment>? Assignments { get; set; }

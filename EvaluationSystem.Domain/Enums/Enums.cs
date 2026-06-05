@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Domain.Enums
 {
+    public enum JobTitle
+    {
+        Teacher = 1,
+        Student = 2,
+        Manager = 3,
+        Employee = 4,
+        Client = 5
+    }
     public enum ReviewStatus
     {
         Pending = 1, 

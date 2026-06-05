@@ -1,9 +1,11 @@
-﻿using System;
+﻿using EvaluationSystem.Domain.BaseModels;
+using EvaluationSystem.Domain.Enums;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EvaluationSystem.Domain.BaseModels;
 
 namespace EvaluationSystem.Domain.Models
 {
@@ -17,17 +19,21 @@ namespace EvaluationSystem.Domain.Models
 
         public int AssignedById { get; set; }
 
-        public string Status { get; set; } = string.Empty;
+        public EvaluationStatus Status { get; set; } = EvaluationStatus.Pending;
 
         public DateTime DueDate { get; set; }
 
         public DateTime? SubmittedAt { get; set; }
 
+        [ForeignKey(nameof(TemplateId))]
         public EvaluationTemplate Template { get; set; } = null!;
 
+        [ForeignKey(nameof(EvaluatorId))]
         public User Evaluator { get; set; } = null!;
 
+        [ForeignKey(nameof(EvaluateeId))]
         public User Evaluatee { get; set; } = null!;
+        [ForeignKey(nameof(AssignedById))]
 
         public User AssignedBy { get; set; } = null!;
 
