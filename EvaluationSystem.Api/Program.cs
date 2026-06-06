@@ -1,19 +1,22 @@
 using AutoMapper;
-using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Application.Helpers;
-using EvaluationSystem.Domain.Models;
-using EvaluationSystem.Infrastructure.Repositories;
 using EvaluationSystem.Application.interfaces;
-using EvaluationSystem.Infrastructure.Seeds;
+using EvaluationSystem.Application.Mapping;
+using EvaluationSystem.Application.MiddleWare;
 using EvaluationSystem.Application.Services;
+using EvaluationSystem.Application.Validators;
+using EvaluationSystem.Domain.Models;
+using EvaluationSystem.Infrastructure.Data;
+using EvaluationSystem.Infrastructure.Repositories;
+using EvaluationSystem.Infrastructure.Seeds;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
-using EvaluationSystem.Application.MiddleWare;
-using EvaluationSystem.Application.Mapping;
 
 namespace EvaluationSystem.Api
 {
@@ -44,8 +47,10 @@ namespace EvaluationSystem.Api
                                        typeof(GenericRepo<>));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+            builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddAutoMapper(op=>op.AddProfile<AuthProfile>());
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =

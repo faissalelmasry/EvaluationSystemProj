@@ -1,29 +1,29 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.DTOs.Auth;
-using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Application.Helpers;
+using EvaluationSystem.Application.interfaces;
+using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
 
 namespace EvaluationSystem.Application.Services
 {
     public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
-        private readonly ILogger _logger;
+        private readonly ILogger<AuthService> _logger;
         private readonly RoleManager<Role> _roleManager;
         private SignInManager<User> _signInManager;
         private readonly IConfiguration _config;
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly JwtHelper _jwtHelper;
         private readonly IMapper _mapper;
         public AuthService(
@@ -31,7 +31,8 @@ namespace EvaluationSystem.Application.Services
              RoleManager<Role> roleManager,
              SignInManager<User> signInManager,
              IConfiguration config,
-             ApplicationDbContext context,
+             IUnitOfWork unitOfWork,
+             ILogger<AuthService> logger,
                 JwtHelper jwtHelper,
                 IMapper mapper
              )
@@ -41,8 +42,9 @@ namespace EvaluationSystem.Application.Services
             _signInManager = signInManager;
             _config = config;
             _jwtHelper = jwtHelper;
-            _context = context;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;   
         }
         public async Task RegisterAsync(RegisterDTO dto)
         {
@@ -63,6 +65,7 @@ namespace EvaluationSystem.Application.Services
                 await _roleManager.CreateAsync(new Role { Name = "Evaluatee" });
 
             await _userManager.AddToRoleAsync(user, "Evaluatee");
+            _logger.LogInformation("New user registered with email {Email}", dto.Email);    
         }
 
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
@@ -70,16 +73,19 @@ namespace EvaluationSystem.Application.Services
             var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user == null)
             {
+                _logger.LogWarning("Failed login attempt for {Email}",dto.Email);
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true);
             if (!result.Succeeded)
             {
+                _logger.LogWarning("Failed login attempt for {Email}",dto.Email);
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var (jwtToken, jwtExpiry) = _jwtHelper.GenerateJwtToken(user, roles);
             var refreshToken = await CreateAndSaveRefreshTokenAsync(user);
+            _logger.LogInformation("User {Email} logged in successfully",dto.Email);
             return new AuthResponseDto
             {
                 Token = jwtToken,
@@ -98,15 +104,13 @@ namespace EvaluationSystem.Application.Services
                 CreatedOn = DateTime.UtcNow,
                 ExpiresOn = DateTime.UtcNow.AddDays(7)
             };
-            _context.RefreshTokens.Add(refreshToken);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.RefreshTokens.AddAsync(refreshToken);
+            await _unitOfWork.SaveChangesAsync();
             return refreshToken;
         }
         public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
         {
-            var token = await _context.RefreshTokens
-                .Include(t => t.User)
-                .SingleOrDefaultAsync(t => t.Token == refreshToken);
+            var token = await _unitOfWork.RefreshTokens.GetByTokenAsync(refreshToken);
 
             if (token == null)
                 throw new UnauthorizedException("Invalid refresh token");
@@ -136,8 +140,7 @@ namespace EvaluationSystem.Application.Services
 
         public async Task RevokeTokenAsync(string refreshToken)
         {
-            var token = await _context.RefreshTokens
-                .SingleOrDefaultAsync(t => t.Token == refreshToken);
+            var token = await _unitOfWork.RefreshTokens.GetByTokenAsync(refreshToken);
 
             if (token == null)
                 throw new BadRequestException("Invalid refresh token");
@@ -146,7 +149,7 @@ namespace EvaluationSystem.Application.Services
                 throw new BadRequestException("Token is already inactive");
 
             token.RevokedOn = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

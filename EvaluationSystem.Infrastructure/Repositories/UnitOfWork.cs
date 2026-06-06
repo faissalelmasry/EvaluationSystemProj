@@ -8,10 +8,16 @@ namespace EvaluationSystem.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context;
         public IGenericRepo<Department> Departments { get; }
+
+        public IRefreshTokenRepository RefreshTokens { get; }
+
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Departments = new GenericRepo<Department>(_context);
+
+            RefreshTokens = new RefreshTokenRepository(_context);
         }
 
         public async Task<int> SaveChangesAsync()
