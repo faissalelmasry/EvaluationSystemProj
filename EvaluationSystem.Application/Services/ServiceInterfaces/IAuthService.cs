@@ -1,6 +1,6 @@
 ﻿using EvaluationSystem.Application.DTOs.Auth;
 
-namespace EvaluationSystem.Application.Services
+namespace EvaluationSystem.Application.Services.ServiceInterfaces
 {
     public interface IAuthService
     {
