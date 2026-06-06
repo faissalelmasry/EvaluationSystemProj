@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace EvaluationSystem.Api.Migrations
+namespace EvaluationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260606002619_auth ")]
-    partial class auth
+    [Migration("20260606112951_NullableDeletedAt")]
+    partial class NullableDeletedAt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -69,7 +69,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DueDate")
@@ -119,7 +119,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -179,7 +179,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<int>("CriterionId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -217,7 +217,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Grade")
@@ -258,7 +258,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -295,7 +295,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -335,7 +335,7 @@ namespace EvaluationSystem.Api.Migrations
                     b.Property<int>("CreatedById")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -655,7 +655,7 @@ namespace EvaluationSystem.Api.Migrations
             modelBuilder.Entity("EvaluationSystem.Domain.Models.EvaluationCriteria", b =>
                 {
                     b.HasOne("EvaluationSystem.Domain.Models.EvaluationSection", "Section")
-                        .WithMany("Criteria")
+                        .WithMany("Criterias")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -828,7 +828,7 @@ namespace EvaluationSystem.Api.Migrations
 
             modelBuilder.Entity("EvaluationSystem.Domain.Models.EvaluationSection", b =>
                 {
-                    b.Navigation("Criteria");
+                    b.Navigation("Criterias");
                 });
 
             modelBuilder.Entity("EvaluationSystem.Domain.Models.EvaluationTemplate", b =>
