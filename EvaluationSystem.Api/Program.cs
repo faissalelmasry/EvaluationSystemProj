@@ -2,13 +2,14 @@ using AutoMapper;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Application.Mapping;
-using EvaluationSystem.Application.MiddleWare;
-using EvaluationSystem.Application.Services;
+using EvaluationSystem.Api.MiddleWare;
+using EvaluationSystem.Application.Services.AuthServices;
+using EvaluationSystem.Application.Services.ServiceInterfaces;
 using EvaluationSystem.Application.Validators;
 using EvaluationSystem.Domain.Models;
 using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Infrastructure.Repositories;
-using EvaluationSystem.Infrastructure.Seeds;
+//using EvaluationSystem.Infrastructure.Seeds;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,7 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
-using System.Text.Json.Serialization;
 
 namespace EvaluationSystem.Api
 {
@@ -43,7 +43,6 @@ namespace EvaluationSystem.Api
                 .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<JwtHelper>();
 
             builder.Services.AddScoped(typeof(IGenericRepo<>),
@@ -51,21 +50,10 @@ namespace EvaluationSystem.Api
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
-            builder.Services.AddAutoMapper(op =>
-            {
-                op.AddProfile<AuthProfile>();
-                op.AddProfile<DepartmentProfile>();
-                op.AddProfile<UserProfile>();
-            });
+            builder.Services.AddAutoMapper(op=>op.AddProfile<AuthProfile>());
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =
@@ -138,7 +126,7 @@ namespace EvaluationSystem.Api
             });
             var app = builder.Build();
 
-            await DataSeeder.InitializeAsync(app.Services);
+            //await DataSeeder.InitializeAsync(app.Services);
 
             app.UseSerilogRequestLogging();
 

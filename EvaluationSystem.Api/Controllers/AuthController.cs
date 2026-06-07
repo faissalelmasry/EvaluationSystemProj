@@ -1,7 +1,7 @@
-﻿using EvaluationSystem.Application.Services;
-using EvaluationSystem.Application.DTOs.Auth;
+﻿using EvaluationSystem.Application.DTOs.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using EvaluationSystem.Application.Services.ServiceInterfaces;
 
 namespace EvaluationSystem.Api.Controllers
 {

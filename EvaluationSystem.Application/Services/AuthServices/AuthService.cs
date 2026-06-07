@@ -2,6 +2,7 @@
 using EvaluationSystem.Application.DTOs.Auth;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Application.interfaces;
+using EvaluationSystem.Application.Services.ServiceInterfaces;
 using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 
-namespace EvaluationSystem.Application.Services
+namespace EvaluationSystem.Application.Services.AuthServices
 {
     public class AuthService : IAuthService
     {
@@ -37,7 +38,7 @@ namespace EvaluationSystem.Application.Services
             _jwtHelper = jwtHelper;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _logger = logger;   
+            _logger = logger;
         }
         public async Task RegisterAsync(RegisterDTO dto)
         {
@@ -46,7 +47,7 @@ namespace EvaluationSystem.Application.Services
             {
                 throw new BadRequestException("User with this email already exists.");
             }
-          var user = _mapper.Map<User>(dto);
+            var user = _mapper.Map<User>(dto);
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
             {
@@ -58,7 +59,7 @@ namespace EvaluationSystem.Application.Services
                 await _roleManager.CreateAsync(new Role { Name = "Evaluatee" });
 
             await _userManager.AddToRoleAsync(user, "Evaluatee");
-            _logger.LogInformation("New user registered with email {Email}", dto.Email);    
+            _logger.LogInformation("New user registered with email {Email}", dto.Email);
         }
 
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
@@ -66,19 +67,19 @@ namespace EvaluationSystem.Application.Services
             var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user == null)
             {
-                _logger.LogWarning("Failed login attempt for {Email}",dto.Email);
+                _logger.LogWarning("Failed login attempt for {Email}", dto.Email);
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true);
             if (!result.Succeeded)
             {
-                _logger.LogWarning("Failed login attempt for {Email}",dto.Email);
+                _logger.LogWarning("Failed login attempt for {Email}", dto.Email);
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var (jwtToken, jwtExpiry) = _jwtHelper.GenerateJwtToken(user, roles);
             var refreshToken = await CreateAndSaveRefreshTokenAsync(user);
-            _logger.LogInformation("User {Email} logged in successfully",dto.Email);
+            _logger.LogInformation("User {Email} logged in successfully", dto.Email);
             return new AuthResponseDto
             {
                 Token = jwtToken,
@@ -87,7 +88,7 @@ namespace EvaluationSystem.Application.Services
                 RefreshTokenExpiresAt = refreshToken.ExpiresOn
             };
         }
-      
+
         private async Task<RefreshToken> CreateAndSaveRefreshTokenAsync(User user)
         {
             var refreshToken = new RefreshToken

@@ -20,6 +20,6 @@ namespace EvaluationSystem.Domain.Models
             [ForeignKey(nameof(TemplateId))]
             public EvaluationTemplate Template { get; set; } = null!;
 
-            public ICollection<EvaluationCriteria>? Criteria { get; set; }
+            public ICollection<EvaluationCriteria>? Criterias { get; set; }
         }
 }

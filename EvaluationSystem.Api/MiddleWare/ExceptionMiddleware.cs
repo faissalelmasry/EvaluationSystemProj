@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace EvaluationSystem.Application.MiddleWare
+namespace EvaluationSystem.Api.MiddleWare
 {
     public class ExceptionMiddleware
     {
