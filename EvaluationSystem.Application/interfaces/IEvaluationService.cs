@@ -14,5 +14,7 @@ namespace EvaluationSystem.Application.interfaces
     {
         Task<EvaluationResultDto> SubmitEvaluationAsync(int assignmentId, SubmitEvaluationDto dto);
         Task<EvaluationReviewDto> ReviewEvaluationAsync(int assignmentId, int reviewerId, SubmitReviewDto dto, ReviewStatus newStatus);
+        Task<List<EvaluationResponseDto>> GetResponsesByAssignmentAsync(int assignmentId);
+        Task<EvaluationResultDto> GetResultByAssignmentAsync(int assignmentId);
     }
 }

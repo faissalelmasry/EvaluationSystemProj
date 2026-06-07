@@ -54,5 +54,32 @@ namespace EvaluationSystem.API.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+        [HttpGet("{assignmentId}/responses")]
+        public async Task<IActionResult> GetResponses(int assignmentId)
+        {
+            try
+            {
+                var responses = await _evaluationService.GetResponsesByAssignmentAsync(assignmentId);
+                return Ok(responses);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("{assignmentId}/result")]
+        public async Task<IActionResult> GetResult(int assignmentId)
+        {
+            try
+            {
+                var result = await _evaluationService.GetResultByAssignmentAsync(assignmentId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
     }
-}
+    }

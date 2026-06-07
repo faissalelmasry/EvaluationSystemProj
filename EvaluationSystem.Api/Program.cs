@@ -67,7 +67,7 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IEvaluationService, EvaluationService>();
             builder.Services.AddScoped<IEvaluationAssignmentService, EvaluationAssignmentService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-
+            builder.Services.AddScoped<ScoreCalculator>();
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
