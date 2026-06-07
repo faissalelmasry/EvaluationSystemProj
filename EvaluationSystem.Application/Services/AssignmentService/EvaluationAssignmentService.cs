@@ -12,13 +12,12 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Services.AssignmentService
 {
-    public class EvaluationAssignmentService:IEvaluationAssignmentService
+    public class EvaluationAssignmentService : IEvaluationAssignmentService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepo<User> _userRepo;
         private readonly IMapper _mapper;
         private readonly IGenericRepo<EvaluationTemplate> _evalutionTemplate;
-
 
         public EvaluationAssignmentService(IUnitOfWork unitOfWork, IGenericRepo<User> userRepo, IMapper mapper, IGenericRepo<EvaluationTemplate> evalutionTemplate)
         {
@@ -27,6 +26,7 @@ namespace EvaluationSystem.Application.Services.AssignmentService
             _mapper = mapper;
             _evalutionTemplate = evalutionTemplate;
         }
+
         public async Task<AssignmentResponseDto> CreateAssignmentAsync(CreateAssignmentDto dto, int adminId)
         {
             if (dto.EvaluatorId == dto.EvaluateeId)
@@ -98,11 +98,10 @@ namespace EvaluationSystem.Application.Services.AssignmentService
             return _mapper.Map<AssignmentResponseDto>(createdAssignment);
         }
 
-
         public async Task<IEnumerable<AssignmentResponseDto>> GetAllAssignmentsAsync()
         {
             var assignments = await _unitOfWork.EvaluationAssignments
-                 .FindByCondition(a => true, trackChanges: false)
+                 .GetAll(trackChanges: false)
                  .Include(a => a.Template)
                  .Include(a => a.Evaluator)
                  .Include(a => a.Evaluatee)
@@ -111,15 +110,56 @@ namespace EvaluationSystem.Application.Services.AssignmentService
             return _mapper.Map<IEnumerable<AssignmentResponseDto>>(assignments);
         }
 
+        public async Task<AssignmentResponseDto> GetAssignmentByIdAsync(int id)
+        {
+            var assignment = await _unitOfWork.EvaluationAssignments
+                 .FindByCondition(a => a.Id == id, trackChanges: false)
+                 .Include(a => a.Template)
+                 .Include(a => a.Evaluator)
+                 .Include(a => a.Evaluatee)
+                 .FirstOrDefaultAsync();
+
+            if (assignment == null)
+            {
+                throw new Exception("Assignment not found");
+            }
+
+            return _mapper.Map<AssignmentResponseDto>(assignment);
+        }
+
         public async Task<IEnumerable<AssignmentResponseDto>> GetMyPendingEvaluationsAsync(int evaluatorId)
         {
             var pendingAssignments = await _unitOfWork.EvaluationAssignments
                  .FindByCondition(a => a.EvaluatorId == evaluatorId && a.Status == EvaluationStatus.Pending, trackChanges: false)
                  .Include(a => a.Template)
                  .Include(a => a.Evaluatee)
+                 .Include(a => a.Evaluator)
                  .ToListAsync();
 
             return _mapper.Map<IEnumerable<AssignmentResponseDto>>(pendingAssignments);
+        }
+
+        public async Task<AssignmentResponseDto> UpdateAssignmentAsync(int id, CreateAssignmentDto dto)
+        {
+            var assignment = await _unitOfWork.EvaluationAssignments.GetByIdAsync(id);
+            if (assignment == null)
+            {
+                throw new Exception("Assignment not found");
+            }
+
+            _mapper.Map(dto, assignment);
+
+            _unitOfWork.EvaluationAssignments.Update(assignment);
+            await _unitOfWork.SaveChangesAsync();
+
+            var updatedAssignment = await _unitOfWork.EvaluationAssignments
+                 .FindByCondition(a => a.Id == id, trackChanges: false)
+                 .Include(a => a.Template)
+                 .Include(a => a.Evaluator)
+                 .Include(a => a.Evaluatee)
+                 .FirstOrDefaultAsync();
+
+            return _mapper.Map<AssignmentResponseDto>(updatedAssignment);
         }
     }
 }
