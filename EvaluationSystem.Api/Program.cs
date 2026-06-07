@@ -18,7 +18,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+<<<<<<< HEAD
 using EvaluationSystem.Application.Services.Evaluation_Service;
+=======
+using EvaluationSystem.Application.Services.TemplateServices;
+>>>>>>> master
 
 namespace EvaluationSystem.Api
 {
@@ -43,18 +47,27 @@ namespace EvaluationSystem.Api
                 .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IEvaluationTemplateService, TemplateService>();
+            builder.Services.AddScoped<IGenericRepo<EvaluationTemplate>, GenericRepo<EvaluationTemplate>>();
             builder.Services.AddScoped<JwtHelper>();
 
             builder.Services.AddScoped(typeof(IGenericRepo<>),
                                        typeof(GenericRepo<>));                    
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+<<<<<<< HEAD
             builder.Services.AddScoped<IEvaluationService, EvaluationService>();
             builder.Services.AddAutoMapper(op =>
             {
                 op.AddProfile<AuthProfile>();
                 op.AddProfile<EvaluationProfile>();
             });
+=======
+            builder.Services.AddAutoMapper(op => 
+            { 
+                op.AddProfile<AuthProfile>();
+                op.AddProfile<EvaluationTemplateProfile>(); });
+>>>>>>> master
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
             builder.Services.AddAuthentication(options =>

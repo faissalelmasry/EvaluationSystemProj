@@ -1,4 +1,7 @@
-﻿using EvaluationSystem.Domain.Models;
+﻿using EvaluationSystem.Domain.BaseModels;
+using System.Linq.Expressions;
+using System.Reflection.Emit;
+using EvaluationSystem.Domain.Models;
 using EvaluationSystem.Infrastructure.EntityConfigs;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +39,7 @@ namespace EvaluationSystem.Infrastructure.Data
             builder.ApplyConfiguration(new UserConfig());
             builder.ApplyConfiguration(new RefreshTokenConfig());
             builder.ApplyConfiguration(new RoleConfig());
-            
+
             //Applies on-delete restrict on any foreign key
             foreach (var foreignKey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
@@ -45,9 +48,6 @@ namespace EvaluationSystem.Infrastructure.Data
                     foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
                 }
             }
-
-
-            // You can add more Fluent API configurations here later if needed
         }
     }
 }
