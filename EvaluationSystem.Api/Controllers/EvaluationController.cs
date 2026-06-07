@@ -81,5 +81,36 @@ namespace EvaluationSystem.API.Controllers
                 return NotFound(new { Message = ex.Message });
             }
         }
+        [HttpPost("{assignmentId}/approve")]
+        public async Task<IActionResult> ApproveEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
+        {
+            try
+            {
+                var reviewerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(reviewerIdClaim, out int reviewerId)) return Unauthorized();
+                var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Approved);
+                return Ok(reviewResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("{assignmentId}/reject")]
+        public async Task<IActionResult> RejectEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
+        {
+            try
+            {
+                var reviewerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(reviewerIdClaim, out int reviewerId)) return Unauthorized();
+                var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Rejected);
+                return Ok(reviewResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
     }
