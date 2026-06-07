@@ -18,11 +18,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
-<<<<<<< HEAD
 using EvaluationSystem.Application.Services.Evaluation_Service;
-=======
 using EvaluationSystem.Application.Services.TemplateServices;
->>>>>>> master
 
 namespace EvaluationSystem.Api
 {
@@ -52,24 +49,22 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<JwtHelper>();
 
             builder.Services.AddScoped(typeof(IGenericRepo<>),
-                                       typeof(GenericRepo<>));                    
+                                       typeof(GenericRepo<>));
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-<<<<<<< HEAD
             builder.Services.AddScoped<IEvaluationService, EvaluationService>();
+
             builder.Services.AddAutoMapper(op =>
             {
                 op.AddProfile<AuthProfile>();
                 op.AddProfile<EvaluationProfile>();
+                op.AddProfile<EvaluationTemplateProfile>();
             });
-=======
-            builder.Services.AddAutoMapper(op => 
-            { 
-                op.AddProfile<AuthProfile>();
-                op.AddProfile<EvaluationTemplateProfile>(); });
->>>>>>> master
+
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =
