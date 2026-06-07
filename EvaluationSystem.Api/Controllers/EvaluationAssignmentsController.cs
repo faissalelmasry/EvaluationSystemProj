@@ -58,5 +58,31 @@ namespace EvaluationSystem.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAssignmentById(int id)
+        {
+            try
+            {
+                var assignment = await _assignmentService.GetAssignmentByIdAsync(id);
+                return Ok(assignment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAssignment(int id, [FromBody] CreateAssignmentDto dto)
+        {
+            try
+            {
+                var result = await _assignmentService.UpdateAssignmentAsync(id, dto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
