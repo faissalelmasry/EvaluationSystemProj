@@ -25,6 +25,7 @@ using EvaluationSystem.Application.Services.SectionService;
 using System.Text.Json.Serialization;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Services.AssignmentService;
+using EvaluationSystem.Application.Services.CriteriaService;
 
 namespace EvaluationSystem.Api
 {
@@ -52,6 +53,8 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IEvaluationTemplateService, TemplateService>();
             builder.Services.AddScoped<IGenericRepo<EvaluationTemplate>, GenericRepo<EvaluationTemplate>>();
             builder.Services.AddScoped<IGenericRepo<EvaluationSection>, GenericRepo<EvaluationSection>>();
+            builder.Services.AddScoped<IEvaluationCriteriaService, CriteriaService>();
+            builder.Services.AddScoped<IEvaluationService, EvaluationService>();
             builder.Services.AddScoped<IEvaluationSectionService, SectionService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<JwtHelper>();
@@ -64,6 +67,7 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IEvaluationService, EvaluationService>();
             builder.Services.AddScoped<IEvaluationAssignmentService, EvaluationAssignmentService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
