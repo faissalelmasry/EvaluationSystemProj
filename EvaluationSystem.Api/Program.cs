@@ -20,6 +20,7 @@ using Serilog;
 using System.Text;
 using EvaluationSystem.Application.Services.Evaluation_Service;
 using EvaluationSystem.Application.Services.TemplateServices;
+using EvaluationSystem.Application.Services.AssignmentService;
 
 namespace EvaluationSystem.Api
 {
@@ -54,12 +55,13 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IEvaluationService, EvaluationService>();
-
+            builder.Services.AddScoped<IEvaluationAssignmentService, EvaluationAssignmentService>();
             builder.Services.AddAutoMapper(op =>
             {
                 op.AddProfile<AuthProfile>();
                 op.AddProfile<EvaluationProfile>();
                 op.AddProfile<EvaluationTemplateProfile>();
+                op.AddProfile<EvaluationAssignmentProfile>();
             });
 
             builder.Services.AddFluentValidationAutoValidation();
