@@ -9,11 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
+
 
 namespace EvaluationSystem.Application.Services.AuthServices
 {
@@ -23,7 +19,6 @@ namespace EvaluationSystem.Application.Services.AuthServices
         private readonly ILogger<AuthService> _logger;
         private readonly RoleManager<Role> _roleManager;
         private SignInManager<User> _signInManager;
-        private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
         private readonly JwtHelper _jwtHelper;
         private readonly IMapper _mapper;
@@ -31,7 +26,6 @@ namespace EvaluationSystem.Application.Services.AuthServices
              UserManager<User> userManager,
              RoleManager<Role> roleManager,
              SignInManager<User> signInManager,
-             IConfiguration config,
              IUnitOfWork unitOfWork,
              ILogger<AuthService> logger,
                 JwtHelper jwtHelper,
@@ -41,7 +35,6 @@ namespace EvaluationSystem.Application.Services.AuthServices
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
-            _config = config;
             _jwtHelper = jwtHelper;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
