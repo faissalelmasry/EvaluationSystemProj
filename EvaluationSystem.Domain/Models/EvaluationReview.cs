@@ -12,6 +12,7 @@ namespace EvaluationSystem.Domain.Models
         public ReviewStatus Status { get; set; } = ReviewStatus.Pending;
 
         public int AssignmentId { get; set; }
+        public DateTime ReviewedAt { get; set; } = DateTime.UtcNow;
 
         public int ReviewerId { get; set; }
 

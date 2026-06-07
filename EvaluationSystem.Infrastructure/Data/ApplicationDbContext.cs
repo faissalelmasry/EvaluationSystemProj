@@ -1,7 +1,11 @@
-﻿using EvaluationSystem.Domain.Models;
+﻿using EvaluationSystem.Domain.BaseModels;
+using System.Linq.Expressions;
+using System.Reflection.Emit;
+using EvaluationSystem.Domain.Models;
 using EvaluationSystem.Infrastructure.EntityConfigs;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace EvaluationSystem.Infrastructure.Data
 {
@@ -36,7 +40,7 @@ namespace EvaluationSystem.Infrastructure.Data
             builder.ApplyConfiguration(new UserConfig());
             builder.ApplyConfiguration(new RefreshTokenConfig());
             builder.ApplyConfiguration(new RoleConfig());
-            
+
             //Applies on-delete restrict on any foreign key
             foreach (var foreignKey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
@@ -45,9 +49,24 @@ namespace EvaluationSystem.Infrastructure.Data
                     foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
                 }
             }
+            //applying Is-Deleted filter on all Queries
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var filter = Expression.Lambda(
+                        Expression.Equal(
+                            Expression.Property(parameter, nameof(BaseEntity.IsDeleted)),
+                            Expression.Constant(false)
+                        ),
+                        parameter
+                    );
+                    builder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                }
+            }
 
-
-            // You can add more Fluent API configurations here later if needed
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
