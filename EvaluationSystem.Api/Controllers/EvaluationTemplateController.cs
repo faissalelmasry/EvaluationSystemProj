@@ -10,7 +10,7 @@ namespace EvaluationSystem.Api.Controllers
     [ApiController]
     public class EvaluationTemplateController : ControllerBase
     {
-        IEvaluationTemplateService TemplateService { get; set; }
+        private IEvaluationTemplateService TemplateService { get; set; }
         public EvaluationTemplateController(IEvaluationTemplateService _templateService)
         {
             TemplateService = _templateService;
@@ -24,17 +24,17 @@ namespace EvaluationSystem.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTemplate(EvaluationTemplateDto dto)
         {
-            var res = await TemplateService.AddTemplate(dto);
+            var res = await TemplateService.AddTemplateAsync(dto);
             if (!res)
             {
                 return BadRequest("can't add this template");
             }
-            return Created();
+            return CreatedAtAction(nameof(GetTemplate),dto);
         }
         [HttpPut("id")]
         public async Task<IActionResult> UpdateTemplate(int id, EvaluationTemplateDto dto)
         {
-            var res = await TemplateService.UpdateTemplate(id, dto);
+            var res = await TemplateService.UpdateTemplateAsync(id, dto);
             if (!res)
             {
                 return BadRequest("can't update this template");

@@ -37,6 +37,16 @@ namespace EvaluationSystem.Infrastructure.Repositories
         {
             return await _dbSet.FindAsync(id);
         }
+        public async Task<T?> GetByIdAsync(int id,params Func<IQueryable<T>, IQueryable<T>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+                query = include(query);
+
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+        }
+
 
         public void Update(T entity)
         {
@@ -50,10 +60,7 @@ namespace EvaluationSystem.Infrastructure.Repositories
                 return _dbSet.AsNoTracking();
 
             }
-
             return _dbSet;
-
-
         }
     }
 }
