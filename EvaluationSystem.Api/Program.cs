@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 using EvaluationSystem.Application.Services.TemplateServices;
+using EvaluationSystem.Application.Services.SectionService;
 
 namespace EvaluationSystem.Api
 {
@@ -45,6 +46,8 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEvaluationTemplateService, TemplateService>();
             builder.Services.AddScoped<IGenericRepo<EvaluationTemplate>, GenericRepo<EvaluationTemplate>>();
+            builder.Services.AddScoped<IGenericRepo<EvaluationSection>, GenericRepo<EvaluationSection>>();
+            builder.Services.AddScoped<IEvaluationSectionService, SectionService>();
             builder.Services.AddScoped<JwtHelper>();
 
             builder.Services.AddScoped(typeof(IGenericRepo<>),
@@ -55,7 +58,10 @@ namespace EvaluationSystem.Api
             builder.Services.AddAutoMapper(op => 
             { 
                 op.AddProfile<AuthProfile>();
-                op.AddProfile<EvaluationTemplateProfile>(); });
+                op.AddProfile<EvaluationTemplateProfile>();
+                op.AddProfile<EvaluationSectionProfile>();
+                op.AddProfile<EvaluationCriteriaProfile>();
+            });
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
             builder.Services.AddAuthentication(options =>

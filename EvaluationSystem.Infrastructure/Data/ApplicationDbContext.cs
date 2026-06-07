@@ -5,6 +5,7 @@ using EvaluationSystem.Domain.Models;
 using EvaluationSystem.Infrastructure.EntityConfigs;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace EvaluationSystem.Infrastructure.Data
 {
@@ -48,6 +49,24 @@ namespace EvaluationSystem.Infrastructure.Data
                     foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
                 }
             }
+            //applying Is-Deleted filter on all Queries
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var filter = Expression.Lambda(
+                        Expression.Equal(
+                            Expression.Property(parameter, nameof(BaseEntity.IsDeleted)),
+                            Expression.Constant(false)
+                        ),
+                        parameter
+                    );
+                    builder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                }
+            }
+
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

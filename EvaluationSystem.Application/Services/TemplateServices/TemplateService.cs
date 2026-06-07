@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using EvaluationSystem.Application.DTOs.EvaluationSection;
 using EvaluationSystem.Application.DTOs.EvaluationTemplate;
 using EvaluationSystem.Application.interfaces;
+using EvaluationSystem.Application.Services.SectionService;
 using EvaluationSystem.Application.Services.ServiceInterfaces;
 using EvaluationSystem.Domain.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -28,33 +30,33 @@ namespace EvaluationSystem.Application.Services.TemplateServices
         }
         public async Task<List<EvaluationTemplateListDto>> GetTemplatesAsync(int PageNumber = 1, int PageSize = 10, string? Search = "")
         {
-            IQueryable<EvaluationTemplate> Templates = EvaluationRepo.GetAll();
+            IQueryable<EvaluationTemplate> Templates = EvaluationRepo.GetAll().AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
                 Templates = Templates.Where(t => t.Title.Contains(Search) || t.Description.Contains(Search));
             }
-
-            Templates = Templates.Include(temp => temp.EvaluationSections)!.ThenInclude(sect => sect.Criterias);
-
             var TempLatesList = await Templates.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToListAsync();
-            var temp= mapper.Map<List<EvaluationTemplateListDto>>(TempLatesList);
+            var temps= mapper.Map<List<EvaluationTemplateListDto>>(TempLatesList);
 
-            return temp;
+            return temps;
         }
         public async Task<GetEvaluationTemplateDto> GetTemplateAsync(int id)
         {
-            var temp = await EvaluationRepo.GetByIdAsync(id);
+            var temp = await EvaluationRepo.GetByIdAsync(id,
+                q => q.Include(t => t.EvaluationSections)
+                       .ThenInclude(s => s.Criterias)
+                );
             return mapper.Map<GetEvaluationTemplateDto>(temp);
         }
-        public async Task<bool> AddTemplate(EvaluationTemplateDto dto)
+        public async Task<bool> AddTemplateAsync(EvaluationTemplateDto dto)
         {
             await EvaluationRepo.AddAsync(mapper.Map<EvaluationTemplate>(dto));
             var res=await unitOfWork.SaveChangesAsync();
             return res > 0;
 
         }
-        public async Task<bool> UpdateTemplate(int id,EvaluationTemplateDto dto)
+        public async Task<bool> UpdateTemplateAsync(int id,EvaluationTemplateDto dto)
         {
             var temp = await EvaluationRepo.GetByIdAsync(id);
             if (temp == null)
@@ -75,5 +77,6 @@ namespace EvaluationSystem.Application.Services.TemplateServices
             var res = await unitOfWork.SaveChangesAsync();
             return res>0;
         }
+
     }
 }

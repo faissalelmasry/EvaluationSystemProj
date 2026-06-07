@@ -12,8 +12,8 @@ namespace EvaluationSystem.Application.Services.ServiceInterfaces
     {
         Task<List<EvaluationTemplateListDto>> GetTemplatesAsync(int PageNumber = 1,int PageSize = 10,string? Search = "");
         Task<GetEvaluationTemplateDto> GetTemplateAsync(int id);
-        Task<bool> AddTemplate(EvaluationTemplateDto dto);
-        Task<bool> UpdateTemplate(int id,EvaluationTemplateDto dto);
+        Task<bool> AddTemplateAsync(EvaluationTemplateDto dto);
+        Task<bool> UpdateTemplateAsync(int id,EvaluationTemplateDto dto);
         Task<bool> DeleteTemplateAsync(int id);
     }
 }
