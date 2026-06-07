@@ -11,6 +11,11 @@ namespace EvaluationSystem.Infrastructure.Repositories
 
         public IRefreshTokenRepository RefreshTokens { get; }
 
+        public IGenericRepo<EvaluationAssignment> EvaluationAssignments { get; }
+        public IGenericRepo<EvaluationResponse> EvaluationResponses { get; }
+        public IGenericRepo<EvaluationResult> EvaluationResults { get; }
+        public IGenericRepo<EvaluationReview> EvaluationReviews { get; }
+        public IGenericRepo<User> Users { get; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
