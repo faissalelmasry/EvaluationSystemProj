@@ -10,12 +10,13 @@ namespace EvaluationSystem.Infrastructure.Repositories
         public IGenericRepo<Department> Departments { get; }
 
         public IRefreshTokenRepository RefreshTokens { get; }
-
+        public IGenericRepo<User> Users { get; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Departments = new GenericRepo<Department>(_context);
+            Users = new GenericRepo<User>(_context);
 
             RefreshTokens = new RefreshTokenRepository(_context);
         }

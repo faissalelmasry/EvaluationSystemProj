@@ -1,4 +1,5 @@
-﻿using EvaluationSystem.Domain.Exceptions;
+﻿using EvaluationSystem.Application.Exceptions;
+using EvaluationSystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -43,6 +44,10 @@ namespace EvaluationSystem.Application.MiddleWare
             else if (exception is UnauthorizedException)
             {
                 statusCode = StatusCodes.Status401Unauthorized; 
+                message = exception.Message;
+            }else if(exception is NotFoundException)
+            {
+                statusCode = StatusCodes.Status404NotFound;
                 message = exception.Message;
             }
 

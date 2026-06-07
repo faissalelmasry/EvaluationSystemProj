@@ -15,8 +15,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace EvaluationSystem.Api
 {
@@ -41,6 +43,7 @@ namespace EvaluationSystem.Api
                 .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<JwtHelper>();
 
             builder.Services.AddScoped(typeof(IGenericRepo<>),
@@ -48,7 +51,19 @@ namespace EvaluationSystem.Api
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            builder.Services.AddAutoMapper(op=>op.AddProfile<AuthProfile>());
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+            builder.Services.AddAutoMapper(op =>
+            {
+                op.AddProfile<AuthProfile>();
+                op.AddProfile<DepartmentProfile>();
+                op.AddProfile<UserProfile>();
+            });
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
             builder.Services.AddAuthentication(options =>
@@ -91,6 +106,36 @@ namespace EvaluationSystem.Api
 
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        In = ParameterLocation.Header,
+                        Description = "Enter JWT Token"
+                    });
+
+                options.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement
+                    {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference =
+                        new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                },
+                Array.Empty<string>()
+            }
+                    });
+            });
             var app = builder.Build();
 
             await DataSeeder.InitializeAsync(app.Services);

@@ -6,6 +6,7 @@ namespace EvaluationSystem.Application.interfaces
     {
         IGenericRepo<Department> Departments { get; }
         IRefreshTokenRepository RefreshTokens { get; }
+         IGenericRepo<User> Users { get; }
         Task<int> SaveChangesAsync();
     }
 }
