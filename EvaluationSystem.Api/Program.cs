@@ -64,6 +64,7 @@ namespace EvaluationSystem.Api
                 op.AddProfile<EvaluationTemplateProfile>();
                 op.AddProfile<EvaluationSectionProfile>();
                 op.AddProfile<EvaluationCriteriaProfile>();
+                op.AddProfile<EvaluationProfile>();
             });
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
