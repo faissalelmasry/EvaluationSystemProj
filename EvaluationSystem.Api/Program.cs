@@ -9,7 +9,7 @@ using EvaluationSystem.Application.Validators;
 using EvaluationSystem.Domain.Models;
 using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Infrastructure.Repositories;
-using EvaluationSystem.Infrastructure.Seeds;
+//using EvaluationSystem.Infrastructure.Seeds;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using EvaluationSystem.Application.Services.Evaluation_Service;
 
 namespace EvaluationSystem.Api
 {
@@ -45,11 +46,15 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<JwtHelper>();
 
             builder.Services.AddScoped(typeof(IGenericRepo<>),
-                                       typeof(GenericRepo<>));
-
+                                       typeof(GenericRepo<>));                    
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            builder.Services.AddAutoMapper(op=>op.AddProfile<AuthProfile>());
+            builder.Services.AddScoped<IEvaluationService, EvaluationService>();
+            builder.Services.AddAutoMapper(op =>
+            {
+                op.AddProfile<AuthProfile>();
+                op.AddProfile<EvaluationProfile>();
+            });
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
             builder.Services.AddAuthentication(options =>
@@ -94,7 +99,7 @@ namespace EvaluationSystem.Api
 
             var app = builder.Build();
 
-            await DataSeeder.InitializeAsync(app.Services);
+            //await DataSeeder.InitializeAsync(app.Services);
 
             app.UseSerilogRequestLogging();
 
