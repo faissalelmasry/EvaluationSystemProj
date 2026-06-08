@@ -6,62 +6,92 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EvaluationSystem.Application.DTOs.EvaluationCriteria;
 using EvaluationSystem.Application.DTOs.EvaluationSection;
+using EvaluationSystem.Application.Exceptions;
 using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Application.Services.ServiceInterfaces;
+using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using static System.Collections.Specialized.BitVector32;
 
 namespace EvaluationSystem.Application.Services.CriteriaService
 {
     public class CriteriaService : IEvaluationCriteriaService
     {
-        readonly IGenericRepo<EvaluationCriteria> CriteriaRepo;
-        readonly IGenericRepo<EvaluationSection> SectionRepo;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
 
         public CriteriaService
-            (IGenericRepo<EvaluationCriteria> _CriteriaRepo
-            , IGenericRepo<EvaluationSection> _SectionRepo
-            , IMapper _mapper
-            , IUnitOfWork _unitOfWork) 
+            (IMapper _mapper,IUnitOfWork _unitOfWork) 
         {
-            CriteriaRepo = _CriteriaRepo;
-            SectionRepo = _SectionRepo;
             mapper = _mapper;
             unitOfWork = _unitOfWork;
         }
-        public async Task<bool> AddCriteriaAsync(int sectionid, AddEvaluationCriteriaDto dto)
+        public async Task AddCriteriaAsync(int sectionid, AddEvaluationCriteriaDto dto)
         {
-            var section =await SectionRepo.GetByIdAsync(sectionid);
+            var section =await unitOfWork.EvaluationSections.GetByIdAsync(sectionid);
             if (section == null)
-                return false;
+                throw new NotFoundException("Section isn't found ");
+            var conflict = await unitOfWork.EvaluationCriterias
+                .FindByCondition(c =>
+                    c.SectionId == sectionid &&
+                    (c.Title == dto.Title || c.OrderNo == dto.OrderNo))
+                .Select(c => new { c.Title, c.OrderNo })
+                .FirstOrDefaultAsync();
+
+            if (conflict != null)
+            {
+                if (conflict.Title == dto.Title)
+                    throw new BadRequestException("Criteria already exists in this section");
+                if (conflict.OrderNo == dto.OrderNo)
+                    throw new BadRequestException("Order already exists in this section");
+            }
             var criteria = mapper.Map<EvaluationCriteria>(dto);
             criteria.SectionId = sectionid;
-            await CriteriaRepo.AddAsync(criteria);
-            var res = await unitOfWork.SaveChangesAsync();
-            return res > 0;
+            await unitOfWork.EvaluationCriterias.AddAsync(criteria);
+            var AffectedRows = await unitOfWork.SaveChangesAsync();
+            if (AffectedRows == 0)
+                throw new BadRequestException("criteria isn't added");
         }
 
-        public async Task<bool> DeleteCriteriaAsync(int id)
+        public async Task DeleteCriteriaAsync(int id)
         {
-            var criteria = await CriteriaRepo.GetByIdAsync(id);
+            var criteria = await unitOfWork.EvaluationCriterias.GetByIdAsync(id);
             if (criteria == null) 
-                return false;
+                throw new NotFoundException("Criteria is not found");
+            var HasResponses= await unitOfWork.EvaluationResponses.GetAll().AnyAsync(r => r.CriterionId == id);
+            if (HasResponses)
+                throw new BadRequestException("can't delete this criteria because it has responses");
             criteria.IsDeleted = true;
-            var res = await unitOfWork.SaveChangesAsync();
-            return res > 0;
+            criteria.DeletedAt = DateTime.UtcNow;
+            var AffectedRows = await unitOfWork.SaveChangesAsync();
+            if(AffectedRows==0)
+                throw new BadRequestException("can't delete this criteria");
         }
 
-        public async Task<bool> UpdateCriteriaAsync(int id, AddEvaluationCriteriaDto dto)
+        public async Task UpdateCriteriaAsync(int id, AddEvaluationCriteriaDto dto)
         {
-            var criteria = await CriteriaRepo.GetByIdAsync(id);
+            var criteria = await unitOfWork.EvaluationCriterias.GetByIdAsync(id);
 
             if (criteria == null)
-                return false;
-
+                throw new NotFoundException("Criteria is not found");
+            var conflict = await unitOfWork.EvaluationCriterias
+                .FindByCondition(c =>
+                    c.SectionId == criteria.SectionId && c.Id != id &&
+                    (c.Title == dto.Title || c.OrderNo == dto.OrderNo))
+                .Select(c => new { c.Title, c.OrderNo })
+                .FirstOrDefaultAsync();
+            if (conflict != null)
+            {
+                if (conflict.Title == dto.Title)
+                    throw new BadRequestException("Criteria already exists in this section");
+                if (conflict.OrderNo == dto.OrderNo)
+                    throw new BadRequestException("Order already exists in this section");
+            }
             mapper.Map(dto, criteria);
-            var res = await unitOfWork.SaveChangesAsync();
-            return res > 0;
+            var AffectedRows = await unitOfWork.SaveChangesAsync();
+            if(AffectedRows == 0)
+                throw new BadRequestException("no updates happened in criteria");
 
         }
     }

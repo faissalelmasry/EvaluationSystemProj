@@ -10,5 +10,6 @@ namespace EvaluationSystem.Application.DTOs.EvaluationSection
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public int OrderNo { get; set; }
     }
 }

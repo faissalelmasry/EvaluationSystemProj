@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.DTOs.Assignments;
+using EvaluationSystem.Application.Exceptions;
 using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Domain.Enums;
+using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,29 +33,29 @@ namespace EvaluationSystem.Application.Services.AssignmentService
         {
             if (dto.EvaluatorId == dto.EvaluateeId)
             {
-                throw new Exception("The evaluator cannot be the same person as the evaluatee.");
+                throw new BadRequestException("The evaluator cannot be the same person as the evaluatee.");
             }
 
             if (dto.DueDate <= DateTime.UtcNow)
             {
-                throw new Exception("The evaluation due date must be in the future.");
+                throw new BadRequestException("The evaluation due date must be in the future.");
             }
 
             var admin = await _userRepo.GetByIdAsync(adminId);
             if (admin == null)
             {
-                throw new Exception("The operating admin was not found in the system.");
+                throw new NotFoundException("The operating admin was not found in the system.");
             }
 
             if (admin.JobTitle != JobTitle.Manager)
             {
-                throw new Exception("The provided Admin ID does not have the authority to assign evaluations.");
+                throw new BadRequestException("The provided Admin ID does not have the authority to assign evaluations.");
             }
 
             var template = await _evalutionTemplate.GetByIdAsync(dto.TemplateId);
             if (template == null)
             {
-                throw new Exception("The specified evaluation template was not found.");
+                throw new NotFoundException("The specified evaluation template was not found.");
             }
 
             var evaluator = await _userRepo.GetByIdAsync(dto.EvaluatorId);
@@ -61,17 +63,17 @@ namespace EvaluationSystem.Application.Services.AssignmentService
 
             if (evaluator == null || evaluatee == null)
             {
-                throw new Exception("The evaluator or evaluatee was not found in the system.");
+                throw new NotFoundException("The evaluator or evaluatee was not found in the system.");
             }
 
             if (evaluator.JobTitle == JobTitle.Student && evaluatee.JobTitle == JobTitle.Manager)
             {
-                throw new Exception("A student is not allowed to evaluate a manager.");
+                throw new BadRequestException("A student is not allowed to evaluate a manager.");
             }
 
             if (evaluator.JobTitle == JobTitle.Employee && evaluatee.JobTitle == JobTitle.Manager)
             {
-                throw new Exception("An employee cannot evaluate a manager through this assignment pathway.");
+                throw new BadRequestException("An employee cannot evaluate a manager through this assignment pathway.");
             }
 
             var assignment = new EvaluationAssignment

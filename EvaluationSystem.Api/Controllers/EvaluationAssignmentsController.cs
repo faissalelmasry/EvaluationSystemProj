@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using EvaluationSystem.Application.interfaces;         
 using EvaluationSystem.Application.DTOs.Assignments;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EvaluationAssignmentsController : ControllerBase
     {
         private readonly IEvaluationAssignmentService _assignmentService;

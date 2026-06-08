@@ -4,14 +4,19 @@ namespace EvaluationSystem.Application.interfaces
 {
     public interface IUnitOfWork
     {
-        IGenericRepo<Department> Departments { get; }
-        IRefreshTokenRepository RefreshTokens { get; }
-        IGenericRepo<EvaluationAssignment> EvaluationAssignments { get; }
-        IGenericRepo<EvaluationResponse> EvaluationResponses { get; }
-        IGenericRepo<EvaluationResult> EvaluationResults { get; }
-        IGenericRepo<EvaluationReview> EvaluationReviews { get; }
+        public IGenericRepo<Department> Departments { get; }
 
-         IGenericRepo<User> Users { get; }
+        public IRefreshTokenRepository RefreshTokens { get; }
+
+        public IGenericRepo<EvaluationAssignment> EvaluationAssignments { get; }
+        public IGenericRepo<EvaluationResponse> EvaluationResponses { get; }
+        public IGenericRepo<EvaluationResult> EvaluationResults { get; }
+        public IGenericRepo<EvaluationReview> EvaluationReviews { get; }
+        public IGenericRepo<EvaluationCriteria> EvaluationCriterias { get; }
+        public IGenericRepo<EvaluationSection> EvaluationSections { get; }
+        public IGenericRepo<EvaluationTemplate> EvaluationTemplates { get; }
+        public IGenericRepo<User> Users { get; }
+
         Task<int> SaveChangesAsync();
     }
 }
