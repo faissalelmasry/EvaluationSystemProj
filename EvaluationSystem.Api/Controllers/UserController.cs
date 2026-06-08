@@ -57,5 +57,18 @@ namespace EvaluationSystem.Api.Controllers
             await _userService.DeactivateUser(id);
             return NoContent();
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto dto)
+        {
+            await _userService.UpdateAsync(id, dto);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _userService.DeleteAsync(id);
+            return NoContent();
+        }
     }
 }

@@ -44,10 +44,12 @@ namespace EvaluationSystem.Api
                              .WriteTo.Console()
                              .WriteTo.File("Logs/log-.txt",
                                  rollingInterval: RollingInterval.Day));
-
-            builder.Services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            builder.Services.AddIdentity<User, Role>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEvaluationTemplateService, TemplateService>();

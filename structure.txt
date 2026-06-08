@@ -1,0 +1,657 @@
+Folder PATH listing for volume OS
+Volume serial number is C0C8-6B8D
+C:.
+¦   .gitattributes
+¦   .gitignore
+¦   EvaluationSystem.sln
+¦   structure.txt
+¦   
++---.github
+¦   +---workflows
++---.vs
+¦   ¦   slnx.sqlite
+¦   ¦   VSWorkspaceState.json
+¦   ¦   
+¦   +---EvaluationSystem
+¦   ¦   +---config
+¦   ¦   ¦       applicationhost.config
+¦   ¦   ¦       
+¦   ¦   +---copilot-chat
+¦   ¦   ¦   +---096994f4
+¦   ¦   ¦       +---sessions
+¦   ¦   +---CopilotIndices
+¦   ¦   ¦   +---18.6.39603.9996
+¦   ¦   ¦           CodeChunks.db
+¦   ¦   ¦           CodeChunks.db-shm
+¦   ¦   ¦           CodeChunks.db-wal
+¦   ¦   ¦           SemanticSymbols.db
+¦   ¦   ¦           SemanticSymbols.db-shm
+¦   ¦   ¦           SemanticSymbols.db-wal
+¦   ¦   ¦           
+¦   ¦   +---DesignTimeBuild
+¦   ¦   ¦       .dtbcache.v2
+¦   ¦   ¦       
+¦   ¦   +---FileContentIndex
+¦   ¦   ¦       46155e81-bdc6-45f8-9e18-ccc85c7f86b9.vsidx
+¦   ¦   ¦       4df6cb76-4bfa-4979-95d5-7128e8791d67.vsidx
+¦   ¦   ¦       6835ce16-f6de-43ab-ba1f-6cc659712ba0.vsidx
+¦   ¦   ¦       76b06838-b477-4e73-bafe-c32cf500507b.vsidx
+¦   ¦   ¦       c58bfbf3-6dda-4a69-9081-b8f6ea5a79d0.vsidx
+¦   ¦   ¦       
+¦   ¦   +---v18
+¦   ¦           .futdcache.v2
+¦   ¦           DocumentLayout.backup.json
+¦   ¦           DocumentLayout.json
+¦   ¦           
+¦   +---EvaluationSystemProj.slnx
+¦   ¦   +---FileContentIndex
+¦   ¦   ¦       73c1dde9-ddef-4247-bbc0-f57d2f9c345d.vsidx
+¦   ¦   ¦       
+¦   ¦   +---v18
+¦   ¦           DocumentLayout.json
+¦   ¦           
+¦   +---ProjectEvaluation
+¦           evaluationsystem.metadata.v10.bin
+¦           evaluationsystem.projects.v10.bin
+¦           evaluationsystem.strings.v10.bin
+¦           
++---EvaluationSystem.Api
+¦   ¦   appsettings.Development.json
+¦   ¦   appsettings.json
+¦   ¦   EvaluationSystem.Api.csproj
+¦   ¦   EvaluationSystem.Api.csproj.user
+¦   ¦   EvaluationSystem.Api.http
+¦   ¦   EvaluationSystem.Api.slnx
+¦   ¦   Program.cs
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦   ¦   +---net8.0
+¦   ¦   ¦       ¦   appsettings.Development.json
+¦   ¦   ¦       ¦   appsettings.json
+¦   ¦   ¦       ¦   AutoMapper.dll
+¦   ¦   ¦       ¦   Azure.Core.dll
+¦   ¦   ¦       ¦   Azure.Identity.dll
+¦   ¦   ¦       ¦   EvaluationSystem.Api.deps.json
+¦   ¦   ¦       ¦   EvaluationSystem.Api.dll
+¦   ¦   ¦       ¦   EvaluationSystem.Api.exe
+¦   ¦   ¦       ¦   EvaluationSystem.Api.pdb
+¦   ¦   ¦       ¦   EvaluationSystem.Api.runtimeconfig.json
+¦   ¦   ¦       ¦   EvaluationSystem.Api.staticwebassets.endpoints.json
+¦   ¦   ¦       ¦   EvaluationSystem.Application.dll
+¦   ¦   ¦       ¦   EvaluationSystem.Application.pdb
+¦   ¦   ¦       ¦   EvaluationSystem.Domain.dll
+¦   ¦   ¦       ¦   EvaluationSystem.Domain.pdb
+¦   ¦   ¦       ¦   EvaluationSystem.Infrastructure.dll
+¦   ¦   ¦       ¦   EvaluationSystem.Infrastructure.pdb
+¦   ¦   ¦       ¦   FluentValidation.AspNetCore.dll
+¦   ¦   ¦       ¦   FluentValidation.DependencyInjectionExtensions.dll
+¦   ¦   ¦       ¦   FluentValidation.dll
+¦   ¦   ¦       ¦   Humanizer.dll
+¦   ¦   ¦       ¦   Microsoft.AspNetCore.Authentication.JwtBearer.dll
+¦   ¦   ¦       ¦   Microsoft.AspNetCore.Cryptography.Internal.dll
+¦   ¦   ¦       ¦   Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+¦   ¦   ¦       ¦   Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+¦   ¦   ¦       ¦   Microsoft.Bcl.AsyncInterfaces.dll
+¦   ¦   ¦       ¦   Microsoft.Bcl.Cryptography.dll
+¦   ¦   ¦       ¦   Microsoft.CodeAnalysis.CSharp.dll
+¦   ¦   ¦       ¦   Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+¦   ¦   ¦       ¦   Microsoft.CodeAnalysis.dll
+¦   ¦   ¦       ¦   Microsoft.CodeAnalysis.Workspaces.dll
+¦   ¦   ¦       ¦   Microsoft.Data.SqlClient.dll
+¦   ¦   ¦       ¦   Microsoft.EntityFrameworkCore.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.EntityFrameworkCore.Design.dll
+¦   ¦   ¦       ¦   Microsoft.EntityFrameworkCore.dll
+¦   ¦   ¦       ¦   Microsoft.EntityFrameworkCore.Relational.dll
+¦   ¦   ¦       ¦   Microsoft.EntityFrameworkCore.SqlServer.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Configuration.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Configuration.Binder.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Configuration.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.DependencyInjection.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.DependencyInjection.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.DependencyModel.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Diagnostics.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.FileProviders.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Hosting.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Identity.Core.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Identity.Stores.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Logging.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Logging.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.ObjectPool.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Options.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.Primitives.dll
+¦   ¦   ¦       ¦   Microsoft.Extensions.WebEncoders.dll
+¦   ¦   ¦       ¦   Microsoft.Identity.Client.dll
+¦   ¦   ¦       ¦   Microsoft.Identity.Client.Extensions.Msal.dll
+¦   ¦   ¦       ¦   Microsoft.IdentityModel.Abstractions.dll
+¦   ¦   ¦       ¦   Microsoft.IdentityModel.JsonWebTokens.dll
+¦   ¦   ¦       ¦   Microsoft.IdentityModel.Logging.dll
+¦   ¦   ¦       ¦   Microsoft.IdentityModel.Protocols.dll
+¦   ¦   ¦       ¦   Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+¦   ¦   ¦       ¦   Microsoft.IdentityModel.Tokens.dll
+¦   ¦   ¦       ¦   Microsoft.OpenApi.dll
+¦   ¦   ¦       ¦   Microsoft.SqlServer.Server.dll
+¦   ¦   ¦       ¦   Microsoft.Win32.SystemEvents.dll
+¦   ¦   ¦       ¦   Mono.TextTemplating.dll
+¦   ¦   ¦       ¦   Serilog.AspNetCore.dll
+¦   ¦   ¦       ¦   Serilog.dll
+¦   ¦   ¦       ¦   Serilog.Extensions.Hosting.dll
+¦   ¦   ¦       ¦   Serilog.Extensions.Logging.dll
+¦   ¦   ¦       ¦   Serilog.Formatting.Compact.dll
+¦   ¦   ¦       ¦   Serilog.Settings.Configuration.dll
+¦   ¦   ¦       ¦   Serilog.Sinks.Console.dll
+¦   ¦   ¦       ¦   Serilog.Sinks.Debug.dll
+¦   ¦   ¦       ¦   Serilog.Sinks.File.dll
+¦   ¦   ¦       ¦   Swashbuckle.AspNetCore.Swagger.dll
+¦   ¦   ¦       ¦   Swashbuckle.AspNetCore.SwaggerGen.dll
+¦   ¦   ¦       ¦   Swashbuckle.AspNetCore.SwaggerUI.dll
+¦   ¦   ¦       ¦   System.CodeDom.dll
+¦   ¦   ¦       ¦   System.Composition.AttributedModel.dll
+¦   ¦   ¦       ¦   System.Composition.Convention.dll
+¦   ¦   ¦       ¦   System.Composition.Hosting.dll
+¦   ¦   ¦       ¦   System.Composition.Runtime.dll
+¦   ¦   ¦       ¦   System.Composition.TypedParts.dll
+¦   ¦   ¦       ¦   System.Configuration.ConfigurationManager.dll
+¦   ¦   ¦       ¦   System.Diagnostics.DiagnosticSource.dll
+¦   ¦   ¦       ¦   System.Drawing.Common.dll
+¦   ¦   ¦       ¦   System.Formats.Asn1.dll
+¦   ¦   ¦       ¦   System.IdentityModel.Tokens.Jwt.dll
+¦   ¦   ¦       ¦   System.IO.Pipelines.dll
+¦   ¦   ¦       ¦   System.Memory.Data.dll
+¦   ¦   ¦       ¦   System.Runtime.Caching.dll
+¦   ¦   ¦       ¦   System.Security.Cryptography.Pkcs.dll
+¦   ¦   ¦       ¦   System.Security.Cryptography.ProtectedData.dll
+¦   ¦   ¦       ¦   System.Security.Cryptography.Xml.dll
+¦   ¦   ¦       ¦   System.Security.Permissions.dll
+¦   ¦   ¦       ¦   System.Text.Encodings.Web.dll
+¦   ¦   ¦       ¦   System.Text.Json.dll
+¦   ¦   ¦       ¦   System.Windows.Extensions.dll
+¦   ¦   ¦       ¦   
+¦   ¦   ¦       +---cs
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---de
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---es
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---fr
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---it
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---ja
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---ko
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---pl
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---pt-BR
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---ru
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---runtimes
+¦   ¦   ¦       ¦   +---browser
+¦   ¦   ¦       ¦   ¦   +---lib
+¦   ¦   ¦       ¦   ¦       +---net8.0
+¦   ¦   ¦       ¦   ¦               System.Text.Encodings.Web.dll
+¦   ¦   ¦       ¦   ¦               
+¦   ¦   ¦       ¦   +---unix
+¦   ¦   ¦       ¦   ¦   +---lib
+¦   ¦   ¦       ¦   ¦       +---net6.0
+¦   ¦   ¦       ¦   ¦               Microsoft.Data.SqlClient.dll
+¦   ¦   ¦       ¦   ¦               System.Drawing.Common.dll
+¦   ¦   ¦       ¦   ¦               
+¦   ¦   ¦       ¦   +---win
+¦   ¦   ¦       ¦   ¦   +---lib
+¦   ¦   ¦       ¦   ¦       +---net6.0
+¦   ¦   ¦       ¦   ¦       ¦       Microsoft.Data.SqlClient.dll
+¦   ¦   ¦       ¦   ¦       ¦       Microsoft.Win32.SystemEvents.dll
+¦   ¦   ¦       ¦   ¦       ¦       System.Drawing.Common.dll
+¦   ¦   ¦       ¦   ¦       ¦       System.Runtime.Caching.dll
+¦   ¦   ¦       ¦   ¦       ¦       System.Security.Cryptography.ProtectedData.dll
+¦   ¦   ¦       ¦   ¦       ¦       System.Windows.Extensions.dll
+¦   ¦   ¦       ¦   ¦       ¦       
+¦   ¦   ¦       ¦   ¦       +---net8.0
+¦   ¦   ¦       ¦   ¦               System.Security.Cryptography.Pkcs.dll
+¦   ¦   ¦       ¦   ¦               
+¦   ¦   ¦       ¦   +---win-arm
+¦   ¦   ¦       ¦   ¦   +---native
+¦   ¦   ¦       ¦   ¦           Microsoft.Data.SqlClient.SNI.dll
+¦   ¦   ¦       ¦   ¦           
+¦   ¦   ¦       ¦   +---win-arm64
+¦   ¦   ¦       ¦   ¦   +---native
+¦   ¦   ¦       ¦   ¦           Microsoft.Data.SqlClient.SNI.dll
+¦   ¦   ¦       ¦   ¦           
+¦   ¦   ¦       ¦   +---win-x64
+¦   ¦   ¦       ¦   ¦   +---native
+¦   ¦   ¦       ¦   ¦           Microsoft.Data.SqlClient.SNI.dll
+¦   ¦   ¦       ¦   ¦           
+¦   ¦   ¦       ¦   +---win-x86
+¦   ¦   ¦       ¦       +---native
+¦   ¦   ¦       ¦               Microsoft.Data.SqlClient.SNI.dll
+¦   ¦   ¦       ¦               
+¦   ¦   ¦       +---tr
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---zh-Hans
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---zh-Hant
+¦   ¦   ¦               Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦   ¦               Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦   ¦               Microsoft.CodeAnalysis.resources.dll
+¦   ¦   ¦               Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦   ¦               
+¦   ¦   +---Release
+¦   ¦       +---net8.0
+¦   +---Controllers
+¦   ¦       AuthController.cs
+¦   ¦       DepartmentController.cs
+¦   ¦       EvaluationController.cs
+¦   ¦       EvaluationCriteriaController.cs
+¦   ¦       EvaluationSectionController.cs
+¦   ¦       EvaluationTemplateController.cs
+¦   ¦       UserController.cs
+¦   ¦       
+¦   +---Logs
+¦   ¦       log-20260606.txt
+¦   ¦       log-20260607.txt
+¦   ¦       
+¦   +---MiddleWare
+¦   ¦       ExceptionMiddleware.cs
+¦   ¦       
+¦   +---obj
+¦   ¦   ¦   EvaluationSystem.Api.csproj.nuget.dgspec.json
+¦   ¦   ¦   EvaluationSystem.Api.csproj.nuget.g.props
+¦   ¦   ¦   EvaluationSystem.Api.csproj.nuget.g.targets
+¦   ¦   ¦   project.assets.json
+¦   ¦   ¦   project.nuget.cache
+¦   ¦   ¦   
+¦   ¦   +---Debug
+¦   ¦   ¦   +---net8.0
+¦   ¦   ¦       ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+¦   ¦   ¦       ¦   ApiEndpoints.json
+¦   ¦   ¦       ¦   apphost.exe
+¦   ¦   ¦       ¦   Evaluati.28D44BA8.Up2Date
+¦   ¦   ¦       ¦   EvaluationSystem.Api.AssemblyInfo.cs
+¦   ¦   ¦       ¦   EvaluationSystem.Api.AssemblyInfoInputs.cache
+¦   ¦   ¦       ¦   EvaluationSystem.Api.assets.cache
+¦   ¦   ¦       ¦   EvaluationSystem.Api.csproj.AssemblyReference.cache
+¦   ¦   ¦       ¦   EvaluationSystem.Api.csproj.BuildWithSkipAnalyzers
+¦   ¦   ¦       ¦   EvaluationSystem.Api.csproj.CoreCompileInputs.cache
+¦   ¦   ¦       ¦   EvaluationSystem.Api.csproj.FileListAbsolute.txt
+¦   ¦   ¦       ¦   EvaluationSystem.Api.dll
+¦   ¦   ¦       ¦   EvaluationSystem.Api.GeneratedMSBuildEditorConfig.editorconfig
+¦   ¦   ¦       ¦   EvaluationSystem.Api.genruntimeconfig.cache
+¦   ¦   ¦       ¦   EvaluationSystem.Api.GlobalUsings.g.cs
+¦   ¦   ¦       ¦   EvaluationSystem.Api.MvcApplicationPartsAssemblyInfo.cache
+¦   ¦   ¦       ¦   EvaluationSystem.Api.MvcApplicationPartsAssemblyInfo.cs
+¦   ¦   ¦       ¦   EvaluationSystem.Api.pdb
+¦   ¦   ¦       ¦   EvaluationSystem.Api.sourcelink.json
+¦   ¦   ¦       ¦   rjsmcshtml.dswa.cache.json
+¦   ¦   ¦       ¦   rjsmrazor.dswa.cache.json
+¦   ¦   ¦       ¦   rpswa.dswa.cache.json
+¦   ¦   ¦       ¦   staticwebassets.build.endpoints.json
+¦   ¦   ¦       ¦   staticwebassets.build.json
+¦   ¦   ¦       ¦   staticwebassets.build.json.cache
+¦   ¦   ¦       ¦   staticwebassets.references.upToDateCheck.txt
+¦   ¦   ¦       ¦   staticwebassets.removed.txt
+¦   ¦   ¦       ¦   swae.build.ex.cache
+¦   ¦   ¦       ¦   
+¦   ¦   ¦       +---EndpointInfo
+¦   ¦   ¦       ¦       EvaluationSystem.Api.json
+¦   ¦   ¦       ¦       EvaluationSystem.Api.OpenApiFiles.cache
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---ref
+¦   ¦   ¦       ¦       EvaluationSystem.Api.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---refint
+¦   ¦   ¦       ¦       EvaluationSystem.Api.dll
+¦   ¦   ¦       ¦       
+¦   ¦   ¦       +---staticwebassets
+¦   ¦   +---Release
+¦   ¦       +---net8.0
+¦   ¦           ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+¦   ¦           ¦   EvaluationSystem.Api.AssemblyInfo.cs
+¦   ¦           ¦   EvaluationSystem.Api.AssemblyInfoInputs.cache
+¦   ¦           ¦   EvaluationSystem.Api.GeneratedMSBuildEditorConfig.editorconfig
+¦   ¦           ¦   EvaluationSystem.Api.GlobalUsings.g.cs
+¦   ¦           ¦   
+¦   ¦           +---ref
+¦   ¦           +---refint
+¦   +---Properties
+¦           launchSettings.json
+¦           
++---EvaluationSystem.Application
+¦   ¦   EvaluationSystem.Application.csproj
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net8.0
+¦   ¦               EvaluationSystem.Application.deps.json
+¦   ¦               EvaluationSystem.Application.dll
+¦   ¦               EvaluationSystem.Application.pdb
+¦   ¦               EvaluationSystem.Domain.dll
+¦   ¦               EvaluationSystem.Domain.pdb
+¦   ¦               
+¦   +---DTOs
+¦   ¦   ¦   Params.cs
+¦   ¦   ¦   
+¦   ¦   +---Auth
+¦   ¦   ¦       AuthMessageDto.cs
+¦   ¦   ¦       AuthResponseDto.cs
+¦   ¦   ¦       LoginDto.cs
+¦   ¦   ¦       RefreshTokenDto.cs
+¦   ¦   ¦       RegisterDTO.cs
+¦   ¦   ¦       RevokeTokenDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Department
+¦   ¦   ¦       CreateDepartmentDto.cs
+¦   ¦   ¦       DepartmentDto.cs
+¦   ¦   ¦       DepartmentSort&Page.cs
+¦   ¦   ¦       PagesResult.cs
+¦   ¦   ¦       
+¦   ¦   +---Evaluation Response
+¦   ¦   ¦       EvaluationDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Evaluation Result
+¦   ¦   ¦       EvaluationResultDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Evaluation Reviewer
+¦   ¦   ¦       EvaluationReviewDto.cs
+¦   ¦   ¦       
+¦   ¦   +---EvaluationCriteria
+¦   ¦   ¦       EvaluationCriteriaDto.cs
+¦   ¦   ¦       
+¦   ¦   +---EvaluationSection
+¦   ¦   ¦       AddEvaluationSectionDto.cs
+¦   ¦   ¦       EvaluationSectionDto.cs
+¦   ¦   ¦       EvaluationTemplateSectionsDto.cs
+¦   ¦   ¦       
+¦   ¦   +---EvaluationTemplate
+¦   ¦   ¦       EvaluationTemplateDto.cs
+¦   ¦   ¦       EvaluationTemplateListDto.cs
+¦   ¦   ¦       GetEvaluationTemplateDto.cs
+¦   ¦   ¦       
+¦   ¦   +---User
+¦   ¦           AssignDepartmentDto.cs
+¦   ¦           AssignRoleDto.cs
+¦   ¦           CreateUserDto.cs
+¦   ¦           UserDto.cs
+¦   ¦           UserQuery.cs
+¦   ¦           UserSearchSort.cs
+¦   ¦           
+¦   +---Helpers
+¦   ¦       JwtHelper.cs
+¦   ¦       ScoreCalculate.cs
+¦   ¦       
+¦   +---interfaces
+¦   ¦       IEvaluationService.cs
+¦   ¦       IGenericRepo.cs
+¦   ¦       IRefreshTokenRepository.cs
+¦   ¦       IUnitOfWork.cs
+¦   ¦       
+¦   +---Mapping
+¦   ¦       AuthProfile.cs
+¦   ¦       DepartmentProfile.cs
+¦   ¦       EvaluationCriteriaProfile.cs
+¦   ¦       EvaluationProfile.cs
+¦   ¦       EvaluationSectionProfile.cs
+¦   ¦       EvaluationTemplateProfile.cs
+¦   ¦       UserProfile.cs
+¦   ¦       
+¦   +---obj
+¦   ¦   ¦   EvaluationSystem.Application.csproj.nuget.dgspec.json
+¦   ¦   ¦   EvaluationSystem.Application.csproj.nuget.g.props
+¦   ¦   ¦   EvaluationSystem.Application.csproj.nuget.g.targets
+¦   ¦   ¦   project.assets.json
+¦   ¦   ¦   project.nuget.cache
+¦   ¦   ¦   
+¦   ¦   +---Debug
+¦   ¦       +---net8.0
+¦   ¦           ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+¦   ¦           ¦   Evaluati.6EA7A145.Up2Date
+¦   ¦           ¦   EvaluationSystem.Application.AssemblyInfo.cs
+¦   ¦           ¦   EvaluationSystem.Application.AssemblyInfoInputs.cache
+¦   ¦           ¦   EvaluationSystem.Application.assets.cache
+¦   ¦           ¦   EvaluationSystem.Application.csproj.AssemblyReference.cache
+¦   ¦           ¦   EvaluationSystem.Application.csproj.BuildWithSkipAnalyzers
+¦   ¦           ¦   EvaluationSystem.Application.csproj.CoreCompileInputs.cache
+¦   ¦           ¦   EvaluationSystem.Application.csproj.FileListAbsolute.txt
+¦   ¦           ¦   EvaluationSystem.Application.dll
+¦   ¦           ¦   EvaluationSystem.Application.GeneratedMSBuildEditorConfig.editorconfig
+¦   ¦           ¦   EvaluationSystem.Application.GlobalUsings.g.cs
+¦   ¦           ¦   EvaluationSystem.Application.pdb
+¦   ¦           ¦   EvaluationSystem.Application.sourcelink.json
+¦   ¦           ¦   
+¦   ¦           +---ref
+¦   ¦           ¦       EvaluationSystem.Application.dll
+¦   ¦           ¦       
+¦   ¦           +---refint
+¦   ¦                   EvaluationSystem.Application.dll
+¦   ¦                   
+¦   +---Services
+¦   ¦   ¦   DepartmentService.cs
+¦   ¦   ¦   IDepartmentService.cs
+¦   ¦   ¦   IUserService.cs
+¦   ¦   ¦   UserService.cs
+¦   ¦   ¦   
+¦   ¦   +---AuthServices
+¦   ¦   ¦       AuthService.cs
+¦   ¦   ¦       
+¦   ¦   +---CriteriaService
+¦   ¦   ¦       CriteriaService.cs
+¦   ¦   ¦       
+¦   ¦   +---Evaluation Service
+¦   ¦   ¦       EvaluationService.cs
+¦   ¦   ¦       
+¦   ¦   +---SectionService
+¦   ¦   ¦       SectionService.cs
+¦   ¦   ¦       
+¦   ¦   +---ServiceInterfaces
+¦   ¦   ¦       IAuthService.cs
+¦   ¦   ¦       IEvaluationCriteriaService.cs
+¦   ¦   ¦       IEvaluationSectionService.cs
+¦   ¦   ¦       IEvaluationTemplateService.cs
+¦   ¦   ¦       
+¦   ¦   +---TemplateServices
+¦   ¦           TemplateService.cs
+¦   ¦           
+¦   +---Validator
+¦           LoginValidator.cs
+¦           RegisterValidator.cs
+¦           
++---EvaluationSystem.Domain
+¦   ¦   EvaluationSystem.Domain.csproj
+¦   ¦   
+¦   +---BaseModels
+¦   ¦       BaseEntity.cs
+¦   ¦       
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net8.0
+¦   ¦               EvaluationSystem.Domain.deps.json
+¦   ¦               EvaluationSystem.Domain.dll
+¦   ¦               EvaluationSystem.Domain.pdb
+¦   ¦               
+¦   +---Enums
+¦   ¦       Enums.cs
+¦   ¦       
+¦   +---Exceptions
+¦   ¦       BadRequestException.cs
+¦   ¦       NotFoundExcpetion.cs
+¦   ¦       UnauthorizedException.cs
+¦   ¦       
+¦   +---Models
+¦   ¦       Department.cs
+¦   ¦       EvaluationAssignment.cs
+¦   ¦       EvaluationCriteria.cs
+¦   ¦       EvaluationResponse.cs
+¦   ¦       EvaluationResult.cs
+¦   ¦       EvaluationReview.cs
+¦   ¦       EvaluationSection.cs
+¦   ¦       EvaluationTemplate.cs
+¦   ¦       RefreshToken.cs
+¦   ¦       Role.cs
+¦   ¦       User.cs
+¦   ¦       
+¦   +---obj
+¦       ¦   EvaluationSystem.Domain.csproj.nuget.dgspec.json
+¦       ¦   EvaluationSystem.Domain.csproj.nuget.g.props
+¦       ¦   EvaluationSystem.Domain.csproj.nuget.g.targets
+¦       ¦   project.assets.json
+¦       ¦   project.nuget.cache
+¦       ¦   
+¦       +---Debug
+¦           +---net8.0
+¦               ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+¦               ¦   EvaluationSystem.Domain.AssemblyInfo.cs
+¦               ¦   EvaluationSystem.Domain.AssemblyInfoInputs.cache
+¦               ¦   EvaluationSystem.Domain.assets.cache
+¦               ¦   EvaluationSystem.Domain.csproj.AssemblyReference.cache
+¦               ¦   EvaluationSystem.Domain.csproj.BuildWithSkipAnalyzers
+¦               ¦   EvaluationSystem.Domain.csproj.CoreCompileInputs.cache
+¦               ¦   EvaluationSystem.Domain.csproj.FileListAbsolute.txt
+¦               ¦   EvaluationSystem.Domain.dll
+¦               ¦   EvaluationSystem.Domain.GeneratedMSBuildEditorConfig.editorconfig
+¦               ¦   EvaluationSystem.Domain.GlobalUsings.g.cs
+¦               ¦   EvaluationSystem.Domain.pdb
+¦               ¦   EvaluationSystem.Domain.sourcelink.json
+¦               ¦   
+¦               +---ref
+¦               ¦       EvaluationSystem.Domain.dll
+¦               ¦       
+¦               +---refint
+¦                       EvaluationSystem.Domain.dll
+¦                       
++---EvaluationSystem.Infrastructure
+    ¦   EvaluationSystem.Infrastructure.csproj
+    ¦   
+    +---bin
+    ¦   +---Debug
+    ¦   ¦   +---net8.0
+    ¦   ¦           EvaluationSystem.Application.dll
+    ¦   ¦           EvaluationSystem.Application.pdb
+    ¦   ¦           EvaluationSystem.Domain.dll
+    ¦   ¦           EvaluationSystem.Domain.pdb
+    ¦   ¦           EvaluationSystem.Infrastructure.deps.json
+    ¦   ¦           EvaluationSystem.Infrastructure.dll
+    ¦   ¦           EvaluationSystem.Infrastructure.pdb
+    ¦   ¦           EvaluationSystem.Infrastructure.runtimeconfig.json
+    ¦   ¦           
+    ¦   +---Release
+    ¦       +---net8.0
+    +---Data
+    ¦       ApplicationDbContext.cs
+    ¦       DataSeeder.cs
+    ¦       
+    +---EntityConfigs
+    ¦       DepartmentConfig.cs
+    ¦       EvaluationAssignmentConfig.cs
+    ¦       EvaluationCriteriaConfig.cs
+    ¦       EvaluationResponseConfig.cs
+    ¦       EvaluationResultConfig.cs
+    ¦       EvaluationReviewConfig.cs
+    ¦       EvaluationSectionConfig.cs
+    ¦       EvaluationTemplateConfig.cs
+    ¦       RefreshTokenConfig.cs
+    ¦       RoleConfig.cs
+    ¦       UserConfig.cs
+    ¦       
+    +---Migrations
+    ¦       20260606112643_Init.cs
+    ¦       20260606112643_Init.Designer.cs
+    ¦       20260606112951_NullableDeletedAt.cs
+    ¦       20260606112951_NullableDeletedAt.Designer.cs
+    ¦       ApplicationDbContextModelSnapshot.cs
+    ¦       
+    +---obj
+    ¦   ¦   EvaluationSystem.Infrastructure.csproj.nuget.dgspec.json
+    ¦   ¦   EvaluationSystem.Infrastructure.csproj.nuget.g.props
+    ¦   ¦   EvaluationSystem.Infrastructure.csproj.nuget.g.targets
+    ¦   ¦   project.assets.json
+    ¦   ¦   project.nuget.cache
+    ¦   ¦   
+    ¦   +---Debug
+    ¦   ¦   +---net8.0
+    ¦   ¦       ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+    ¦   ¦       ¦   Evaluati.91B2086A.Up2Date
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.AssemblyInfo.cs
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.AssemblyInfoInputs.cache
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.assets.cache
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.csproj.AssemblyReference.cache
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.csproj.BuildWithSkipAnalyzers
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.csproj.CoreCompileInputs.cache
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.csproj.FileListAbsolute.txt
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.dll
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.genruntimeconfig.cache
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.GlobalUsings.g.cs
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.pdb
+    ¦   ¦       ¦   EvaluationSystem.Infrastructure.sourcelink.json
+    ¦   ¦       ¦   
+    ¦   ¦       +---ref
+    ¦   ¦       ¦       EvaluationSystem.Infrastructure.dll
+    ¦   ¦       ¦       
+    ¦   ¦       +---refint
+    ¦   ¦               EvaluationSystem.Infrastructure.dll
+    ¦   ¦               
+    ¦   +---Release
+    ¦       +---net8.0
+    ¦           ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+    ¦           ¦   EvaluationSystem.Infrastructure.AssemblyInfo.cs
+    ¦           ¦   EvaluationSystem.Infrastructure.AssemblyInfoInputs.cache
+    ¦           ¦   EvaluationSystem.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+    ¦           ¦   EvaluationSystem.Infrastructure.GlobalUsings.g.cs
+    ¦           ¦   
+    ¦           +---ref
+    ¦           +---refint
+    +---Repositories
+            GenericRepo.cs
+            RefreshTokenRepository.cs
+            UnitOfWork.cs
+            
