@@ -1,71 +1,71 @@
-﻿using EvaluationSystem.Application.DTOs.Department;
-using EvaluationSystem.Application.interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿    using EvaluationSystem.Application.DTOs.Department;
+    using EvaluationSystem.Application.interfaces;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
-namespace EvaluationSystem.Api.Controllers
-{
-   
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class DepartmentsController : ControllerBase
+    namespace EvaluationSystem.Api.Controllers
     {
-        private readonly IDepartmentService _departmentService;
-
-        public DepartmentsController(
-            IDepartmentService departmentService)
+   
+        [Route("api/[controller]")]
+        [ApiController]
+        [Authorize]
+        public class DepartmentsController : ControllerBase
         {
-            _departmentService = departmentService;
-        }
+            private readonly IDepartmentService _departmentService;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] DepartmentSort_Page dto)
-        {
-            var departments =
-                await _departmentService.GetAllAsync(dto);
+            public DepartmentsController(
+                IDepartmentService departmentService)
+            {
+                _departmentService = departmentService;
+            }
 
-            return Ok(departments);
-        }
+            [HttpGet]
+            public async Task<IActionResult> GetAll([FromQuery] DepartmentSort_Page dto)
+            {
+                var departments =
+                    await _departmentService.GetAllAsync(dto);
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var department =
-                await _departmentService.GetByIdAsync(id);
+                return Ok(departments);
+            }
 
-            return Ok(department);
-        }
+            [HttpGet("{id}")]
+            public async Task<IActionResult> GetById(int id)
+            {
+                var department =
+                    await _departmentService.GetByIdAsync(id);
 
-        [HttpPost]
-        public async Task<IActionResult> Create(
-            [FromBody] CreateDepartmentDto dto)
-        {
-            var department =
-                await _departmentService.CreateAsync(dto);
+                return Ok(department);
+            }
 
-            return CreatedAtAction(
-                nameof(GetById),
-                new { id = department.Id },
-                department);
-        }
+            [HttpPost]
+            public async Task<IActionResult> Create(
+                [FromBody] CreateDepartmentDto dto)
+            {
+                var department =
+                    await _departmentService.CreateAsync(dto);
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(
-            int id,
-            [FromBody] CreateDepartmentDto dto)
-        {
-            await _departmentService.UpdateAsync(id, dto);
+                return CreatedAtAction(
+                    nameof(GetById),
+                    new { id = department.Id },
+                    department);
+            }
 
-            return NoContent();
-        }
+            [HttpPut("{id}")]
+            public async Task<IActionResult> Update(
+                int id,
+                [FromBody] CreateDepartmentDto dto)
+            {
+                await _departmentService.UpdateAsync(id, dto);
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _departmentService.DeleteAsync(id);
+                return NoContent();
+            }
 
-            return NoContent();
+            [HttpDelete("{id}")]
+            public async Task<IActionResult> Delete(int id)
+            {
+                await _departmentService.DeleteAsync(id);
+
+                return NoContent();
+            }
         }
     }
-}

@@ -17,6 +17,8 @@ namespace EvaluationSystem.Application.Services
         Task DeactivateUser(int userId);
         Task<PagesResult<UserDto>> ListUsersAsync(UserSearchSort searchSort);
         Task<UserDto?> GetByIdAsync(int id);
+        Task UpdateAsync(int id, UpdateUserDto dto);
+        Task DeleteAsync(int id);
 
     }
 }

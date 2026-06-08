@@ -2,11 +2,13 @@
 using EvaluationSystem.Application.DTOs.Department;
 using EvaluationSystem.Application.DTOs.User;
 using EvaluationSystem.Application.Exceptions;
+using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,55 +23,29 @@ namespace EvaluationSystem.Application.Services
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        public UserService(IUnitOfWork unitOfWork,IMapper mapper,UserManager<User> userManager,RoleManager<Role> roleManager)
+        private readonly ILogger<UserService> _logger;
+        public UserService(IUnitOfWork unitOfWork,IMapper mapper,UserManager<User> userManager,RoleManager<Role> roleManager,ILogger<UserService> logger)
         {
             _unitofwork = unitOfWork;
             _mapper= mapper;
             _userManager= userManager;
             _roleManager= roleManager;
+            _logger= logger;
             
-        }
-
-        public async Task ActivateUser(int userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null)
-            {
-                throw new BadRequestException("User not found");
-            }
-            if (user.IsActive)
-            {
-                throw new BadRequestException("User is already activated");
-            }
-            user.IsActive = true;
-            await _userManager.UpdateAsync(user);
         }
 
         public async Task AssignDepartmentAsync(int userId,AssignDepartmentDto assignDepartment)
         {
-            var user =
-                await _userManager.FindByIdAsync(userId.ToString());
-
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
-            {
-                throw new NotFoundException("User not found");
-            }
+                throw new NotFoundException($"User with ID {userId} not found");
 
-            var department =
-                await _unitofwork.Departments.GetByIdAsync(
-                    assignDepartment.DepartmentId);
-
+            var department = await _unitofwork.Departments.GetByIdAsync(assignDepartment.DepartmentId);
             if (department == null)
-            {
-                throw new NotFoundException("Department not found");
-            }
+                throw new NotFoundException($"Department with ID {assignDepartment.DepartmentId} not found");
 
-            if (user.DepartmentId ==
-                assignDepartment.DepartmentId)
-            {
-                throw new BadRequestException(
-                    "User is already assigned to this department");
-            }
+            if (user.DepartmentId == assignDepartment.DepartmentId)
+                throw new BadRequestException($"User is already assigned to {department.Name}");
 
             user.DepartmentId =
                 assignDepartment.DepartmentId;
@@ -138,10 +114,12 @@ namespace EvaluationSystem.Application.Services
 
         public async Task<UserDto> CreateAsync(CreateUserDto user)
         {
+            _logger.LogInformation("Creating user with email: {Email}", user.Email);
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
             if (existingUser != null)
             {
+                _logger.LogWarning("User creation failed - email exists: {Email}", user.Email);
                 throw new BadRequestException("This email already exists!");
             }
 
@@ -186,30 +164,17 @@ namespace EvaluationSystem.Application.Services
                     string.Join(", ",
                     roleResult.Errors.Select(e => e.Description)));
             }
-
+            _logger.LogInformation("User created successfully: {UserId}", newUser.Id);
             return await MapUserToDto(newUser);
         }
 
-        public async Task DeactivateUser(int userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if(user == null)
-            {
-                throw new BadRequestException("User not found");
-            }
-            if (!user.IsActive)
-            {
-                throw new BadRequestException("User is already deactivated");
-            }
-            user.IsActive = false;
-            await _userManager.UpdateAsync(user);
-        }
+  
 
         public async Task<UserDto?> GetByIdAsync(int id)
         {
             var user = await _userManager.Users
         .Include(u => u.Department) 
-        .FirstOrDefaultAsync(u => u.Id.ToString() == id.ToString());
+        .FirstOrDefaultAsync(u => u.Id == id);
 
 
             if (user == null)
@@ -221,17 +186,9 @@ namespace EvaluationSystem.Application.Services
             return await MapUserToDto(user);
         }
 
-        public async Task<PagesResult<UserDto>> ListUsersAsync( UserSearchSort searchSort)
+        public async Task<PagesResult<UserDto>> ListUsersAsync(UserSearchSort searchSort)
         {
-            searchSort.PageNumber =
-                Math.Max(1, searchSort.PageNumber);
-
-            searchSort.PageSize =
-                Math.Clamp(searchSort.PageSize, 1, 100);
-
             var query = _unitofwork.Users.GetAll();
-
-            query = query.Include(u => u.Department);
 
             if (!string.IsNullOrWhiteSpace(searchSort.Search))
             {
@@ -240,31 +197,39 @@ namespace EvaluationSystem.Application.Services
                     u.Email.Contains(searchSort.Search));
             }
 
-            query = searchSort.SortBy?.ToLower() switch
+            var sortOptions = new Dictionary<string, Func<IQueryable<User>, IQueryable<User>>>
             {
-                "name" => searchSort.Descending
-                    ? query.OrderByDescending(u => u.FullName)
-                    : query.OrderBy(u => u.FullName),
+                ["name"] = q => searchSort.Descending
+                    ? q.OrderByDescending(u => u.FullName)
+                    : q.OrderBy(u => u.FullName),
 
-                "id" => searchSort.Descending
-                    ? query.OrderByDescending(u => u.Id)
-                    : query.OrderBy(u => u.Id),
-
-                _ => query.OrderBy(u => u.Id)
+                ["id"] = q => searchSort.Descending
+                    ? q.OrderByDescending(u => u.Id)
+                    : q.OrderBy(u => u.Id),
             };
 
-            var totalCount = await query.CountAsync();
+            query = SortingHelper.ApplySorting(
+                query,
+                searchSort.SortBy,
+                searchSort.Descending,
+                sortOptions);
 
+            query = query.Include(u => u.Department);
+
+            var totalCount = await query.CountAsync();
             var users = await query
                 .Skip((searchSort.PageNumber - 1) * searchSort.PageSize)
                 .Take(searchSort.PageSize)
                 .ToListAsync();
 
+            // Optimized: Removed .Result inside LINQ to prevent thread starvation/deadlocks
             var userDtos = new List<UserDto>();
-
-            foreach (var user in users)
+            foreach (var u in users)
             {
-                userDtos.Add(await MapUserToDto(user));
+                var dto = _mapper.Map<UserDto>(u);
+                var roles = await _userManager.GetRolesAsync(u);
+                dto.Role = roles.FirstOrDefault() ?? string.Empty;
+                userDtos.Add(dto);
             }
 
             return new PagesResult<UserDto>
@@ -284,6 +249,63 @@ namespace EvaluationSystem.Application.Services
             dto.Role = roles.FirstOrDefault() ?? string.Empty;
 
             return dto;
+        }
+        public async Task SetUserActiveStatusAsync(int userId, bool isActive)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                throw new NotFoundException("User not found");
+
+            if (user.IsActive == isActive)
+            {
+                string status = isActive ? "activated" : "deactivated";
+                throw new BadRequestException($"User is already {status}");
+            }
+
+            user.IsActive = isActive;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+                throw new BadRequestException(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        public async Task ActivateUser(int userId) => await SetUserActiveStatusAsync(userId, true);
+        public async Task DeactivateUser(int userId) => await SetUserActiveStatusAsync(userId, false);
+
+        public async Task UpdateAsync(int id, UpdateUserDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                throw new NotFoundException("User not found");
+
+            var department = await _unitofwork.Departments.GetByIdAsync(dto.DepartmentId);
+            if (department == null)
+                throw new NotFoundException("Department not found");
+
+            user.FullName = dto.FullName;
+            user.Email = dto.Email;
+            user.UserName = dto.Email; 
+            user.DepartmentId = dto.DepartmentId;
+            user.JobTitle = dto.JobTitle;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                throw new BadRequestException(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                throw new NotFoundException("User not found");
+
+            user.IsDeleted = true;
+            user.DeletedAt = DateTime.UtcNow;
+            user.IsActive = false;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                throw new BadRequestException(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
     }
 }
