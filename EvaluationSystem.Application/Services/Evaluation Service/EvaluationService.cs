@@ -2,9 +2,11 @@
 using EvaluationSystem.Application.DTOs.Evaluation_Response;
 using EvaluationSystem.Application.DTOs.Evaluation_Result;
 using EvaluationSystem.Application.DTOs.Evaluation_Reviewer;
+using EvaluationSystem.Application.Exceptions;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Domain.Enums;
+using EvaluationSystem.Domain.Exceptions;
 using EvaluationSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,13 +17,13 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Services.Evaluation_Service
 {
-    public class EvaluationService: IEvaluationService
+    public class EvaluationService : IEvaluationService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IGenericRepo<EvaluationCriteria> _evaluationCriteriaRepo;
         private readonly ScoreCalculator _calculator;
-        public EvaluationService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepo<EvaluationCriteria> evaluationCriteriaRepo, ScoreCalculator calculator    )
+        public EvaluationService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepo<EvaluationCriteria> evaluationCriteriaRepo, ScoreCalculator calculator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -29,61 +31,47 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
             _calculator = calculator;
         }
 
-        public async Task<EvaluationResultDto> SubmitEvaluationAsync( int assignmentId, SubmitEvaluationDto dto)
+        public async Task<EvaluationResultDto> SubmitEvaluationAsync(int assignmentId, SubmitEvaluationDto dto)
         {
-            var responses = _mapper.Map<List<EvaluationResponse>>(dto.Responses);
-
-            var criteriaIds = responses
-                .Select(r => r.CriterionId)
-                .ToList();
-
-            foreach (var response in responses)
+            var assignment = await _unitOfWork.EvaluationAssignments.GetByIdAsync(assignmentId);
+            if (assignment == null)
             {
-                response.AssignmentId = assignmentId;
-
-                await _unitOfWork.EvaluationResponses.AddAsync(response);
+                throw new NotFoundException($"Assignment with ID {assignmentId} was not found.");
             }
 
+            if (assignment.Status == EvaluationStatus.Submitted || assignment.Status == EvaluationStatus.Completed)
+            {
+                throw new BadRequestException($"Assignment {assignmentId} has already been submitted and cannot be modified.");
+            }
+
+            var responses = _mapper.Map<List<EvaluationResponse>>(dto.Responses);
+            var criteriaIds = responses.Select(r => r.CriterionId).ToList();
+
             var criteriaList = await _evaluationCriteriaRepo
-                .FindByCondition(
-                    c => criteriaIds.Contains(c.Id),
-                    trackChanges: false)
+                .FindByCondition(c => criteriaIds.Contains(c.Id), trackChanges: false)
                 .ToListAsync();
 
             var criteriaDictionary = criteriaList.ToDictionary(c => c.Id);
 
             foreach (var response in responses)
             {
-                if (criteriaDictionary.TryGetValue(
-                        response.CriterionId,
-                        out var criterion))
+                response.AssignmentId = assignmentId;
+
+                if (criteriaDictionary.TryGetValue(response.CriterionId, out var criterion))
                 {
                     response.Criterion = criterion;
                 }
                 else
                 {
-                    throw new Exception(
-                        $"Criterion with ID {response.CriterionId} not found.");
+                    throw new NotFoundException($"Criterion with ID {response.CriterionId} was not found.");
                 }
+
+                await _unitOfWork.EvaluationResponses.AddAsync(response);
             }
-
-
-            var finalResult = _calculator.CalculateFinalScore(
-                assignmentId,
-                responses);
-
+            var finalResult = _calculator.CalculateFinalScore(assignmentId, responses);
             await _unitOfWork.EvaluationResults.AddAsync(finalResult);
-
-            var assignment = await _unitOfWork
-                .EvaluationAssignments
-                .GetByIdAsync(assignmentId);
-
-            if (assignment != null)
-            {
-                assignment.Status = EvaluationStatus.Submitted;
-
-                _unitOfWork.EvaluationAssignments.Update(assignment);
-            }
+            assignment.Status = EvaluationStatus.Submitted;
+            _unitOfWork.EvaluationAssignments.Update(assignment);
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -92,12 +80,27 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
 
         public async Task<EvaluationReviewDto> ReviewEvaluationAsync(int assignmentId, int reviewerId, SubmitReviewDto dto, ReviewStatus newStatus)
         {
+            var assignment = await _unitOfWork.EvaluationAssignments.GetByIdAsync(assignmentId);
+            if (assignment == null)
+            {
+                throw new NotFoundException($"Assignment with ID {assignmentId} was not found.");
+            }
+            if (assignment.EvaluatorId != reviewerId)
+            {
+                throw new UnauthorizedException("You are not authorized to review this evaluation. Only the assigned evaluator can perform this action.");
+            }
+            if (assignment.Status != EvaluationStatus.Submitted)
+            {
+                throw new BadRequestException($"Cannot review Assignment {assignmentId} because its current status is '{assignment.Status}'. It must be 'Submitted'.");
+            }
+
             var existingResult = await _unitOfWork.EvaluationResults
-                    .FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: false)
-                    .FirstOrDefaultAsync();
+            .FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: false)
+            .FirstOrDefaultAsync();
+
             if (existingResult == null)
             {
-                throw new Exception($"Cannot review Assignment {assignmentId} because it has not been submitted yet.");
+                throw new BadRequestException($"Cannot review Assignment {assignmentId} because no calculation results were found in the database.");
             }
 
             var review = new EvaluationReview
@@ -105,27 +108,22 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
                 AssignmentId = assignmentId,
                 ReviewerId = reviewerId,
                 ReviewComment = dto.ReviewComment,
-                Status = newStatus, 
+                Status = newStatus,
                 ReviewedAt = DateTime.UtcNow
             };
 
             await _unitOfWork.EvaluationReviews.AddAsync(review);
-            var assignment = await _unitOfWork.EvaluationAssignments.GetByIdAsync(assignmentId);
-            if (assignment != null)
-            {
-                if (newStatus == ReviewStatus.Approved)
-                {
-                    assignment.Status = EvaluationStatus.Completed;
-                }
-                else if (newStatus == ReviewStatus.Rejected || newStatus == ReviewStatus.Amended)
-                {
-                    assignment.Status = EvaluationStatus.InProgress;
-                }
 
-                _unitOfWork.EvaluationAssignments.Update(assignment);
+            if (newStatus == ReviewStatus.Approved)
+            {
+                assignment.Status = EvaluationStatus.Completed;
+            }
+            else if (newStatus == ReviewStatus.Rejected || newStatus == ReviewStatus.Amended)
+            {
+                assignment.Status = EvaluationStatus.InProgress;
             }
 
-
+            _unitOfWork.EvaluationAssignments.Update(assignment);
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<EvaluationReviewDto>(review);
@@ -133,14 +131,23 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
 
         public async Task<List<EvaluationResponseDto>> GetResponsesByAssignmentAsync(int assignmentId)
         {
+            var assignmentExists = await _unitOfWork.EvaluationAssignments
+                .FindByCondition(a => a.Id == assignmentId, trackChanges: false)
+                .AnyAsync();
+
+            if (!assignmentExists)
+            {
+                throw new NotFoundException($"Assignment with ID {assignmentId} was not found.");
+            }
+
             var responses = await _unitOfWork.EvaluationResponses
                 .FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: false)
-                .Include(r => r.Criterion) 
+                .Include(r => r.Criterion)
                 .ToListAsync();
 
             if (!responses.Any())
             {
-                throw new Exception($"No responses found for Assignment ID {assignmentId}.");
+                throw new NotFoundException($"No responses found for Assignment ID {assignmentId}. The evaluation has not been submitted yet.");
             }
 
             return _mapper.Map<List<EvaluationResponseDto>>(responses);
@@ -148,17 +155,25 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
 
         public async Task<EvaluationResultDto> GetResultByAssignmentAsync(int assignmentId)
         {
+            var assignmentExists = await _unitOfWork.EvaluationAssignments
+                    .FindByCondition(a => a.Id == assignmentId, trackChanges: false)
+                    .AnyAsync();
+
+            if (!assignmentExists)
+            {
+                throw new NotFoundException($"Assignment with ID {assignmentId} was not found.");
+            }
+
             var result = await _unitOfWork.EvaluationResults
                 .FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: false)
                 .FirstOrDefaultAsync();
 
             if (result == null)
             {
-                throw new Exception($"No result found for Assignment ID {assignmentId}. The evaluation might not be submitted yet.");
+                throw new NotFoundException($"No result found for Assignment ID {assignmentId}. The evaluation might not be submitted yet.");
             }
 
             return _mapper.Map<EvaluationResultDto>(result);
         }
     }
-
-    }
+}

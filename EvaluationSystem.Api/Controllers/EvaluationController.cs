@@ -1,15 +1,19 @@
 ﻿using EvaluationSystem.Application.DTOs.Evaluation_Response;
 using EvaluationSystem.Application.DTOs.Evaluation_Reviewer;
 using EvaluationSystem.Application.interfaces;
-using EvaluationSystem.Application.Services.Evaluation_Service;
+using EvaluationSystem.Application.Services.ServiceInterfaces;
 using EvaluationSystem.Domain.Enums;
+using EvaluationSystem.Domain.Exceptions; 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using EvaluationSystem.API.Extensions;
 
 namespace EvaluationSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize] 
     public class EvaluationsController : ControllerBase
     {
         private readonly IEvaluationService _evaluationService;
@@ -22,95 +26,37 @@ namespace EvaluationSystem.API.Controllers
         [HttpPost("{assignmentId}/submit")]
         public async Task<IActionResult> SubmitEvaluation(int assignmentId, [FromBody] SubmitEvaluationDto dto)
         {
-            try
-            {
-                var result = await _evaluationService.SubmitEvaluationAsync(assignmentId, dto);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }
+            var result = await _evaluationService.SubmitEvaluationAsync(assignmentId, dto);
+            return Ok(result);
         }
 
-        [HttpPost("{assignmentId}/review")]
-        public async Task<IActionResult> ReviewEvaluation(int assignmentId, [FromQuery] ReviewStatus status, [FromBody] SubmitReviewDto dto)
-        {
-            try
-            {
-                var reviewerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (!int.TryParse(reviewerIdClaim, out int reviewerId))
-                {
-                    return Unauthorized(new { Message = "You must be logged in to review evaluations." });
-                }
-
-                var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, status);
-
-                return Ok(reviewResult);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }
-        }
         [HttpGet("{assignmentId}/responses")]
         public async Task<IActionResult> GetResponses(int assignmentId)
         {
-            try
-            {
-                var responses = await _evaluationService.GetResponsesByAssignmentAsync(assignmentId);
-                return Ok(responses);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new { Message = ex.Message });
-            }
+            var responses = await _evaluationService.GetResponsesByAssignmentAsync(assignmentId);
+            return Ok(responses);
         }
 
         [HttpGet("{assignmentId}/result")]
         public async Task<IActionResult> GetResult(int assignmentId)
         {
-            try
-            {
-                var result = await _evaluationService.GetResultByAssignmentAsync(assignmentId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new { Message = ex.Message });
-            }
+            var result = await _evaluationService.GetResultByAssignmentAsync(assignmentId);
+            return Ok(result);
         }
+
         [HttpPost("{assignmentId}/approve")]
         public async Task<IActionResult> ApproveEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
         {
-            try
-            {
-                var reviewerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (!int.TryParse(reviewerIdClaim, out int reviewerId)) return Unauthorized();
-                var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Approved);
-                return Ok(reviewResult);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }
+            var reviewerId = User.GetUserId();
+            var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Approved);
+            return Ok(reviewResult);
         }
-
         [HttpPost("{assignmentId}/reject")]
         public async Task<IActionResult> RejectEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
         {
-            try
-            {
-                var reviewerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (!int.TryParse(reviewerIdClaim, out int reviewerId)) return Unauthorized();
-                var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Rejected);
-                return Ok(reviewResult);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }
+            var reviewerId = User.GetUserId();
+            var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Rejected);
+            return Ok(reviewResult);
         }
     }
-    }
+}
