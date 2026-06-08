@@ -54,5 +54,63 @@ namespace EvaluationSystem.API.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+        [HttpGet("{assignmentId}/responses")]
+        public async Task<IActionResult> GetResponses(int assignmentId)
+        {
+            try
+            {
+                var responses = await _evaluationService.GetResponsesByAssignmentAsync(assignmentId);
+                return Ok(responses);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("{assignmentId}/result")]
+        public async Task<IActionResult> GetResult(int assignmentId)
+        {
+            try
+            {
+                var result = await _evaluationService.GetResultByAssignmentAsync(assignmentId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+        [HttpPost("{assignmentId}/approve")]
+        public async Task<IActionResult> ApproveEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
+        {
+            try
+            {
+                var reviewerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(reviewerIdClaim, out int reviewerId)) return Unauthorized();
+                var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Approved);
+                return Ok(reviewResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("{assignmentId}/reject")]
+        public async Task<IActionResult> RejectEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
+        {
+            try
+            {
+                var reviewerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!int.TryParse(reviewerIdClaim, out int reviewerId)) return Unauthorized();
+                var reviewResult = await _evaluationService.ReviewEvaluationAsync(assignmentId, reviewerId, dto, ReviewStatus.Rejected);
+                return Ok(reviewResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
-}
+    }

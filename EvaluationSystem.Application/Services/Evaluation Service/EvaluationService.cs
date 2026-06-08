@@ -20,49 +20,73 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IGenericRepo<EvaluationCriteria> _evaluationCriteriaRepo;
-        public EvaluationService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepo<EvaluationCriteria> evaluationCriteriaRepo)
+        private readonly ScoreCalculator _calculator;
+        public EvaluationService(IUnitOfWork unitOfWork, IMapper mapper, IGenericRepo<EvaluationCriteria> evaluationCriteriaRepo, ScoreCalculator calculator    )
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _evaluationCriteriaRepo = evaluationCriteriaRepo;
-
+            _calculator = calculator;
         }
 
-        public async Task<EvaluationResultDto> SubmitEvaluationAsync(int assignmentId, SubmitEvaluationDto dto)
+        public async Task<EvaluationResultDto> SubmitEvaluationAsync( int assignmentId, SubmitEvaluationDto dto)
         {
             var responses = _mapper.Map<List<EvaluationResponse>>(dto.Responses);
 
-            // ========================================================
-            // 🛑 SIMULATION MODE: BYPASSING THE DATABASE
-            // ========================================================
+            var criteriaIds = responses
+                .Select(r => r.CriterionId)
+                .ToList();
 
-            // 1. Fake the database criteria in memory so we don't need SQL
-            var fakeCriteriaList = new List<EvaluationCriteria>
-    {
-        // Question 10: Rating Scale, Weight 2
-        new EvaluationCriteria { Id = 10, Weight = 2, MaxScore = 5, QuestionType = QuestionType.RatingScale },
-        // Question 11: Yes/No, Weight 1
-        new EvaluationCriteria { Id = 11, Weight = 1, MaxScore = 5, QuestionType = QuestionType.Boolean }
-    };
-
-            // 2. Attach our fake criteria to the incoming answers
             foreach (var response in responses)
             {
                 response.AssignmentId = assignmentId;
-                response.Criterion = fakeCriteriaList.FirstOrDefault(c => c.Id == response.CriterionId);
 
-                if (response.Criterion == null) throw new Exception($"Criterion {response.CriterionId} not found.");
+                await _unitOfWork.EvaluationResponses.AddAsync(response);
             }
 
-            // 3. Run your Math Engine!
-            var calculator = new ScoreCalculator();
-            var finalResult = calculator.CalculateFinalScore(assignmentId, responses);
+            var criteriaList = await _evaluationCriteriaRepo
+                .FindByCondition(
+                    c => criteriaIds.Contains(c.Id),
+                    trackChanges: false)
+                .ToListAsync();
 
-            // 4. We COMMENT OUT the database saves so SQL Server doesn't crash!
-            // await _unitOfWork.EvaluationResults.AddAsync(finalResult);
-            // await _unitOfWork.SaveChangesAsync();
+            var criteriaDictionary = criteriaList.ToDictionary(c => c.Id);
 
-            // 5. Return the result straight to Swagger
+            foreach (var response in responses)
+            {
+                if (criteriaDictionary.TryGetValue(
+                        response.CriterionId,
+                        out var criterion))
+                {
+                    response.Criterion = criterion;
+                }
+                else
+                {
+                    throw new Exception(
+                        $"Criterion with ID {response.CriterionId} not found.");
+                }
+            }
+
+
+            var finalResult = _calculator.CalculateFinalScore(
+                assignmentId,
+                responses);
+
+            await _unitOfWork.EvaluationResults.AddAsync(finalResult);
+
+            var assignment = await _unitOfWork
+                .EvaluationAssignments
+                .GetByIdAsync(assignmentId);
+
+            if (assignment != null)
+            {
+                assignment.Status = EvaluationStatus.Submitted;
+
+                _unitOfWork.EvaluationAssignments.Update(assignment);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
             return _mapper.Map<EvaluationResultDto>(finalResult);
         }
 
@@ -105,6 +129,35 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<EvaluationReviewDto>(review);
+        }
+
+        public async Task<List<EvaluationResponseDto>> GetResponsesByAssignmentAsync(int assignmentId)
+        {
+            var responses = await _unitOfWork.EvaluationResponses
+                .FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: false)
+                .Include(r => r.Criterion) 
+                .ToListAsync();
+
+            if (!responses.Any())
+            {
+                throw new Exception($"No responses found for Assignment ID {assignmentId}.");
+            }
+
+            return _mapper.Map<List<EvaluationResponseDto>>(responses);
+        }
+
+        public async Task<EvaluationResultDto> GetResultByAssignmentAsync(int assignmentId)
+        {
+            var result = await _unitOfWork.EvaluationResults
+                .FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: false)
+                .FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                throw new Exception($"No result found for Assignment ID {assignmentId}. The evaluation might not be submitted yet.");
+            }
+
+            return _mapper.Map<EvaluationResultDto>(result);
         }
     }
 

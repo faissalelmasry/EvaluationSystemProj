@@ -13,7 +13,7 @@ namespace EvaluationSystem.Application.Mapping
     {
         public EvaluationSectionProfile() 
         {
-            CreateMap<EvaluationSection,EvaluationSectionDto>().ReverseMap();
+            CreateMap<EvaluationSection,EvaluationSectionDto>().ForMember(dest=>dest.Criteria,opt => opt.MapFrom(src => src.Criterias)).ReverseMap();
             CreateMap<EvaluationSection, AddEvaluationSectionDto>().ReverseMap();
             CreateMap<EvaluationSection,EvaluationTemplateSectionsDto>()
                 .AfterMap((src, dest) => { dest.TemplateTitle = src.Template.Title; }).ReverseMap();

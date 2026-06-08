@@ -24,6 +24,8 @@ using EvaluationSystem.Application.Services.TemplateServices;
 using EvaluationSystem.Application.Services.SectionService;
 using System.Text.Json.Serialization;
 using EvaluationSystem.Application.Services;
+using EvaluationSystem.Application.Services.AssignmentService;
+using EvaluationSystem.Application.Services.CriteriaService;
 
 namespace EvaluationSystem.Api
 {
@@ -53,6 +55,8 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IEvaluationTemplateService, TemplateService>();
             builder.Services.AddScoped<IGenericRepo<EvaluationTemplate>, GenericRepo<EvaluationTemplate>>();
             builder.Services.AddScoped<IGenericRepo<EvaluationSection>, GenericRepo<EvaluationSection>>();
+            builder.Services.AddScoped<IEvaluationCriteriaService, CriteriaService>();
+            builder.Services.AddScoped<IEvaluationService, EvaluationService>();
             builder.Services.AddScoped<IEvaluationSectionService, SectionService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<JwtHelper>();
@@ -63,6 +67,15 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IEvaluationService, EvaluationService>();
+            builder.Services.AddScoped<IEvaluationAssignmentService, EvaluationAssignmentService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<ScoreCalculator>();
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             builder.Services.AddAutoMapper(op =>
             {
@@ -71,20 +84,11 @@ namespace EvaluationSystem.Api
                 op.AddProfile<EvaluationSectionProfile>();
                 op.AddProfile<EvaluationCriteriaProfile>();
                 op.AddProfile<EvaluationProfile>();
-            });
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
-            builder.Services.AddAutoMapper(op =>
-            {
-                op.AddProfile<AuthProfile>();
                 op.AddProfile<DepartmentProfile>();
                 op.AddProfile<UserProfile>();
+                op.AddProfile<EvaluationAssignmentProfile>();
             });
+
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 
@@ -144,20 +148,21 @@ namespace EvaluationSystem.Api
                 options.AddSecurityRequirement(
                     new OpenApiSecurityRequirement
                     {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference =
-                        new OpenApiReference
                         {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                            new OpenApiSecurityScheme
+                            {
+                                Reference =
+                                    new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    }
+                            },
+                            Array.Empty<string>()
                         }
-                },
-                Array.Empty<string>()
-            }
                     });
             });
+
             var app = builder.Build();
 
             //await DataSeeder.InitializeAsync(app.Services);

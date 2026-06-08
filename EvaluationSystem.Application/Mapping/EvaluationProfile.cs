@@ -20,6 +20,11 @@ namespace EvaluationSystem.Application.Mapping
             CreateMap<EvaluationResult, EvaluationResultDto>();
 
             CreateMap<EvaluationReview, EvaluationReviewDto>();
+
+            CreateMap<EvaluationResponse, EvaluationResponseDto>()
+                .ForMember(
+                    dest => dest.CriterionTitle,
+                    opt => opt.MapFrom(src => src.Criterion.Title));
         }
     }
 }
