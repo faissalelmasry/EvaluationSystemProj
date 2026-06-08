@@ -9,9 +9,9 @@ namespace EvaluationSystem.Application.Services.ServiceInterfaces
 {
     public interface IEvaluationSectionService
     {
-        Task<bool> AddSectionAsync(int templateId, AddEvaluationSectionDto dto);
-        Task<bool> UpdateSectionAsync(int id, AddEvaluationSectionDto dto);
-        Task<bool> DeleteSectionAsync(int id);
+        Task AddSectionAsync(int templateId, AddEvaluationSectionDto dto);
+        Task UpdateSectionAsync(int id, AddEvaluationSectionDto dto);
+        Task DeleteSectionAsync(int id);
 
     }
 }

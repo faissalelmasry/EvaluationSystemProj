@@ -3,6 +3,7 @@ using EvaluationSystem.Application.DTOs.Evaluation_Reviewer;
 using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Application.Services.Evaluation_Service;
 using EvaluationSystem.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -10,6 +11,7 @@ namespace EvaluationSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EvaluationsController : ControllerBase
     {
         private readonly IEvaluationService _evaluationService;

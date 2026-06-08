@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using EvaluationSystem.Application.Services.ServiceInterfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EvaluationSystem.Api.Controllers
 {
@@ -25,15 +26,15 @@ namespace EvaluationSystem.Api.Controllers
         {
             var authResponse = await _authService.LoginAsync(dto);
             Response.Cookies.Append(
-    "refreshToken",
-    authResponse.RefreshToken,
-    new CookieOptions
-    {
-        HttpOnly = true,
-        Secure = true,
-        SameSite = SameSiteMode.Strict,
-        Expires = authResponse.RefreshTokenExpiresAt
-    });
+                "refreshToken",
+                authResponse.RefreshToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = authResponse.RefreshTokenExpiresAt
+                });
 
             return Ok(new
             {
@@ -69,6 +70,7 @@ namespace EvaluationSystem.Api.Controllers
             });
         }
         [HttpPost("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             var refreshToken = Request.Cookies["refreshToken"];

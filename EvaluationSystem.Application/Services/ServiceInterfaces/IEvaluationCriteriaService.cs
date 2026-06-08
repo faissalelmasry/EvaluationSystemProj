@@ -9,8 +9,8 @@ namespace EvaluationSystem.Application.Services.ServiceInterfaces
 {
     public interface IEvaluationCriteriaService
     {
-        Task<bool> AddCriteriaAsync(int sectionid, AddEvaluationCriteriaDto dto);
-        Task<bool> UpdateCriteriaAsync(int id, AddEvaluationCriteriaDto dto);
-        Task<bool> DeleteCriteriaAsync(int id);
+        Task AddCriteriaAsync(int sectionid, AddEvaluationCriteriaDto dto);
+        Task UpdateCriteriaAsync(int id, AddEvaluationCriteriaDto dto);
+        Task DeleteCriteriaAsync(int id);
     }
 }
