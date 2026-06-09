@@ -26,6 +26,7 @@ using System.Text.Json.Serialization;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Services.AssignmentService;
 using EvaluationSystem.Application.Services.CriteriaService;
+using EvaluationSystem.Application.Services.ReportService;
 
 namespace EvaluationSystem.Api
 {
@@ -70,6 +71,7 @@ namespace EvaluationSystem.Api
             builder.Services.AddScoped<IEvaluationAssignmentService, EvaluationAssignmentService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<ScoreCalculator>();
+            builder.Services.AddScoped<IEvaluationReportService, ReportService>();
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
