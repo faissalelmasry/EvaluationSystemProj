@@ -27,6 +27,7 @@ namespace EvaluationSystem.Application.Mapping
 
                 .ForMember(dest => dest.EvaluateeName,
                            opt => opt.MapFrom(src => src.Evaluatee != null ? src.Evaluatee.FullName : string.Empty));
+            CreateMap<CreateAssignmentDto, EvaluationAssignment>();
         }
 
     }
