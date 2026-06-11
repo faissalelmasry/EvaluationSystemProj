@@ -14,5 +14,6 @@ namespace EvaluationSystem.Application.interfaces
         Task<UserReportDto> GetReportByUserAsync(int userId);
         Task<CompletionRateDto> GetCompletionRateAsync();
         Task<TopScoresDto> GetTopScoresAsync();
+        Task<byte[]> GenerateEvaluationPdfAsync(int assignmentId);
     }
 }
