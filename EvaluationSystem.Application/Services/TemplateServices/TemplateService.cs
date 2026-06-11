@@ -10,72 +10,100 @@ using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Application.Services.SectionService;
 using EvaluationSystem.Application.Services.ServiceInterfaces;
 using EvaluationSystem.Domain.Models;
+using EvaluationSystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using EvaluationSystem.Application.Exceptions;
+using static System.Collections.Specialized.BitVector32;
 
 namespace EvaluationSystem.Application.Services.TemplateServices
 {
     public class TemplateService : IEvaluationTemplateService
     {
-        private readonly IGenericRepo<EvaluationTemplate> EvaluationRepo;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
-        public TemplateService(IGenericRepo<EvaluationTemplate> _EvaluationRepo,IMapper _mapper,IUnitOfWork _unitOfWork) 
+        public TemplateService(IMapper _mapper,IUnitOfWork _unitOfWork) 
         { 
-            EvaluationRepo = _EvaluationRepo;
             mapper = _mapper;
             unitOfWork = _unitOfWork;
         }
         public async Task<List<EvaluationTemplateListDto>> GetTemplatesAsync(int PageNumber = 1, int PageSize = 10, string? Search = "")
         {
-            IQueryable<EvaluationTemplate> Templates = EvaluationRepo.GetAll().AsNoTracking();
+            IQueryable<EvaluationTemplate> Templates = unitOfWork.EvaluationTemplates.GetAll().AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
                 Templates = Templates.Where(t => t.Title.Contains(Search) || t.Description.Contains(Search));
             }
             var TempLatesList = await Templates.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToListAsync();
+            if(TempLatesList.Count == 0)
+                throw new NotFoundException("No templates found");
             var temps= mapper.Map<List<EvaluationTemplateListDto>>(TempLatesList);
 
             return temps;
         }
         public async Task<GetEvaluationTemplateDto> GetTemplateAsync(int id)
         {
-            var temp = await EvaluationRepo.GetByIdAsync(id,
+            var temp = await unitOfWork.EvaluationTemplates.GetByIdAsync(id,
                 q => q.Include(t => t.EvaluationSections)
                        .ThenInclude(s => s.Criterias)
                 );
+            if(temp==null)
+                throw new NotFoundException("Template isn't found");
+
             return mapper.Map<GetEvaluationTemplateDto>(temp);
         }
-        public async Task<bool> AddTemplateAsync(EvaluationTemplateDto dto)
+        public async Task AddTemplateAsync(EvaluationTemplateDto dto)
         {
-            await EvaluationRepo.AddAsync(mapper.Map<EvaluationTemplate>(dto));
-            var res=await unitOfWork.SaveChangesAsync();
-            return res > 0;
+            var conflict = await unitOfWork.EvaluationTemplates
+                .FindByCondition(c =>
+                    (c.Title == dto.Title))
+                .FirstOrDefaultAsync();
+            if (conflict != null)
+                throw new BadRequestException("Template already exists");
+            await unitOfWork.EvaluationTemplates.AddAsync(mapper.Map<EvaluationTemplate>(dto));
+            var AffectedRows=await unitOfWork.SaveChangesAsync();
+            if(AffectedRows==0)
+                throw new BadRequestException("can't add template");
 
         }
-        public async Task<bool> UpdateTemplateAsync(int id,EvaluationTemplateDto dto)
+        public async Task UpdateTemplateAsync(int id,EvaluationTemplateDto dto)
         {
-            var temp = await EvaluationRepo.GetByIdAsync(id);
+            var temp = await unitOfWork.EvaluationTemplates.GetByIdAsync(id);
             if (temp == null)
-                return false;
+                throw new NotFoundException("Template isn't found");
+            var exists = await unitOfWork.EvaluationTemplates
+                .FindByCondition(t => t.Title == dto.Title && t.Id != id)
+                .AnyAsync();
+            if(exists)
+                throw new BadRequestException("Template already exists");
 
             mapper.Map(dto, temp);
 
-            var res = await unitOfWork.SaveChangesAsync();
-            return res > 0;
+            var AffectedRows = await unitOfWork.SaveChangesAsync();
+            if (AffectedRows == 0)
+                throw new BadRequestException("can't update template");
         }
-        public async Task<bool> DeleteTemplateAsync(int id)
+        public async Task DeleteTemplateAsync(int id)
         {
             
-            var temp = await EvaluationRepo.GetByIdAsync(id);
+            var temp = await unitOfWork.EvaluationTemplates.GetByIdAsync(id);
             if (temp == null)
-                return false;
+                throw new NotFoundException("Template isn't found");
+            var HasAssignments= await unitOfWork.EvaluationAssignments.FindByCondition(a => a.TemplateId == id).AnyAsync();
+            if(HasAssignments)
+                throw new BadRequestException("can't delete template because it has assignments");
+            var HasSections = await unitOfWork.EvaluationSections.FindByCondition(a => a.TemplateId == id).AnyAsync();
+            if (HasSections)
+                throw new BadRequestException("can't delete template because it has sections");
+
             temp.IsDeleted=true;
-            var res = await unitOfWork.SaveChangesAsync();
-            return res>0;
+            temp.DeletedAt = DateTime.UtcNow;
+            var AffectedRows = await unitOfWork.SaveChangesAsync();
+            if(AffectedRows==0)
+                throw new BadRequestException("can't delete template");
         }
 
     }

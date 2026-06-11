@@ -8,6 +8,7 @@ namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EvaluationTemplateController : ControllerBase
     {
         private IEvaluationTemplateService TemplateService { get; set; }
@@ -24,37 +25,26 @@ namespace EvaluationSystem.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTemplate(EvaluationTemplateDto dto)
         {
-            var res = await TemplateService.AddTemplateAsync(dto);
-            if (!res)
-            {
-                return BadRequest("can't add this template");
-            }
+            await TemplateService.AddTemplateAsync(dto);
             return CreatedAtAction(nameof(GetTemplate),dto);
         }
         [HttpPut("id")]
         public async Task<IActionResult> UpdateTemplate(int id, EvaluationTemplateDto dto)
         {
-            var res = await TemplateService.UpdateTemplateAsync(id, dto);
-            if (!res)
-            {
-                return BadRequest("can't update this template");
-            }
+            await TemplateService.UpdateTemplateAsync(id, dto);
+
             return NoContent();
         }
         [HttpGet("id")]
         public async Task<IActionResult> GetTemplate(int id)
         {
             var temp = await TemplateService.GetTemplateAsync(id);
-            if (temp==null)
-                return NotFound();
             return Ok(temp);
         }
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteTemplate(int id)
         {
-            var res = await TemplateService.DeleteTemplateAsync(id);
-            if (!res)
-                return NotFound("Can't delete template");
+            await TemplateService.DeleteTemplateAsync(id);
             return NoContent();
         }
 

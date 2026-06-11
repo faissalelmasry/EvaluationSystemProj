@@ -3,6 +3,7 @@ using EvaluationSystem.Application.DTOs.Evaluation_Reviewer;
 using EvaluationSystem.Application.interfaces;
 using EvaluationSystem.Application.Services.ServiceInterfaces;
 using EvaluationSystem.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using EvaluationSystem.Domain.Exceptions; 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -2,6 +2,7 @@
 using EvaluationSystem.Application.DTOs.EvaluationTemplate;
 using EvaluationSystem.Application.Services.ServiceInterfaces;
 using EvaluationSystem.Application.Services.TemplateServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EvaluationSectionController : ControllerBase
     {
         private readonly IEvaluationSectionService evaluationSectionService;
@@ -19,31 +21,19 @@ namespace EvaluationSystem.Api.Controllers
         [HttpPost("templateid")]
         public async Task<IActionResult> AddSection(int templateid, AddEvaluationSectionDto dto)
         {
-            var res = await evaluationSectionService.AddSectionAsync(templateid, dto);
-            if (!res)
-            {
-                return BadRequest("can't add this section");
-            }
+            await evaluationSectionService.AddSectionAsync(templateid, dto);
             return Created();
         }
         [HttpPut("id")]
         public async Task<IActionResult> UpdateSection(int id, AddEvaluationSectionDto dto)
         {
-            var res = await evaluationSectionService.UpdateSectionAsync(id, dto);
-            if (!res)
-            {
-                return BadRequest("can't update this section");
-            }
+            await evaluationSectionService.UpdateSectionAsync(id, dto);
             return NoContent();
         }
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteSection(int id)
         {
-            var res = await evaluationSectionService.DeleteSectionAsync(id);
-            if (!res)
-            {
-                return BadRequest("can't Delete this section");
-            }
+            await evaluationSectionService.DeleteSectionAsync(id);
             return NoContent();
         }
     }
