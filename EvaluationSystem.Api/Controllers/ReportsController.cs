@@ -89,5 +89,26 @@ namespace EvaluationSystem.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        //6
+        [HttpGet("assignment/{id}/pdf")]
+        public async Task<IActionResult> DownloadEvaluationPdf(int id)
+        {
+            try
+            {
+                
+                byte[] pdfBytes = await _reportService.GenerateEvaluationPdfAsync(id);
+
+               
+                string fileName = $"Evaluation_Report_{id}.pdf";
+
+               
+                return File(pdfBytes, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
