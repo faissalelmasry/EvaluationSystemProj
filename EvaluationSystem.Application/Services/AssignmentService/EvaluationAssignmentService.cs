@@ -20,7 +20,7 @@ namespace EvaluationSystem.Application.Services.AssignmentService
         private readonly IGenericRepo<User> _userRepo;
         private readonly IMapper _mapper;
         private readonly IGenericRepo<EvaluationTemplate> _evalutionTemplate;
-
+        
         public EvaluationAssignmentService(IUnitOfWork unitOfWork, IGenericRepo<User> userRepo, IMapper mapper, IGenericRepo<EvaluationTemplate> evalutionTemplate)
         {
             _unitOfWork = unitOfWork;
@@ -66,14 +66,19 @@ namespace EvaluationSystem.Application.Services.AssignmentService
                 throw new NotFoundException("The evaluator or evaluatee was not found in the system.");
             }
 
-            if (evaluator.JobTitle == JobTitle.Student && evaluatee.JobTitle == JobTitle.Manager)
+            if (evaluatee.JobTitle == JobTitle.Manager && evaluator.JobTitle != JobTitle.Manager)
             {
-                throw new BadRequestException("A student is not allowed to evaluate a manager.");
+                throw new BadRequestException("Only managers are authorized to evaluate other managers.");
             }
 
-            if (evaluator.JobTitle == JobTitle.Employee && evaluatee.JobTitle == JobTitle.Manager)
+            if (evaluator.JobTitle == JobTitle.Student && evaluatee.JobTitle != JobTitle.Student)
             {
-                throw new BadRequestException("An employee cannot evaluate a manager through this assignment pathway.");
+                throw new BadRequestException("Students are only allowed to evaluate peer students.");
+            }
+
+            if (evaluator.JobTitle == JobTitle.Client && (evaluatee.JobTitle == JobTitle.Manager || evaluatee.JobTitle == JobTitle.Teacher))
+            {
+                throw new BadRequestException("Clients cannot evaluate academic or managerial staff.");
             }
 
             var assignment = new EvaluationAssignment
