@@ -164,7 +164,13 @@ namespace EvaluationSystem.Api
                         }
                     });
             });
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularFrontend",
+                    policy => policy.WithOrigins("http://localhost:4200") // The default Angular port
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
             var app = builder.Build();
 
             //await DataSeeder.InitializeAsync(app.Services);
@@ -178,7 +184,7 @@ namespace EvaluationSystem.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors("AllowAngularFrontend");
             app.UseHttpsRedirection();
 
             app.UseAuthentication();

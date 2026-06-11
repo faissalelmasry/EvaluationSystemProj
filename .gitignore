@@ -8,6 +8,7 @@
 *.suo
 *.user
 *.userosscache
+
 *.sln.docstates
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -361,3 +362,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Node & Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+npm-debug.log
+yarn-error.log

@@ -8,7 +8,7 @@
    
         [Route("api/[controller]")]
         [ApiController]
-        [Authorize]
+        //[Authorize]
         public class DepartmentsController : ControllerBase
         {
             private readonly IDepartmentService _departmentService;
