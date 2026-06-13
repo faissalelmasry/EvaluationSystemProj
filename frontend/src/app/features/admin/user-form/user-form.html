@@ -1,0 +1,55 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label class="form-label"> Full Name </label>
+
+    <input type="text" class="form-control" formControlName="fullName" />
+
+    @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+      <small class="text-danger"> Full Name is required </small>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"> Email </label>
+
+    <input type="email" class="form-control" formControlName="email" />
+
+    @if (form.controls.email.touched && form.controls.email.invalid) {
+      <small class="text-danger"> Enter a valid email </small>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"> Password </label>
+
+    <input type="password" class="form-control" formControlName="password" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"> Department </label>
+
+    <select class="form-select" formControlName="departmentId">
+      <option [value]="0">Select Department</option>
+
+      @for (department of departments(); track department.id) {
+        <option [value]="department.id">
+          {{ department.name }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"> Role </label>
+
+    <select class="form-select" formControlName="role">
+      <option value="">Select Role</option>
+
+      <option value="Admin">Admin</option>
+
+      <option value="Employee">Employee</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Create User</button>
+</form>

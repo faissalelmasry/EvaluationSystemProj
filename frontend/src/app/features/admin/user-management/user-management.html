@@ -1,0 +1,75 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between mb-3">
+    <h3>Users</h3>
+
+    <button class="btn btn-primary" (click)="openCreateModal()">Add User</button>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search users..."
+        [formControl]="searchControl"
+      />
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center">
+      <h5>Loading...</h5>
+    </div>
+  } @else if (users().length === 0) {
+    <p>No users found.</p>
+  } @else {
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (user of users(); track user.id) {
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.roles }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <div class="d-flex gap-2 mt-3">
+    <button
+      class="btn btn-outline-primary"
+      [disabled]="pageNumber() === 1"
+      (click)="previousPage()"
+    >
+      Previous
+    </button>
+
+    <span class="align-self-center"> Page {{ pageNumber() }} </span>
+
+    <button class="btn btn-outline-primary" (click)="nextPage()">Next</button>
+  </div>
+</div>
+
+@if (showCreateModal()) {
+  <div class="modal-backdrop">
+    <div class="custom-modal">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Create User</h4>
+
+        <button class="btn btn-sm btn-danger" (click)="closeCreateModal()">X</button>
+      </div>
+
+    </div>
+  </div>
+}
