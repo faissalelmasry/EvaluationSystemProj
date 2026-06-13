@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Signal } from '@angular/core';
+import { TemplateListComponent } from './features/evaluation-template/template-list.component/template-list.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  template: `
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-  `
+  imports: [RouterOutlet,TemplateListComponent],
+  templateUrl: './app.html',
 })
 export class AppComponent {
+  title = signal('Evaluation System');
 }

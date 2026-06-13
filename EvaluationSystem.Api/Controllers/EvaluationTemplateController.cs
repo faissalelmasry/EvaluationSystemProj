@@ -8,7 +8,7 @@ namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class EvaluationTemplateController : ControllerBase
     {
         private IEvaluationTemplateService TemplateService { get; set; }
