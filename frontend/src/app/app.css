@@ -1,0 +1,18 @@
+.app-container {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.main-content {
+  min-height: 100vh;
+  margin-left: 260px;
+  padding: 102px 32px 32px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 70px;
+    padding: 94px 16px 24px;
+  }
+}

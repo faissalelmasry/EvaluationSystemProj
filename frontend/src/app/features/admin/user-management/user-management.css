@@ -1,0 +1,240 @@
+.admin-page {
+  padding: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.75rem;
+}
+
+.page-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #4b6a95;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 2.25rem;
+  line-height: 1.1;
+  color: #111827;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.action-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-width: 170px;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.action-btn.primary {
+  background: #4d42ff;
+  color: #fff;
+  box-shadow: 0 20px 30px rgba(77, 66, 255, 0.18);
+}
+
+.action-btn.secondary {
+  background: #eef2ff;
+  color: #1f2937;
+}
+
+.users-card {
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 24px 40px rgba(15, 23, 42, 0.08);
+  padding: 2rem;
+}
+
+.users-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.section-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #4b6a95;
+}
+
+.users-card-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.search-group {
+  min-width: 220px;
+  flex: 1 1 320px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #4d42ff;
+  box-shadow: 0 0 0 4px rgba(77, 66, 255, 0.12);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.85rem;
+}
+
+.users-table thead th {
+  padding: 1rem 1.1rem;
+  text-align: left;
+  color: #334155;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.users-table tbody tr {
+  background: #f8fbff;
+}
+
+.users-table td {
+  padding: 1rem 1.1rem;
+  color: #0f172a;
+  vertical-align: middle;
+  border: none;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.5rem 0.85rem;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.status-badge.active {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-badge.inactive {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.loader,
+.empty-state {
+  padding: 2rem 0;
+  color: #475569;
+  font-size: 1rem;
+}
+
+.page-size-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+.page-size-group label {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.page-size-select {
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  font-size: 0.95rem;
+}
+
+.pagination-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pagination-info {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.pager-btn {
+  min-width: 110px;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: #4d42ff;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.pager-btn[disabled] {
+  background: #c7d2fe;
+  cursor: default;
+}
+
+.pager-btn:not([disabled]):hover {
+  background: #3c31c8;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h4 {
+  margin: 0;
+}

@@ -1,0 +1,31 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">📊 EvalSystem</div>
+  </div>
+
+  <ul class="sidebar-nav">
+    <li class="nav-item" [ngClass]="{'active': activeRoute === 'dashboard'}" (click)="navigate('dashboard')">
+      <a href="javascript:void(0)"><span class="icon">📈</span><span class="label">Dashboard</span></a>
+    </li>
+    <li class="nav-item" [ngClass]="{'active': activeRoute === 'evaluations'}" (click)="navigate('evaluations')">
+      <a href="javascript:void(0)"><span class="icon">📝</span><span class="label">My Evaluations</span></a>
+    </li>
+    <li class="nav-item" [ngClass]="{'active': activeRoute === 'form'}" (click)="navigate('form')">
+      <a href="javascript:void(0)"><span class="icon">✍️</span><span class="label">Evaluation Form</span></a>
+    </li>
+    <li class="nav-item" [ngClass]="{'active': activeRoute === 'reports'}" (click)="navigate('reports')">
+      <a href="javascript:void(0)"><span class="icon">📊</span><span class="label">Reports</span></a>
+    </li>
+    <li class="nav-item" [ngClass]="{'active': activeRoute === 'admin'}" (click)="navigate('admin')" >
+      <a href="javascript:void(0)"><span class="icon">⚙️</span><span class="label">Admin Panel</span></a>
+    </li>
+    <li class="nav-divider"></li>
+    <li class="nav-item" (click)="logout()">
+      <a href="javascript:void(0)"><span class="icon">🚪</span><span class="label">Logout</span></a>
+    </li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <div class="version">v1.0.0</div>
+  </div>
+</div>

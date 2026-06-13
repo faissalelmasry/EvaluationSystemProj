@@ -4,9 +4,11 @@ import { JobTitle } from "./job-title.enum";
 export interface User {
     id: number;
     username: string;
+    fullName?: string;
     email: string;
     departmentId: number;
-    roles: string[];
+    roles?: string[];
+    role?: string;
     jobTitle: JobTitle;
     isActive: boolean;
     createdAt: string;
@@ -25,6 +27,7 @@ export interface UserCreatePayload {
 export interface CreateUserDto {
   email: string;
   fullName: string;
+  username: string;
   password?: string; // Needed for creation
   departmentId: number;
   jobTitle: number; // Enum value

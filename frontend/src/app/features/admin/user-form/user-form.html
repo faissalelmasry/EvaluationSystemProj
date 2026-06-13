@@ -1,35 +1,88 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="mb-3">
-    <label class="form-label"> Full Name </label>
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="card shadow-sm border-0 p-4 mx-auto"
+  style="max-width: 700px;">
 
-    <input type="text" class="form-control" formControlName="fullName" />
+  <h3 class="text-center fw-bold mb-4">
+    Create User
+  </h3>
+
+  <div class="mb-4">
+    <label class="form-label fw-semibold">
+      Full Name
+    </label>
+
+    <input
+      type="text"
+      class="form-control form-control-lg"
+      formControlName="fullName" />
 
     @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
-      <small class="text-danger"> Full Name is required </small>
+      <small class="text-danger d-block mt-1">
+        Full Name is required
+      </small>
     }
   </div>
 
-  <div class="mb-3">
-    <label class="form-label"> Email </label>
+  <div class="mb-4">
+    <label class="form-label fw-semibold">
+      Username
+    </label>
 
-    <input type="email" class="form-control" formControlName="email" />
+    <input
+      type="text"
+      class="form-control form-control-lg"
+      formControlName="username" />
+
+    @if (form.controls.username.touched && form.controls.username.invalid) {
+      <small class="text-danger d-block mt-1">
+        Username is required
+      </small>
+    }
+  </div>
+
+  <div class="mb-4">
+    <label class="form-label fw-semibold">
+      Email
+    </label>
+
+    <input
+      type="email"
+      class="form-control form-control-lg"
+      formControlName="email" />
 
     @if (form.controls.email.touched && form.controls.email.invalid) {
-      <small class="text-danger"> Enter a valid email </small>
+      <small class="text-danger d-block mt-1">
+        Enter a valid email
+      </small>
     }
   </div>
 
-  <div class="mb-3">
-    <label class="form-label"> Password </label>
+  <div class="mb-4">
+    <label class="form-label fw-semibold">
+      Password
+    </label>
 
-    <input type="password" class="form-control" formControlName="password" />
+    <input
+      type="password"
+      class="form-control form-control-lg"
+      autocomplete="new-password"
+      formControlName="password" />
   </div>
 
-  <div class="mb-3">
-    <label class="form-label"> Department </label>
+  <div class="mb-4">
+    <label class="form-label fw-semibold">
+      Department
+    </label>
 
-    <select class="form-select" formControlName="departmentId">
-      <option [value]="0">Select Department</option>
+    <select
+      class="form-select form-select-lg"
+      formControlName="departmentId">
+
+      <option [value]="0">
+        Select Department
+      </option>
 
       @for (department of departments(); track department.id) {
         <option [value]="department.id">
@@ -37,19 +90,69 @@
         </option>
       }
     </select>
+
+    @if (form.controls.departmentId.touched && form.controls.departmentId.invalid) {
+      <small class="text-danger d-block mt-1">
+        Department is required
+      </small>
+    }
   </div>
 
-  <div class="mb-3">
-    <label class="form-label"> Role </label>
+  <div class="mb-4">
+    <label class="form-label fw-semibold">
+      Job Title
+    </label>
 
-    <select class="form-select" formControlName="role">
-      <option value="">Select Role</option>
+    <select
+      class="form-select form-select-lg"
+      formControlName="jobTitle">
 
-      <option value="Admin">Admin</option>
+      <option [value]="0">
+        Select Job Title
+      </option>
 
-      <option value="Employee">Employee</option>
+      @for (option of jobTitleOptions; track option.value) {
+        <option [value]="option.value">
+          {{ option.label }}
+        </option>
+      }
+    </select>
+
+    @if (form.controls.jobTitle.touched && form.controls.jobTitle.invalid) {
+      <small class="text-danger d-block mt-1">
+        Job Title is required
+      </small>
+    }
+  </div>
+
+  <div class="mb-4">
+    <label class="form-label fw-semibold">
+      Role
+    </label>
+
+    <select
+      class="form-select form-select-lg"
+      formControlName="role">
+
+      <option value="">
+        Select Role
+      </option>
+
+      @for (option of roleOptions; track option.value) {
+        <option [value]="option.value">
+          {{ option.label }}
+        </option>
+      }
     </select>
   </div>
 
-  <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Create User</button>
+  <button
+    type="submit"
+    class="btn btn-primary btn-lg w-100 mt-2"
+    [disabled]="form.invalid">
+
+    Create User
+
+  </button>
+
 </form>
