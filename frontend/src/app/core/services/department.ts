@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { environment } from '../../../environments/environment.development';
 import { Department, DepartmentCreatePayload } from '../models/department.model';
 import { PagesResult } from '../models/pagination.model';
