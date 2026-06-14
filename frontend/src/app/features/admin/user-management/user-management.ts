@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-user-management',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './user-management.html',
-  styleUrl: './user-management.scss',
+  styleUrl: './user-management.css',
 })
 export class UserManagement implements OnInit {
   private userService = inject(UserService);
