@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using EvaluationSystem.Application.Exceptions;
 using static System.Collections.Specialized.BitVector32;
+using EvaluationSystem.Application.Helpers;
 
 namespace EvaluationSystem.Application.Services.TemplateServices
 {
@@ -67,8 +68,23 @@ namespace EvaluationSystem.Application.Services.TemplateServices
             var AffectedRows=await unitOfWork.SaveChangesAsync();
             if(AffectedRows==0)
                 throw new BadRequestException("can't add template");
-
         }
+        public async Task AddFullTemplateAsync(AddFullTemplateDto dto)
+        {
+            var conflict = await unitOfWork.EvaluationTemplates
+                .FindByCondition(c =>
+                    (c.Title == dto.Title))
+                .FirstOrDefaultAsync();
+            if (conflict != null)
+                throw new BadRequestException("Template already exists");
+            TemplateValidationHelper.ValidateNewSections(dto.Sections);
+            TemplateValidationHelper.ValidateNewCriteria(dto.Sections);
+            await unitOfWork.EvaluationTemplates.AddAsync(mapper.Map<EvaluationTemplate>(dto));
+            var AffectedRows = await unitOfWork.SaveChangesAsync();
+            if (AffectedRows == 0)
+                throw new BadRequestException("can't add template");
+        }
+
         public async Task UpdateTemplateAsync(int id,EvaluationTemplateDto dto)
         {
             var temp = await unitOfWork.EvaluationTemplates.GetByIdAsync(id);

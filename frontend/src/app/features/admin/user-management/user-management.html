@@ -1,75 +1,110 @@
-<div class="container mt-4">
-  <div class="d-flex justify-content-between mb-3">
-    <h3>Users</h3>
-
-    <button class="btn btn-primary" (click)="openCreateModal()">Add User</button>
-  </div>
-
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search users..."
-        [formControl]="searchControl"
-      />
+<div class="admin-page">
+  <header class="page-header">
+    <div>
+      <p class="page-label">Admin Panel</p>
+      <h1>Manage users, templates, and evaluations</h1>
     </div>
-  </div>
+  </header>
 
-  @if (loading()) {
-    <div class="text-center">
-      <h5>Loading...</h5>
-    </div>
-  } @else if (users().length === 0) {
-    <p>No users found.</p>
-  } @else {
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-        </tr>
-      </thead>
+  <section class="admin-actions">
+    <button class="action-btn primary" (click)="openCreateModal()">+ New User</button>
+    <button class="action-btn primary">+ New Template</button>
+    <button class="action-btn primary">+ New Assignment</button>
+    <button class="action-btn secondary">📊 Export Report</button>
+  </section>
 
-      <tbody>
-        @for (user of users(); track user.id) {
-          <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.roles }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  }
-
-  <div class="d-flex gap-2 mt-3">
-    <button
-      class="btn btn-outline-primary"
-      [disabled]="pageNumber() === 1"
-      (click)="previousPage()"
-    >
-      Previous
-    </button>
-
-    <span class="align-self-center"> Page {{ pageNumber() }} </span>
-
-    <button class="btn btn-outline-primary" (click)="nextPage()">Next</button>
-  </div>
-</div>
-
-@if (showCreateModal()) {
-  <div class="modal-backdrop">
-    <div class="custom-modal">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Create User</h4>
-
-        <button class="btn btn-sm btn-danger" (click)="closeCreateModal()">X</button>
+  <section class="users-card">
+    <div class="users-card-header">
+      <div>
+        <p class="section-label">System Users</p>
       </div>
 
+      <div class="search-group">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search users..."
+          [formControl]="searchControl"
+        />
+      </div>
+      <div class="page-size-group">
+        <label for="pageSize">Rows per page</label>
+        <select id="pageSize" class="page-size-select" (change)="changePageSize($event)">
+          <option [selected]="pageSize() === 5" value="5">5</option>
+          <option [selected]="pageSize() === 10" value="10">10</option>
+          <option [selected]="pageSize() === 20" value="20">20</option>
+        </select>
+      </div>
     </div>
-  </div>
-}
+
+    <div class="table-responsive">
+      @if (loading()) {
+        <div class="loader">Loading...</div>
+      } @else if (users().length === 0) {
+        <p class="empty-state">No users found.</p>
+      } @else {
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (user of users(); track user.id) {
+              <tr>
+                <td>{{ user.fullName || user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role || (user.roles ? user.roles.join(', ') : '') }}</td>
+                <td>
+                  {{ user.department || departmentMap()[user.departmentId] || '—' }}
+                </td>
+                <td>
+                  <span class="status-badge {{ user.isActive ? 'active' : 'inactive' }}">
+                    {{ user.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="pagination-footer">
+          <div class="pagination-info">
+            Showing page {{ pageNumber() }} of {{ pageCount }} • {{ totalCount() }} users
+          </div>
+
+          <div class="pagination-controls">
+            <button class="pager-btn" [disabled]="pageNumber() === 1" (click)="previousPage()">
+              Previous
+            </button>
+            <button
+              class="pager-btn"
+              [disabled]="pageNumber() === pageCount"
+              (click)="nextPage()"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  @if (showCreateModal()) {
+    <div class="modal-backdrop">
+      <div class="custom-modal">
+        <div class="modal-header">
+          <h4>Create User</h4>
+          <button class="btn btn-sm btn-danger" (click)="closeCreateModal()">X</button>
+        </div>
+
+        <app-user-form></app-user-form>
+      </div>
+    </div>
+  }
+</div>
