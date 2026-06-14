@@ -12,10 +12,11 @@ import { Signal } from '@angular/core';
 })
 export class TemplateListComponent implements OnInit {
 public templates = signal<EvaluationTemplateList[]>([]);
+public pageNumber = signal<number>(1);
 public constructor(private TemplateService:TemplateService){}
 ngOnInit()
 {
-   this.TemplateService.GetTemplates(1,10,"").subscribe(res=>
+   this.TemplateService.GetTemplates(this.pageNumber(),20,"").subscribe(res=>
    {
     this.templates.set(res);
     console.log(res)

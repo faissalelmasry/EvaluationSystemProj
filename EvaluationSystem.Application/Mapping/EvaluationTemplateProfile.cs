@@ -18,6 +18,8 @@ namespace EvaluationSystem.Application.Mapping
             CreateMap<EvaluationTemplate, GetEvaluationTemplateDto>()
                 .ForMember(dest => dest.Sections, opt => opt.MapFrom(src => src.EvaluationSections));
             CreateMap<EvaluationTemplate, EvaluationTemplateDto>().ReverseMap();
+            CreateMap<EvaluationTemplate, AddFullTemplateDto>()
+                .ForMember(dest => dest.Sections, opt => opt.MapFrom(src => src.EvaluationSections)).ReverseMap();
         }
     }
 }

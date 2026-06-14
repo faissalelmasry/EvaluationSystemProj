@@ -28,6 +28,12 @@ namespace EvaluationSystem.Api.Controllers
             await TemplateService.AddTemplateAsync(dto);
             return CreatedAtAction(nameof(GetTemplate),dto);
         }
+        [HttpPost("template")]
+        public async Task<IActionResult> AddFullTemplate(AddFullTemplateDto dto)
+        {
+            await TemplateService.AddFullTemplateAsync(dto);
+            return CreatedAtAction(nameof(GetTemplate), dto);
+        }
         [HttpPut("id")]
         public async Task<IActionResult> UpdateTemplate(int id, EvaluationTemplateDto dto)
         {

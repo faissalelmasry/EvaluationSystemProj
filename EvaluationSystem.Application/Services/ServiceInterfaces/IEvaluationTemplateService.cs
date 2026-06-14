@@ -15,5 +15,6 @@ namespace EvaluationSystem.Application.Services.ServiceInterfaces
         Task AddTemplateAsync(EvaluationTemplateDto dto);
         Task UpdateTemplateAsync(int id,EvaluationTemplateDto dto);
         Task DeleteTemplateAsync(int id);
+        Task AddFullTemplateAsync(AddFullTemplateDto dto);
     }
 }
