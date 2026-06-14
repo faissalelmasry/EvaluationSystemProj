@@ -10,7 +10,7 @@ export const routes: Routes = [
   { 
     path: 'evaluation/:assignmentId/submit', 
     component: EvaluationFormComponent
-  }
+  },
   { path: 'admin', component: UserManagement },
   { path: 'admin/users/new', component: UserForm },
   { path: '404', component: NotFoundComponent },
