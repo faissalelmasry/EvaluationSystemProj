@@ -20,14 +20,14 @@ export class TemplateService {
   Search: string
 ): Observable<EvaluationTemplateList[]>
   {
-    return this.client.get<EvaluationTemplateList[]>(`${environment.BaseUrl}/EvaluationTemplate?PageNumber=${PageNumber}&PageSize=${PageSize}&Search=${Search}`)
+    return this.client.get<EvaluationTemplateList[]>(`${environment.apiUrl}/EvaluationTemplate?PageNumber=${PageNumber}&PageSize=${PageSize}&Search=${Search}`)
   }
   public AddTemplate(dto:AddTemplateDto)
   {
-    return this.client.post<AddTemplateDto>(`${environment.BaseUrl}/EvaluationTemplate/template`,dto);
+    return this.client.post<AddTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/template`,dto);
   }
   public GetTemplateById(id:number):Observable<GetTemplateDto>
   {
-    return this .client.get<GetTemplateDto>(`${environment.BaseUrl}/EvaluationTemplate/${id}`)
+    return this .client.get<GetTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/${id}`)
   }
 }
