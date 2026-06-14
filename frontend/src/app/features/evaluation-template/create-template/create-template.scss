@@ -1,0 +1,98 @@
+.template-form {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label { font-size: 13px; font-weight: 500; color: #666; }
+  input, textarea {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+}
+
+.field-row {
+  display: flex;
+  gap: 12px;
+
+  .field { flex: 1; }
+  .field-small { flex: 0 0 80px; }
+}
+
+.section-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.criteria-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 12px;
+  border-left: 2px solid #f0f0f0;
+}
+
+.criterion-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+
+  .field { flex: 1; }
+  .field-small { flex: 0 0 70px; }
+}
+
+.error { color: #d32f2f; font-size: 12px; }
+.form-error { color: #d32f2f; font-size: 14px; text-align: center; }
+
+.btn-add, .btn-add-section {
+  align-self: flex-start;
+  background: #f0f0f0;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-remove, .btn-remove-small {
+  background: #ffebee;
+  color: #d32f2f;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+.btn-submit {
+  background: #7c6aff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}

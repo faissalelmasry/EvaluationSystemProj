@@ -1,1 +1,4 @@
-<p>template-list.component works!</p>
+@for(item of templates();track $index)
+{
+    {{item.title}}
+}

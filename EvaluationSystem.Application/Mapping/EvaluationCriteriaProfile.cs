@@ -16,6 +16,7 @@ namespace EvaluationSystem.Application.Mapping
         {
             CreateMap<EvaluationCriteria, EvaluationCriteriaDto>().ReverseMap();
             CreateMap<EvaluationCriteria, AddEvaluationCriteriaDto>().ReverseMap();
+            CreateMap<EvaluationCriteria, AddTemplateCriteriaDto>().ReverseMap();
         }
     }
 }
