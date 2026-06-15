@@ -16,6 +16,7 @@ using EvaluationSystem.Application.Exceptions;
 using static System.Collections.Specialized.BitVector32;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Application.DTOs.EvaluationCriteria;
+using EvaluationSystem.Domain.Exceptions;
 
 namespace EvaluationSystem.Application.Services.TemplateServices
 {
