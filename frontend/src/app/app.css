@@ -10,9 +10,19 @@
   box-sizing: border-box;
 }
 
+.main-content.full-width {
+  margin-left: 0;
+  padding-top: 70px;
+}
+
 @media (max-width: 768px) {
   .main-content {
     margin-left: 70px;
     padding: 94px 16px 24px;
+  }
+
+  .main-content.full-width {
+    margin-left: 0;
+    padding: 60px 16px 24px;
   }
 }

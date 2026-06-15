@@ -7,7 +7,7 @@ import { TemplateService } from '../../../core/services/template.service';
   selector: 'app-create-template',
   imports: [ReactiveFormsModule],
   templateUrl: './create-template.html',
-  styleUrl: './create-template.scss',
+  styleUrls: ['./create-template.scss'],
 })
 export class CreateTemplate implements OnInit {
   form!:FormGroup;

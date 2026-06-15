@@ -1,0 +1,144 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <div class="auth-brand">
+      <div class="brand-icon">⚡</div>
+      <h1 class="brand-name">EvalSystem</h1>
+    </div>
+
+    <h2 class="auth-title">Create an account</h2>
+    <p class="auth-subtitle">Fill in the details below to get started</p>
+
+    @if (errorMessage()) {
+      <div class="alert-error">
+        <span>⚠</span> {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert-success">
+        <span>✓</span> {{ successMessage() }}
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+      <div class="field-group">
+        <label class="field-label">Full Name</label>
+        <input
+          type="text"
+          class="field-input"
+          [class.field-error]="form.controls.fullName.touched && form.controls.fullName.invalid"
+          formControlName="fullName"
+          placeholder="John Doe"
+        />
+        @if (form.controls.fullName.touched && form.controls.fullName.errors?.['required']) {
+          <small class="error-text">Full name is required</small>
+        }
+        @if (form.controls.fullName.touched && form.controls.fullName.errors?.['minlength']) {
+          <small class="error-text">Full name must be at least 3 characters</small>
+        }
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Email address</label>
+        <input
+          type="email"
+          class="field-input"
+          [class.field-error]="form.controls.email.touched && form.controls.email.invalid"
+          formControlName="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+        />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <small class="error-text">Please enter a valid email address</small>
+        }
+      </div>
+
+      <div class="field-row">
+
+        <div class="field-group">
+          <label class="field-label">Department</label>
+          <select
+            class="field-input"
+            [class.field-error]="form.controls.departmentId.touched && form.controls.departmentId.invalid"
+            formControlName="departmentId"
+          >
+            <option [value]="0">Select department</option>
+            @for (dep of departments(); track dep.id) {
+              <option [value]="dep.id">{{ dep.name }}</option>
+            }
+          </select>
+          @if (form.controls.departmentId.touched && form.controls.departmentId.invalid) {
+            <small class="error-text">Please select a department</small>
+          }
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Job Title</label>
+          <select
+            class="field-input"
+            [class.field-error]="form.controls.jobTitle.touched && form.controls.jobTitle.invalid"
+            formControlName="jobTitle"
+          >
+            @for (opt of jobTitleOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <div class="input-with-icon">
+          <input
+            [type]="showPassword() ? 'text' : 'password'"
+            class="field-input"
+            [class.field-error]="form.controls.password.touched && form.controls.password.invalid"
+            formControlName="password"
+            placeholder="Min. 6 characters"
+            autocomplete="new-password"
+          />
+          <button type="button" class="eye-btn" (click)="togglePassword()">
+            {{ showPassword() ? '🙈' : '👁' }}
+          </button>
+        </div>
+        @if (form.controls.password.touched && form.controls.password.errors?.['minlength']) {
+          <small class="error-text">Password must be at least 6 characters</small>
+        }
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Confirm Password</label>
+        <input
+          type="password"
+          class="field-input"
+          [class.field-error]="form.controls.confirmPassword.touched && (form.controls.confirmPassword.invalid || form.errors?.['passwordMismatch'])"
+          formControlName="confirmPassword"
+          placeholder="Re-enter your password"
+          autocomplete="new-password"
+        />
+        @if (form.controls.confirmPassword.touched && form.errors?.['passwordMismatch']) {
+          <small class="error-text">Passwords do not match</small>
+        }
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading()">
+        @if (loading()) {
+          <span class="spinner"></span>
+          Creating account...
+        } @else {
+          Create Account
+        }
+      </button>
+
+    </form>
+
+    <p class="auth-footer">
+      Already have an account?
+      <a routerLink="/login" class="auth-link">Sign in</a>
+    </p>
+
+  </div>
+</div>

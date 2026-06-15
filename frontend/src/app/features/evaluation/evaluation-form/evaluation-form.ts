@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   standalone: true, 
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './evaluation-form.html',
-  styleUrl: './evaluation-form.scss',
+  styleUrls: ['./evaluation-form.scss'],
 })
 export class EvaluationFormComponent implements OnInit {
   

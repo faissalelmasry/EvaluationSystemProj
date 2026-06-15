@@ -1,39 +1,35 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-  <div class="mb-3">
-    <label class="form-label">
-      Department Name
-    </label>
+  <div *ngIf="errorMessage()" class="form-alert-error">⚠ {{ errorMessage() }}</div>
 
+  <div class="field-group">
+    <label class="field-label">Department Name</label>
     <input
       type="text"
-      class="form-control"
-      formControlName="name">
-
+      class="field-input"
+      [class.field-error]="form.controls.name.touched && form.controls.name.invalid"
+      formControlName="name"
+      placeholder="e.g. Engineering"
+    />
+    <small *ngIf="form.controls.name.touched && form.controls.name.invalid" class="error-text">Department name is required (min. 2 characters)</small>
   </div>
 
-  <div class="mb-3">
-
-    <label class="form-label">
-      Description
-    </label>
-
+  <div class="field-group">
+    <label class="field-label">Description <span class="optional">(optional)</span></label>
     <textarea
       rows="3"
-      class="form-control"
-      formControlName="description">
-
-    </textarea>
-
+      class="field-input"
+      formControlName="description"
+      placeholder="Brief description of this department..."
+    ></textarea>
   </div>
 
-  <button
-    type="submit"
-    class="btn btn-primary"
-    [disabled]="loading()">
-
-    {{ loading() ? 'Creating...' : 'Create Department' }}
-
-  </button>
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+    <button type="submit" class="btn-submit" [disabled]="loading()">
+      <span *ngIf="loading()" class="spinner-sm"></span>
+      {{ isEdit ? 'Save Changes' : 'Create Department' }}
+    </button>
+  </div>
 
 </form>

@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-template-builder.component',
   imports: [],
   templateUrl: './template-builder.component.html',
-  styleUrl: './template-builder.component.scss',
+  styleUrls: ['./template-builder.component.scss'],
 })
 export class TemplateBuilderComponent {}

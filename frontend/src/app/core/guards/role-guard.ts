@@ -10,7 +10,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
   if (!expectedRoles || expectedRoles.length === 0) {
     return true;
   }
-
+ 
   const token = localStorage.getItem('jwt_token');
 
   if (!token) {

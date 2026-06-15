@@ -10,7 +10,6 @@ export interface RegisterDto {
   password: string;
   departmentId: number;
   jobTitle: JobTitle;
-
 }
 export interface LoginResponse {
   token: string;
@@ -18,8 +17,19 @@ export interface LoginResponse {
 export interface AuthResponseDto {
   token: string;
   tokenExpiresAt: string;
-
 }
 export interface AuthMessageDto {
   message: string;
+}
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
+export interface ForgotPasswordDto {
+  email: string;
+}
+export interface ResetPasswordDto {
+  email: string;
+  token: string;
+  newPassword: string;
 }

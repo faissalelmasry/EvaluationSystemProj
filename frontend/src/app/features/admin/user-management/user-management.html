@@ -1,110 +1,159 @@
 <div class="admin-page">
+
   <header class="page-header">
     <div>
       <p class="page-label">Admin Panel</p>
-      <h1>Manage users, templates, and evaluations</h1>
+      <h1>User Management</h1>
     </div>
+    <button class="btn-primary" (click)="openCreateModal()">+ New User</button>
   </header>
 
-  <section class="admin-actions">
-    <button class="action-btn primary" (click)="openCreateModal()">+ New User</button>
-    <button class="action-btn primary">+ New Template</button>
-    <button class="action-btn primary">+ New Assignment</button>
-    <button class="action-btn secondary">📊 Export Report</button>
-  </section>
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-value">{{ totalCount() }}</span>
+      <span class="stat-label">Total Users</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ users().length }}</span>
+      <span class="stat-label">On This Page</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ pageCount }}</span>
+      <span class="stat-label">Total Pages</span>
+    </div>
+  </div>
 
-  <section class="users-card">
-    <div class="users-card-header">
-      <div>
-        <p class="section-label">System Users</p>
-      </div>
-
-      <div class="search-group">
+  <section class="table-card">
+    <div class="table-card-header">
+      <p class="section-label">System Users</p>
+      <div class="header-controls">
         <input
           type="text"
           class="search-input"
-          placeholder="Search users..."
+          placeholder="🔍 Search users..."
           [formControl]="searchControl"
         />
-      </div>
-      <div class="page-size-group">
-        <label for="pageSize">Rows per page</label>
-        <select id="pageSize" class="page-size-select" (change)="changePageSize($event)">
-          <option [selected]="pageSize() === 5" value="5">5</option>
-          <option [selected]="pageSize() === 10" value="10">10</option>
-          <option [selected]="pageSize() === 20" value="20">20</option>
-        </select>
+        <div class="page-size-wrap">
+          <label>Rows:</label>
+          <select class="page-size-select" (change)="changePageSize($event)">
+            <option [selected]="pageSize() === 5" value="5">5</option>
+            <option [selected]="pageSize() === 10" value="10">10</option>
+            <option [selected]="pageSize() === 20" value="20">20</option>
+          </select>
+        </div>
       </div>
     </div>
 
     <div class="table-responsive">
-      @if (loading()) {
-        <div class="loader">Loading...</div>
-      } @else if (users().length === 0) {
-        <p class="empty-state">No users found.</p>
-      } @else {
-        <table class="users-table">
+
+      <div *ngIf="loading(); else loaded">
+        <div class="table-loader">
+          <span class="spinner-lg"></span>
+          <span>Loading users...</span>
+        </div>
+      </div>
+
+      <ng-template #loaded>
+        <div *ngIf="users().length === 0; else tableBlock">
+          <div class="empty-state">
+            <div class="empty-icon">👤</div>
+            <p>No users found.</p>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #tableBlock>
+        <table class="data-table">
           <thead>
             <tr>
+              <th>#</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Role</th>
               <th>Department</th>
+              <th>Role</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
-
           <tbody>
-            @for (user of users(); track user.id) {
-              <tr>
-                <td>{{ user.fullName || user.username }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role || (user.roles ? user.roles.join(', ') : '') }}</td>
-                <td>
-                  {{ user.department || departmentMap()[user.departmentId] || '—' }}
-                </td>
-                <td>
-                  <span class="status-badge {{ user.isActive ? 'active' : 'inactive' }}">
-                    {{ user.isActive ? 'Active' : 'Inactive' }}
-                  </span>
-                </td>
-              </tr>
-            }
+            <tr *ngFor="let user of users(); let i = index" [class.row-inactive]="!user.isActive">
+              <td class="td-num">{{ (pageNumber() - 1) * pageSize() + i + 1 }}</td>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar">{{ (user.fullName || user.username || 'U')[0].toUpperCase() }}</div>
+                  <span>{{ user.fullName || user.username }}</span>
+                </div>
+              </td>
+              <td class="td-email">{{ user.email }}</td>
+              <td>{{user.department }}</td>
+              <td>
+               <span class="current-role-text">
+    {{ getUserRole(user) || '—' }}
+  </span>
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="user.isActive" [class.inactive]="!user.isActive">
+                  {{ user.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions-cell">
+                  <button
+                    class="action-icon-btn edit"
+                    title="Edit user"
+                    (click)="openEditModal(user)"
+                  >✏️</button>
+                  <button
+                    class="action-icon-btn toggle"
+                    [title]="user.isActive ? 'Deactivate' : 'Activate'"
+                    [disabled]="actionLoadingId() === user.id"
+                    (click)="toggleActive(user)"
+                  >
+                    {{ user.isActive ? '🔒' : '🔓' }}
+                  </button>
+                  <button
+                    class="action-icon-btn delete"
+                    title="Delete user"
+                    (click)="deleteUser(user)"
+                  >🗑️</button>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
 
         <div class="pagination-footer">
-          <div class="pagination-info">
-            Showing page {{ pageNumber() }} of {{ pageCount }} • {{ totalCount() }} users
-          </div>
-
+          <span class="pagination-info">
+            Showing {{ (pageNumber() - 1) * pageSize() + 1 }}–{{ (pageNumber() * pageSize()) < totalCount() ? (pageNumber() * pageSize()) : totalCount() }} of {{ totalCount() }} users
+          </span>
           <div class="pagination-controls">
             <button class="pager-btn" [disabled]="pageNumber() === 1" (click)="previousPage()">
-              Previous
+              ← Previous
             </button>
-            <button
-              class="pager-btn"
-              [disabled]="pageNumber() === pageCount"
-              (click)="nextPage()"
-            >
-              Next
+            <span class="page-indicator">{{ pageNumber() }} / {{ pageCount }}</span>
+            <button class="pager-btn" [disabled]="pageNumber() >= pageCount" (click)="nextPage()">
+              Next →
             </button>
           </div>
         </div>
-      }
+      </ng-template>
     </div>
   </section>
 
   @if (showCreateModal()) {
-    <div class="modal-backdrop">
-      <div class="custom-modal">
-        <div class="modal-header">
-          <h4>Create User</h4>
-          <button class="btn btn-sm btn-danger" (click)="closeCreateModal()">X</button>
+    <div class="modal-overlay" (click)="closeCreateModal()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <div class="modal-head">
+          <h4>{{ selectedUser() ? 'Edit User' : 'Create User' }}</h4>
+          <button class="modal-close" (click)="closeCreateModal()">✕</button>
         </div>
-
-        <app-user-form></app-user-form>
+        <app-user-form
+          [editUser]="selectedUser()"
+          (saved)="onUserSaved()"
+          (cancelled)="closeCreateModal()"
+        ></app-user-form>
       </div>
     </div>
   }
+
 </div>
