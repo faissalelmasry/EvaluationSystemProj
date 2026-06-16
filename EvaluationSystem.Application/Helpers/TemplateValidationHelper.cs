@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EvaluationSystem.Application.DTOs.EvaluationCriteria;
 using EvaluationSystem.Application.DTOs.EvaluationSection;
 using EvaluationSystem.Domain.Exceptions;
 
@@ -34,5 +35,6 @@ namespace EvaluationSystem.Application.Helpers
                     throw new BadRequestException($"Duplicate criterion order in section '{section.Title}'");
             }
         }
+
     }
 }

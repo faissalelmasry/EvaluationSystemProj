@@ -1,4 +1,107 @@
-@for(item of templates();track $index)
-{
-    {{item.title}}
-}
+<div class="templates-page">
+
+  <div class="page-header">
+    <div>
+      <h1>Evaluation Templates</h1>
+      <p>Manage your evaluation templates</p>
+    </div>
+
+    <button class="create-btn" routerLink="/template/add">
+      + Create Template
+    </button>
+  </div>
+  <div class="search-container">
+
+  <div class="search-box">
+
+    <span class="search-icon">
+      🔍
+    </span>
+
+    <input
+      #searchInput
+      type="text"
+      placeholder="Search by title or description..."
+      (keyup.enter)="onSearch(searchInput.value)">
+
+    <button
+      class="search-btn"
+      (click)="onSearch(searchInput.value)">
+      Search
+    </button>
+
+  </div>
+
+</div>
+
+  @if (templates().length === 0) {
+    <div class="empty-state">
+      <h3>No Templates Found</h3>
+      <p>Create your first evaluation template.</p>
+    </div>
+  }
+
+  <div class="templates-grid">
+
+    @for (template of templates(); track template.id) {
+
+      <div class="template-card">
+
+        <div class="card-header">
+          <h3>{{ template.title }}</h3>
+
+          <span class="template-id">
+            #{{ template.id }}
+          </span>
+        </div>
+
+        <div class="card-body">
+          <p>
+            {{ template.description }}
+          </p>
+        </div>
+
+        <div class="card-footer">
+
+          <button class="btn-view" [routerLink]="['/template', template.id]">
+            View
+          </button>
+
+          <button class="btn-edit" [routerLink]="['/template/update', template.id]">
+            Edit
+          </button>
+
+          <button class="btn-delete" (click)="DeleteTemplate(template.id)">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+  <div class="pagination-container">
+
+  <button
+    class="pagination-btn"
+    [disabled]="pageNumber() === 1"
+    (click)="previousPage()">
+    ←
+  </button>
+
+  <div class="current-page">
+    {{ pageNumber() }}
+  </div>
+
+  <button
+    class="pagination-btn"
+    (click)="nextPage()">
+    →
+  </button>
+
+</div>
+  
+
+</div>

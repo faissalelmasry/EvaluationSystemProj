@@ -5,6 +5,7 @@ import { EvaluationTemplateList } from '../models/evaluation-template-list';
 import { Observable } from 'rxjs';
 import { AddTemplateDto } from '../models/add-template-dto';
 import { GetTemplateDto } from '../models/get-template-dto';
+import { UpdateTemplateDto } from '../models/update-template-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,14 @@ export class TemplateService {
   }
   public GetTemplateById(id:number):Observable<GetTemplateDto>
   {
-    return this .client.get<GetTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/${id}`)
+    return this.client.get<GetTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/id?id=${id}`)
+  }
+  public UpdateTemplate(id:number,dto:UpdateTemplateDto)
+  {
+    return this.client.put<UpdateTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/id?id=${id}`,dto)
+  }
+  public DeleteTemplate(id:number)
+  {
+    return this.client.delete(`${environment.apiUrl}/EvaluationTemplate/id?id=${id}`);
   }
 }

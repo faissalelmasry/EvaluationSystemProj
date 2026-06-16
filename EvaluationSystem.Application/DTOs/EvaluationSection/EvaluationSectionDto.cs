@@ -12,6 +12,7 @@ namespace EvaluationSystem.Application.DTOs.EvaluationSection
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public int OrderNo { get; set; }
         public List<EvaluationCriteriaDto> Criteria { get; set; } = new List<EvaluationCriteriaDto>();
     }
 }

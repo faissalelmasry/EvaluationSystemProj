@@ -11,10 +11,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-         "styles": [
-  "node_modules/bootstrap/dist/css/bootstrap.min.css",
-  "src/styles.scss"
-]
+          "style": "scss"
         }
       },
       "root": "",
@@ -64,8 +61,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-    "proxyConfig": "src/proxy.conf.json"
-  },
+            "proxyConfig": "src/proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"

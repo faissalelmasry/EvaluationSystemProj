@@ -7,10 +7,11 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { UserForm } from '../user-form/user-form';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-user-management',
-  imports: [CommonModule, ReactiveFormsModule, UserForm],
+  imports: [CommonModule, ReactiveFormsModule, UserForm, RouterLink],
   templateUrl: './user-management.html',
   styleUrl: './user-management.css',
 })
