@@ -2,6 +2,8 @@ import { Component, OnInit, Signal, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TemplateService } from '../../../core/services/template.service';
+import { Router } from '@angular/router';
+import { QuestionType } from '../../../core/enums/question-type';
 
 @Component({
   selector: 'app-create-template',
@@ -10,10 +12,17 @@ import { TemplateService } from '../../../core/services/template.service';
   styleUrls: ['./create-template.scss'],
 })
 export class CreateTemplate implements OnInit {
+  questionTypes = [
+      { id: QuestionType.SingleChoice, name: 'Single Choice' },
+      { id: QuestionType.MultipleChoice, name: 'Multiple Choice' },
+      { id: QuestionType.Text, name: 'Text' },
+      { id: QuestionType.RatingScale, name: 'Rating Scale' },
+      { id: QuestionType.Boolean, name: 'Boolean' },
+    ];
   form!:FormGroup;
   isSubmitting:boolean=false;
   errorMessage = signal('');
-  public constructor(private fb:FormBuilder,private templateService:TemplateService){}
+  public constructor(private fb:FormBuilder,private templateService:TemplateService,private router:Router){}
   ngOnInit(): void {
     this.form=this.fb.group({
       title:['',[Validators.required,Validators.maxLength(30)]],
@@ -48,7 +57,7 @@ export class CreateTemplate implements OnInit {
     return this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
       orderNo: [criteriaArray ? criteriaArray.length + 1 : 1, [Validators.required, Validators.min(1)]],
-      questionType: "SingleChoice",
+      questionType: [QuestionType.SingleChoice,[Validators.required]],
       maxScore: [1,Validators.min(1)],
       weight: [1,[Validators.required,Validators.min(1)]],
       isRequired: [true,Validators.required],
@@ -81,9 +90,9 @@ export class CreateTemplate implements OnInit {
     this.errorMessage.set('');
 
     this.templateService.AddTemplate(this.form.value).subscribe({
-      next: () => {
+      next: (res) => {
         this.isSubmitting = false;
-        this.form.reset();
+        this.router.navigateByUrl(`/templates`)
       },
       error: (err) => {
         this.isSubmitting = false;

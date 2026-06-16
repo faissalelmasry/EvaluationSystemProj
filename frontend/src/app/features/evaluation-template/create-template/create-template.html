@@ -1,179 +1,204 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="template-form">
 
-  <h2>Create Evaluation Template</h2>
-
-  <!-- ── Template Info ── -->
-  <div class="field">
-    <label>Title</label>
-    <input formControlName="title" placeholder="Template title" />
-    @if (form.get('title')?.touched) {
-      @if (form.get('title')?.hasError('required')) {
-        <span class="error">Title is required</span>
-      }
-      @if (form.get('title')?.hasError('maxlength')) {
-        <span class="error">Title can't exceed 30 characters</span>
-      }
-    }
+  <!-- ── Page Header ── -->
+  <div class="page-header">
+    <h2>Create Evaluation Template</h2>
+    <p>Define sections and scoring criteria for your evaluation.</p>
   </div>
 
-  <div class="field">
-    <label>Description</label>
-    <textarea formControlName="description" placeholder="Template description"></textarea>
-    @if (form.get('description')?.touched) {
-      @if (form.get('description')?.hasError('required')) {
-        <span class="error">Description is required</span>
-      }
-      @if (form.get('description')?.hasError('maxlength')) {
-        <span class="error">Description can't exceed 100 characters</span>
-      }
-    }
+  <!-- ── Template Info ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <span>Template Info</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Title</label>
+        <input formControlName="title" placeholder="e.g. Quarterly Performance Review" />
+        @if (form.get('title')?.touched) {
+          @if (form.get('title')?.hasError('required')) {
+            <span class="error">Title is required</span>
+          }
+          @if (form.get('title')?.hasError('maxlength')) {
+            <span class="error">Title can't exceed 30 characters</span>
+          }
+        }
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea formControlName="description" placeholder="Brief description of this evaluation template…"></textarea>
+        @if (form.get('description')?.touched) {
+          @if (form.get('description')?.hasError('required')) {
+            <span class="error">Description is required</span>
+          }
+          @if (form.get('description')?.hasError('maxlength')) {
+            <span class="error">Description can't exceed 100 characters</span>
+          }
+        }
+      </div>
+    </div>
   </div>
 
   <!-- ── Sections ── -->
-  <div formArrayName="sections" class="sections-container">
+  <div class="divider"><span>Sections</span></div>
+
+  <div formArrayName="sections" class="sections-wrapper">
 
     @for (section of Sections.controls; track section; let i = $index) {
       <div [formGroupName]="i" class="section-card">
 
         <div class="section-header">
-          <h3>Section {{ i + 1 }}</h3>
+          <div class="section-label">
+            <div class="section-index">{{ i + 1 }}</div>
+            <span>Section {{ i + 1 }}</span>
+          </div>
           <button type="button" class="btn-remove"
                   (click)="removeSection(i)"
                   [disabled]="Sections.length === 0">
-            ✕ Remove Section
+            ✕ Remove
           </button>
         </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label>Section Title</label>
-            <input formControlName="title" placeholder="e.g. Communication Skills" />
-            @if (section.get('title')?.touched) {
-              @if (section.get('title')?.hasError('required')) {
-                <span class="error">Section title is required</span>
+        <div class="section-body">
+          <div class="field-row">
+            <div class="field">
+              <label>Section Title</label>
+              <input formControlName="title" placeholder="e.g. Communication Skills" />
+              @if (section.get('title')?.touched) {
+                @if (section.get('title')?.hasError('required')) {
+                  <span class="error">Section title is required</span>
+                }
+                @if (section.get('title')?.hasError('maxlength')) {
+                  <span class="error">Title can't exceed 30 characters</span>
+                }
               }
-              @if (section.get('title')?.hasError('maxlength')) {
-                <span class="error">Title can't exceed 30 characters</span>
-              }
-            }
-          </div>
-
-          <div class="field field-small">
-            <label>Order</label>
-            <input formControlName="orderNo" type="number" min="1" />
-            @if (section.get('orderNo')?.touched) {
-              @if (section.get('orderNo')?.hasError('required')) {
-                <span class="error">Order is required</span>
-              }
-              @if (section.get('orderNo')?.hasError('min')) {
-                <span class="error">Min value is 1</span>
-              }
-            }
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Section Description</label>
-          <textarea formControlName="description" placeholder="Section description"></textarea>
-          @if (section.get('description')?.touched) {
-            @if (section.get('description')?.hasError('required')) {
-              <span class="error">Description is required</span>
-            }
-            @if (section.get('description')?.hasError('maxlength')) {
-              <span class="error">Description can't exceed 100 characters</span>
-            }
-          }
-        </div>
-
-        <!-- ── Criteria ── -->
-        <div formArrayName="criteria" class="criteria-container">
-          <h4>Criteria</h4>
-
-          @for (criterion of getCriteria(i).controls; track criterion; let j = $index) {
-            <div [formGroupName]="j" class="criterion-card">
-
-              <div class="criterion-header">
-                <span>Criterion {{ j + 1 }}</span>
-                <button type="button" class="btn-remove-small"
-                        (click)="removeCriterion(i, j)"
-                        [disabled]="getCriteria(i).length === 0">
-                  ✕
-                </button>
-              </div>
-
-              <div class="field-row">
-                <div class="field">
-                  <label>Title</label>
-                  <input formControlName="title" placeholder="e.g. Clarity of explanation" />
-                  @if (criterion.get('title')?.touched) {
-                    @if (criterion.get('title')?.hasError('required')) {
-                      <span class="error">Criterion title is required</span>
-                    }
-                    @if (criterion.get('title')?.hasError('maxlength')) {
-                      <span class="error">Title can't exceed 100 characters</span>
-                    }
-                  }
-                </div>
-
-                <div class="field field-small">
-                  <label>Order</label>
-                  <input formControlName="orderNo" type="number" min="1" />
-                  @if (criterion.get('orderNo')?.touched) {
-                    @if (criterion.get('orderNo')?.hasError('required')) {
-                      <span class="error">Order is required</span>
-                    }
-                    @if (criterion.get('orderNo')?.hasError('min')) {
-                      <span class="error">Min value is 1</span>
-                    }
-                  }
-                </div>
-              </div>
-
-              <div class="field-row">
-                <div class="field">
-                  <label>Question Type</label>
-                  <select formControlName="questionType">
-                    <option value="SingleChoice">Single Choice</option>
-                    <option value="MultipleChoice">Multiple Choice</option>
-                    <option value="Text">Text</option>
-                  </select>
-                </div>
-
-                <div class="field field-small">
-                  <label>Max Score</label>
-                  <input formControlName="maxScore" type="number" min="1" />
-                  @if (criterion.get('maxScore')?.touched && criterion.get('maxScore')?.hasError('min')) {
-                    <span class="error">Min value is 1</span>
-                  }
-                </div>
-
-                <div class="field field-small">
-                  <label>Weight</label>
-                  <input formControlName="weight" type="number" min="1" />
-                  @if (criterion.get('weight')?.touched) {
-                    @if (criterion.get('weight')?.hasError('required')) {
-                      <span class="error">Weight is required</span>
-                    }
-                    @if (criterion.get('weight')?.hasError('min')) {
-                      <span class="error">Min value is 1</span>
-                    }
-                  }
-                </div>
-              </div>
-
-              <div class="field checkbox-field">
-                <label>
-                  <input formControlName="isRequired" type="checkbox" />
-                  Is Required
-                </label>
-              </div>
-
             </div>
-          }
 
-          <button type="button" class="btn-add" (click)="addCriterion(i)">
-            + Add Criterion
-          </button>
+            <div class="field">
+              <label>Order</label>
+              <input formControlName="orderNo" type="number" min="1" />
+              @if (section.get('orderNo')?.touched) {
+                @if (section.get('orderNo')?.hasError('required')) {
+                  <span class="error">Order is required</span>
+                }
+                @if (section.get('orderNo')?.hasError('min')) {
+                  <span class="error">Min value is 1</span>
+                }
+              }
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Section Description</label>
+            <textarea formControlName="description" placeholder="What does this section evaluate?"></textarea>
+            @if (section.get('description')?.touched) {
+              @if (section.get('description')?.hasError('required')) {
+                <span class="error">Description is required</span>
+              }
+              @if (section.get('description')?.hasError('maxlength')) {
+                <span class="error">Description can't exceed 100 characters</span>
+              }
+            }
+          </div>
+
+          <!-- ── Criteria ── -->
+          <div formArrayName="criteria" class="criteria-block">
+            <div class="criteria-heading">Criteria</div>
+
+            <div class="criteria-list">
+              @for (criterion of getCriteria(i).controls; track criterion; let j = $index) {
+                <div [formGroupName]="j" class="criterion-card">
+
+                  <div class="criterion-header">
+                    <span class="criterion-label">Criterion {{ j + 1 }}</span>
+                    <button type="button" class="btn-remove-sm"
+                            (click)="removeCriterion(i, j)"
+                            [disabled]="getCriteria(i).length === 0"
+                            title="Remove criterion">
+                      ✕
+                    </button>
+                  </div>
+
+                  <div class="field-row">
+                    <div class="field">
+                      <label>Title</label>
+                      <input formControlName="title" placeholder="e.g. Clarity of explanation" />
+                      @if (criterion.get('title')?.touched) {
+                        @if (criterion.get('title')?.hasError('required')) {
+                          <span class="error">Criterion title is required</span>
+                        }
+                        @if (criterion.get('title')?.hasError('maxlength')) {
+                          <span class="error">Title can't exceed 100 characters</span>
+                        }
+                      }
+                    </div>
+
+                    <div class="field">
+                      <label>Order</label>
+                      <input formControlName="orderNo" type="number" min="1" />
+                      @if (criterion.get('orderNo')?.touched) {
+                        @if (criterion.get('orderNo')?.hasError('required')) {
+                          <span class="error">Order is required</span>
+                        }
+                        @if (criterion.get('orderNo')?.hasError('min')) {
+                          <span class="error">Min value is 1</span>
+                        }
+                      }
+                    </div>
+                  </div>
+
+                  <div class="field-row-3">
+                    <div class="field">
+                      <label>Question Type</label>
+                      <select class="form-select" formControlName="questionType">
+                          @for (q of questionTypes; track q.id) {
+                            <option [ngValue]="q.id">
+                              {{ q.name }}
+                            </option>
+                          }
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label>Max Score</label>
+                      <input formControlName="maxScore" type="number" min="1" />
+                      @if (criterion.get('maxScore')?.touched && criterion.get('maxScore')?.hasError('min')) {
+                        <span class="error">Min value is 1</span>
+                      }
+                    </div>
+
+                    <div class="field">
+                      <label>Weight</label>
+                      <input formControlName="weight" type="number" min="1" />
+                      @if (criterion.get('weight')?.touched) {
+                        @if (criterion.get('weight')?.hasError('required')) {
+                          <span class="error">Weight is required</span>
+                        }
+                        @if (criterion.get('weight')?.hasError('min')) {
+                          <span class="error">Min value is 1</span>
+                        }
+                      }
+                    </div>
+                  </div>
+
+                  <div class="field checkbox-field">
+                    <label>
+                      <input formControlName="isRequired" type="checkbox" />
+                      Required criterion
+                    </label>
+                  </div>
+
+                </div>
+              }
+            </div>
+
+            <button type="button" class="btn-add-criterion" (click)="addCriterion(i)">
+              + Add Criterion
+            </button>
+          </div>
         </div>
 
       </div>
@@ -190,9 +215,10 @@
   }
 
   <button type="submit" class="btn-submit"
-        [disabled]="isSubmitting || form.invalid">
+          [disabled]="isSubmitting || form.invalid">
     @if (isSubmitting) {
-      <span>Saving...</span>
+      <span class="spinner"></span>
+      <span>Saving…</span>
     } @else {
       <span>Save Template</span>
     }

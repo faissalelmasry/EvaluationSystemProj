@@ -1,17 +1,17 @@
 .top-bar {
-  background: white;
+  background: rgba(255, 255, 255, 0.96);
   padding: 1rem 2rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e7eef8;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 40px rgba(20, 32, 70, 0.08);
   position: fixed;
   top: 0;
   left: 260px;
   right: 0;
   z-index: 500;
-  height: 70px;
+  height: 76px;
 }
 
 .top-bar-left {
@@ -19,16 +19,16 @@
 }
 
 .page-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #1e3a5f;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #15294f;
   margin: 0;
 }
 
 .top-bar-right {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .user-section {
@@ -42,14 +42,14 @@
 }
 
 .user-name {
-  font-weight: 600;
-  color: #1e3a5f;
+  font-weight: 700;
+  color: #15294f;
   font-size: 0.95rem;
 }
 
 .user-role {
   font-size: 0.8rem;
-  color: #718096;
+  color: #62748a;
 }
 
 .profile-container {
@@ -57,85 +57,85 @@
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4f6ef6 0%, #3d5fe8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.95rem;
 }
 
 .avatar:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(79, 110, 246, 0.28);
 }
 
 .profile-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  margin-top: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #dbe3ef;
+  border-radius: 20px;
+  box-shadow: 0 24px 55px rgba(22, 35, 85, 0.16);
+  width: 320px;
+  margin-top: 0.85rem;
   z-index: 1001;
   overflow: hidden;
 }
 
 .profile-dropdown .dropdown-header {
-  padding: 1.5rem;
-  background: #f7fafc;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 1.5rem 1.35rem;
+  background: #f8fafd;
 }
 
 .profile-info {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 .avatar-large {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4f6ef6 0%, #3d5fe8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
   flex-shrink: 0;
 }
 
-.profile-info > div {
+.profile-info>div {
   flex: 1;
 }
 
 .profile-info .name {
   margin: 0;
-  font-weight: 600;
-  color: #1e3a5f;
+  font-weight: 700;
+  color: #172a4d;
   font-size: 0.95rem;
 }
 
 .profile-info .email {
-  margin: 0.25rem 0 0 0;
-  font-size: 0.8rem;
-  color: #718096;
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  color: #6c7a92;
 }
 
 .dropdown-divider {
   height: 1px;
-  background: #e2e8f0;
+  background: #e8eff7;
   margin: 0;
 }
 
@@ -148,28 +148,28 @@
 
 .menu-item {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.2rem;
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #2c3e50;
-  transition: all 0.2s ease;
+  color: #243652;
+  transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
   text-align: left;
-  font-size: 0.9rem;
+  font-size: 0.93rem;
 }
 
 .menu-item:hover {
-  background: #f7fafc;
-  color: #4f46e5;
-  padding-left: 1.25rem;
+  background: #f2f6ff;
+  color: #3d5fe8;
+  padding-left: 1.35rem;
 }
 
 .menu-item .icon {
   font-size: 1rem;
-  min-width: 1.5rem;
+  min-width: 1.4rem;
   text-align: center;
 }
 
@@ -178,28 +178,28 @@
 }
 
 .dropdown-footer {
-  padding: 0.5rem 0;
+  padding: 0.75rem 0;
 }
 
 .logout-btn {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.9rem 1.2rem;
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #ef4444;
-  transition: all 0.2s ease;
+  color: #dc2626;
+  transition: background 0.2s ease, padding-left 0.2s ease;
   text-align: left;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.93rem;
+  font-weight: 600;
 }
 
 .logout-btn:hover {
   background: #fef2f2;
-  padding-left: 1.25rem;
+  padding-left: 1.35rem;
 }
 
 .dropdown-overlay {
