@@ -14,9 +14,7 @@ using EvaluationSystem.Domain.Exceptions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using EvaluationSystem.Application.Exceptions;
-using static System.Collections.Specialized.BitVector32;
 using EvaluationSystem.Application.Helpers;
 using EvaluationSystem.Application.DTOs.EvaluationCriteria;
 using EvaluationSystem.Domain.Exceptions;
@@ -173,7 +171,7 @@ namespace EvaluationSystem.Application.Services.TemplateServices
             if (temp == null)
                 throw new NotFoundException("Template isn't found");
             var exists = await unitOfWork.EvaluationTemplates
-                .FindByCondition(t => t.Title == dto.Title && t.Id != id)
+                .GetAll().Where(t => t.Title == dto.Title && t.Id != id)
                 .AnyAsync();
             if(exists)
                 throw new BadRequestException("Template already exists");

@@ -122,5 +122,6 @@ namespace EvaluationSystem.Application.Helpers
                     throw new BadRequestException($"Duplicate criterion order in section '{section.Title}'");
             }
         }
+
     }
 }

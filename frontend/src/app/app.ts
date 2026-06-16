@@ -5,12 +5,16 @@ import { TemplateListComponent } from './features/evaluation-template/template-l
 import { CreateTemplate } from "./features/evaluation-template/create-template/create-template";
 import { TopBarComponent } from './shared/layout/navbar/navbar/navbar';
 import { SidebarComponent } from './shared/layout/sidebar/sidebar/sidebar';
+import { CreateSection } from "./features/evaluation-section/create-section/create-section";
+import { CreateCriteria } from "./features/evaluation-criteria/create-criteria/create-criteria";
+import { TemplateDetails } from "./features/evaluation-template/template-details/template-details";
+import { UpdateTemplate } from "./features/evaluation-template/update-template/update-template";
 import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, TopBarComponent, CreateTemplate,CommonModule],
+  imports: [RouterOutlet, SidebarComponent, TopBarComponent,CommonModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

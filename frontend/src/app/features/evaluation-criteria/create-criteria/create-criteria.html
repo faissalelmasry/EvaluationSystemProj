@@ -1,0 +1,63 @@
+<h2>
+  {{ isEditMode ? 'Update Criterion' : 'Create Criterion' }}
+</h2>
+@if (BackEndError()) {
+  <div class="alert alert-danger">
+    {{ BackEndError() }}
+  </div>
+}
+
+<form [formGroup]="Form" (ngSubmit)="onSubmit()">
+
+  <div class="mb-3">
+    <label>Title</label>
+    <input class="form-control" formControlName="title" />
+
+    @if (f['title'].touched && f['title'].errors?.['required']) {
+      <small class="text-danger">Title is required</small>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label>Description</label>
+    <textarea class="form-control" formControlName="description"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label>Question Type</label>
+    <select class="form-select" formControlName="questionType">
+  <option [ngValue]="null">Select Question Type</option>
+
+  @for (q of questionTypes; track q.id) {
+    <option [ngValue]="q.id">
+      {{ q.name }}
+    </option>
+  }
+</select>
+  </div>
+
+  <div class="mb-3">
+    <label>Max Score</label>
+    <input type="number" class="form-control" formControlName="maxScore" />
+  </div>
+
+  <div class="mb-3">
+    <label>Weight</label>
+    <input type="number" class="form-control" formControlName="weight" />
+  </div>
+
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" formControlName="isRequired" />
+    <label class="form-check-label">Is Required</label>
+  </div>
+
+  <div class="mb-3">
+    <label>Order No</label>
+    <input type="number" class="form-control" formControlName="orderNo" />
+  </div>
+
+  <button class="btn btn-primary" type="submit" [disabled]="Form.invalid || IsSubmitting()">
+    {{ isEditMode ? 'Update Criterion' : 'Create Criterion' }}
+  </button>
+
+</form>

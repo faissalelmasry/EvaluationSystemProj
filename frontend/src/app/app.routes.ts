@@ -9,6 +9,12 @@ import { UserManagement } from './features/admin/user-management/user-management
 import { DepartmentManagement } from './features/admin/department-management/department-management';
 import { UserForm } from './features/admin/user-form/user-form';
 import { NotFoundComponent } from './shared/layout/not-found/not-found';
+import { CreateTemplate } from './features/evaluation-template/create-template/create-template';
+import { UpdateTemplate } from './features/evaluation-template/update-template/update-template';
+import { CreateSection } from './features/evaluation-section/create-section/create-section';
+import { TemplateListComponent } from './features/evaluation-template/template-list.component/template-list.component';
+import { TemplateDetails } from './features/evaluation-template/template-details/template-details';
+import { CreateCriteria } from './features/evaluation-criteria/create-criteria/create-criteria';
 import { authGuard } from './core/guards/auth-guard';
 import { Assignmentlist } from './features/assignment/assignmentlist/assignmentlist';
 import { Assignmentform } from './features/assignment/assignmentform/assignmentform';
@@ -42,6 +48,14 @@ export const routes: Routes = [
   },
   
   { path: 'admin/users/new', component: UserForm },
+  { path:'templates',component:TemplateListComponent},
+  { path:'template/add',component:CreateTemplate},
+  { path:'template/:id',component:TemplateDetails},
+  { path:'template/update/:id',component:UpdateTemplate},
+  { path:'section/add/:templateid',component:CreateSection},
+  { path:'section/update/:sectionid',component:CreateSection},
+  { path:'criteria/add/:sectionid',component:CreateCriteria},
+  { path:'criteria/update/:criteriaid',component:CreateCriteria},
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },

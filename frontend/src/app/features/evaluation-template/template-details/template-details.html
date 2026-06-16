@@ -1,0 +1,128 @@
+<div class="details-container">
+
+  @if (isLoading()) {
+    <div class="loading">Loading...</div>
+  }
+
+  @if (template()) {
+
+    <div class="template-header">
+
+      <div class="template-info">
+        <h2>📦 {{ template()?.title }}</h2>
+        <p>{{ template()?.description }}</p>
+      </div>
+
+      <div class="actions">
+
+        <button class="btn btn-primary" [routerLink]="['/template/update', template()?.id]">
+          ✏️ Edit Template
+        </button>
+
+        <button class="btn btn-danger" (click)="DeleteTemplate(template()?.id)">
+          🗑️ Delete Template 
+        </button>
+
+        <button class="btn btn-success" [routerLink]="['/section/add', template()?.id]">
+          + Add Section
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="sections">
+
+      @for (section of template()?.sections; track section.id) {
+
+        <div class="section-card">
+
+          <div class="section-header">
+
+            <div>
+              <h3>🧩 {{ section.title }}</h3>
+              <p>{{ section.description }}</p>
+            </div>
+
+            <div class="section-actions">
+
+              <button class="btn-small" [routerLink]="['/section/update', section.id]">
+                ✏️ 
+              </button>
+
+              <button class="btn-small danger" (click)="DeleteSection(section.id)">
+                🗑️
+              </button>
+
+              <button class="btn-small success" [routerLink]="['/criteria/add', section.id]">
+                + Criteria
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="criteria">
+
+            @if (section.criteria.length === 0) {
+              <div class="empty">
+                No criteria in this section
+              </div>
+            }
+
+            @for (c of section.criteria; track c.id) {
+
+              <div class="criteria-card">
+
+                <div class="criteria-header">
+
+                  <div class="criteria-title">
+                    ⭐ {{ c.title }}
+                  </div>
+
+                  <div class="criteria-actions">
+
+                    <button class="icon-btn" [routerLink]="['/criteria/update', c.id]">
+                      ✏️
+                    </button>
+
+                    <button class="icon-btn danger" (click)="DeleteCriteria(section.id, c.id)">🗑️</button>
+
+                  </div>
+
+                </div>
+
+                <p class="criteria-desc">
+                  {{ c.description }}
+                </p>
+
+                <div class="criteria-meta">
+
+                  <span>🎯 Score: {{ c.maxScore }}</span>
+                  <span>⚖️ Weight: {{ c.weight }}</span>
+
+                  <span class="badge">
+                    {{ c.questionType }}
+                  </span>
+
+                  @if (c.isRequired) {
+                    <span class="required">Required</span>
+                  }
+
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>

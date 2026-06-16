@@ -8,6 +8,18 @@
     <button class="btn-primary" (click)="openCreateModal()">+ New User</button>
   </header>
 
+  <section class="admin-actions">
+    <button class="action-btn primary" (click)="openCreateModal()">+ New User</button>
+    <button class="action-btn primary" routerLink="/templates">Show Templates</button>
+    <button class="action-btn primary">+ New Assignment</button>
+    <button class="action-btn secondary">📊 Export Report</button>
+  </section>
+
+  <section class="users-card">
+    <div class="users-card-header">
+      <div>
+        <p class="section-label">System Users</p>
+      </div>
   <div class="stats-row">
     <div class="stat-card">
       <span class="stat-value">{{ totalCount() }}</span>

@@ -72,8 +72,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-    "proxyConfig": "src/proxy.conf.json"
-  },
+            "proxyConfig": "src/proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"

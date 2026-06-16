@@ -4,5 +4,6 @@ export interface GetSectionsDto {
   id:number
   title:string
   description:string
+  orderNo:number
   criteria:GetCriteriaDto[];
 }
