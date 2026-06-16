@@ -168,9 +168,10 @@ namespace EvaluationSystem.Api
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngularFrontend",
-                    policy => policy.WithOrigins("http://localhost:4200") // The default Angular port
+                    policy => policy.WithOrigins("http://localhost:4200")
                                     .AllowAnyMethod()
-                                    .AllowAnyHeader().AllowCredentials());
+                                    .AllowAnyHeader()
+                                    .AllowCredentials()); 
             });
             var app = builder.Build();
 

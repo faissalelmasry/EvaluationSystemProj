@@ -35,13 +35,13 @@ export class SidebarComponent implements OnInit {
       this.authService.logout().subscribe({
         next: () => {
           localStorage.removeItem('user');
-          localStorage.removeItem('jwt_token');
+          localStorage.removeItem('token');
           this.router.navigate(['/login']);
         },
         error: (err) => {
           console.error('Logout error:', err);
           localStorage.removeItem('user');
-          localStorage.removeItem('jwt_token');
+          localStorage.removeItem('token');
           this.router.navigate(['/login']);
         }
       });
@@ -51,8 +51,8 @@ export class SidebarComponent implements OnInit {
   private setActiveRoute(): void {
     const currentUrl = this.router.url;
     if (currentUrl.includes('/dashboard')) this.activeRoute = 'dashboard';
-    else if (currentUrl.includes('/evaluations')) this.activeRoute = 'evaluations';
-    else if (currentUrl.includes('/form')) this.activeRoute = 'form';
+    else if (currentUrl.includes('/reviews')) this.activeRoute = 'reviews';
+    else if (currentUrl.includes('/history')) this.activeRoute = 'history'; 
     else if (currentUrl.includes('/reports')) this.activeRoute = 'reports';
     else if (currentUrl.includes('/admin')) this.activeRoute = 'admin';
     else if (currentUrl.includes('/departments')) this.activeRoute = 'departments';

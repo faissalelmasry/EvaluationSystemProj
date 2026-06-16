@@ -20,9 +20,7 @@ export class EvaluationService {
     return this.http.get(`${this.apiUrl}/${assignmentId}/responses`);
   }
 
-  getResult(assignmentId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${assignmentId}/result`);
-  }
+
 
   public getEvaluationForReview(assignmentId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${assignmentId}/responses`);
@@ -37,7 +35,7 @@ export class EvaluationService {
   public getMyPendingAssignments(evaluatorId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/EvaluationAssignments/my-pending?evaluatorId=${evaluatorId}`);
   }
-  public getEvaluationResult(assignmentId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/Evaluations/${assignmentId}/result`);
+  getEvaluationResult(assignmentId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${assignmentId}/result`); 
   }
 }

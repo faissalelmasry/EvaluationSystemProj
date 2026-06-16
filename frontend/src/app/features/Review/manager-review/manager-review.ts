@@ -51,7 +51,7 @@ export class ManagerReviewComponent implements OnInit {
     this.evaluationService.approveEvaluation(this.assignmentId, this.managerNotes).subscribe({
       next: () => {
         alert('Evaluation successfully approved!');
-        this.router.navigate(['/my-evaluations']);
+        this.router.navigate(['/reviews']);
       },
       error: () => alert('Failed to approve evaluation. Check console.')
     });
@@ -67,7 +67,7 @@ export class ManagerReviewComponent implements OnInit {
     this.evaluationService.rejectEvaluation(this.assignmentId, this.managerNotes).subscribe({
       next: () => {
         alert('Evaluation rejected and sent back for updates.');
-        this.router.navigate(['/my-evaluations']);
+        this.router.navigate(['/reviews']);
       },
       error: () => alert('Failed to reject evaluation.')
     });

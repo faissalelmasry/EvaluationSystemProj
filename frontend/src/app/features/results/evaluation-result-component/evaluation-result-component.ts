@@ -40,6 +40,5 @@ export class EvaluationResultComponent implements OnInit {
   }
 
   goBackToDashboard() {
-    this.router.navigate(['/my-evaluations']);
   }
 }

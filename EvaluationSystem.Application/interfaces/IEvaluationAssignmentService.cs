@@ -14,7 +14,8 @@ namespace EvaluationSystem.Application.interfaces
         Task<IEnumerable<AssignmentResponseDto>> GetMyPendingEvaluationsAsync(int evaluatorId);
         Task<AssignmentResponseDto> GetAssignmentByIdAsync(int id);
         Task<AssignmentResponseDto> UpdateAssignmentAsync(int id, CreateAssignmentDto dto);
-    
-}
+        Task<IEnumerable<AssignmentResponseDto>> GetMyEvaluationHistoryAsync(int evaluateeId);
+
+    }
 }
 

@@ -52,5 +52,22 @@ isLoggedIn(): boolean {
 clearToken() {
   localStorage.removeItem('jwt_token');
 }
+// Add this inside AuthService
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      
+      const userId = payload['nameid'] || 
+                     payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || 
+                     payload['sub'];
+                     
+      return userId ? Number(userId) : null;
+    } catch (e) {
+      console.error('Failed to decode JWT token', e);
+      return null;
+    }
+  }
 }

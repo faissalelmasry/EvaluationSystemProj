@@ -70,11 +70,11 @@
                   </span>
                 </td>
                 <td class="px-4 py-3.5 text-center">
-                  <button (click)="startEvaluation(item.id)" 
-                          class="btn btn-success rounded-3 btn-sm px-4 fw-medium text-nowrap"
-                          [disabled]="item.status === 'Completed' || item.status === 5 || item.status === '5'">
-                    Start
-                  </button>
+<button (click)="startEvaluation(item.id, item.templateId)" 
+        class="btn btn-success rounded-3 btn-sm px-4 fw-medium text-nowrap"
+        [disabled]="item.status === 'Completed' || item.status === 5 || item.status === '5'">
+  Start
+</button>
                 </td>
               </tr>
             } @empty {

@@ -137,7 +137,9 @@ namespace EvaluationSystem.Application.Services.AssignmentService
         public async Task<IEnumerable<AssignmentResponseDto>> GetMyPendingEvaluationsAsync(int evaluatorId)
         {
             var pendingAssignments = await _unitOfWork.EvaluationAssignments
-                 .FindByCondition(a => a.EvaluatorId == evaluatorId && a.Status == EvaluationStatus.Pending, trackChanges: false)
+                 .FindByCondition(a => a.EvaluatorId == evaluatorId &&
+                                      (a.Status == EvaluationStatus.Pending || a.Status == EvaluationStatus.InProgress),
+                                  trackChanges: false)
                  .Include(a => a.Template)
                  .Include(a => a.Evaluatee)
                  .Include(a => a.Evaluator)
@@ -167,6 +169,17 @@ namespace EvaluationSystem.Application.Services.AssignmentService
                  .FirstOrDefaultAsync();
 
             return _mapper.Map<AssignmentResponseDto>(updatedAssignment);
+        }
+        public async Task<IEnumerable<AssignmentResponseDto>> GetMyEvaluationHistoryAsync(int evaluateeId)
+        {
+            var completedAssignments = await _unitOfWork.EvaluationAssignments
+                 .FindByCondition(a => a.EvaluateeId == evaluateeId && a.Status == EvaluationStatus.Completed, trackChanges: false)
+                 .Include(a => a.Template)
+                 .Include(a => a.Evaluator)
+                 .Include(a => a.Evaluatee)
+                 .ToListAsync();
+
+            return _mapper.Map<IEnumerable<AssignmentResponseDto>>(completedAssignments);
         }
     }
 }
