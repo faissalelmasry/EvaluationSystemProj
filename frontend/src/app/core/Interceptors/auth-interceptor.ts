@@ -31,8 +31,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         alert('Access Denied: You do not have permission to perform this action.');
       }
       else if (error.status === 400 || error.status === 404) {
-        const backendMessage = error.error?.Message || 'An unexpected server error occurred.';
-        alert(`Error: ${backendMessage}`); 
+        // Components handle these errors inline — no alert needed
       }
       else if (error.status === 500) {
         // alert('A critical server error occurred. Please contact IT.');

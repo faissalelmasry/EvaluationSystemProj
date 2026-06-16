@@ -8,8 +8,8 @@
    
         [Route("api/[controller]")]
         [ApiController]
-        //[Authorize]
-        public class DepartmentsController : ControllerBase
+    [Authorize]
+    public class DepartmentsController : ControllerBase
         {
             private readonly IDepartmentService _departmentService;
 
@@ -20,7 +20,8 @@
             }
 
             [HttpGet]
-            public async Task<IActionResult> GetAll([FromQuery] DepartmentSort_Page dto)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll([FromQuery] DepartmentSort_Page dto)
             {
                 var departments =
                     await _departmentService.GetAllAsync(dto);

@@ -96,14 +96,21 @@
     <div class="actions-section">
       <h2 class="section-title">Quick Actions</h2>
       <div class="actions-row">
+        <a routerLink="/profile" class="action-btn">
+          <span class="action-icon">👤</span>
+          <span>Edit Profile</span>
+        </a>
         <a routerLink="/change-password" class="action-btn">
           <span class="action-icon">🔐</span>
           <span>Change Password</span>
         </a>
-        <a routerLink="/admin" class="action-btn secondary">
-          <span class="action-icon">📊</span>
-          <span>Back to Dashboard</span>
-        </a>
+      </div>
+      <div class="actions-divider"></div>
+      <div class="actions-row">
+        <button class="action-btn logout-btn" (click)="logout()">
+          <span class="action-icon">🚪</span>
+          <span>Logout</span>
+        </button>
       </div>
     </div>
 

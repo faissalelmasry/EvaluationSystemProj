@@ -8,7 +8,11 @@ namespace EvaluationSystem.Application.Mapping
     {
         public UserProfile()
         {
-            CreateMap<CreateUserDto, User>();
+            CreateMap<CreateUserDto, User>()
+    .ForMember(
+        dest => dest.UserName,
+        opt => opt.MapFrom(src => src.UserName)
+    );
 
             CreateMap<User, UserDto>()
                 .ForMember(

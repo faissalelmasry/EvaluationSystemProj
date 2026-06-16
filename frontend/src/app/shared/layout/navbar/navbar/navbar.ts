@@ -54,11 +54,6 @@ export class TopBarComponent implements OnInit {
     this.showProfileMenu = false;
   }
 
-  openSettings(): void {
-    this.closeDropdown();
-    this.router.navigate(['/settings']);
-  }
-
   openProfile(): void {
     this.closeDropdown();
     this.router.navigate(['/profile']);
@@ -80,7 +75,7 @@ export class TopBarComponent implements OnInit {
         error: (err) => {
           console.error('Logout error:', err);
           localStorage.removeItem('user');
-         localStorage.removeItem('jwt_token');
+          localStorage.removeItem('jwt_token');
           this.router.navigate(['/login']);
         }
       });

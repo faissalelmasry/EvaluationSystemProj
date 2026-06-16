@@ -131,7 +131,47 @@ namespace EvaluationSystem.Application.Services.AuthServices
                 RefreshTokenExpiresAt = newRefreshToken.ExpiresOn
             };
         }
+        public async Task ChangePasswordAsync(string userId, ChangePasswordDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new BadRequestException("User not found");
 
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new BadRequestException(errors);
+            }
+
+            _logger.LogInformation("User {UserId} changed password", userId);
+        }
+        public async Task<string> ForgotPasswordAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                throw new BadRequestException("User not found");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            _logger.LogInformation("Password reset token generated for {Email}", email);
+
+            return token;
+        }
+        public async Task ResetPasswordAsync(ResetPasswordDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
+                throw new BadRequestException("User not found");
+
+            var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new BadRequestException(errors);
+            }
+
+            _logger.LogInformation("Password reset successful for {Email}", dto.Email);
+        }
         public async Task RevokeTokenAsync(string refreshToken)
         {
             var token = await _unitOfWork.RefreshTokens.GetByTokenAsync(refreshToken);

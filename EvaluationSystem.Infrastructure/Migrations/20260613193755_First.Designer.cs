@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EvaluationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260606112951_NullableDeletedAt")]
-    partial class NullableDeletedAt
+    [Migration("20260613193755_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,6 +266,9 @@ namespace EvaluationSystem.Infrastructure.Migrations
 
                     b.Property<string>("ReviewComment")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReviewedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ReviewerId")
                         .HasColumnType("int");
