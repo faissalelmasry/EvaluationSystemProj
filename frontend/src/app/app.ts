@@ -2,7 +2,6 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { TemplateListComponent } from './features/evaluation-template/template-list.component/template-list.component';
-import { CreateTemplate } from "./features/evaluation-template/create-template/create-template";
 import { TopBarComponent } from './shared/layout/navbar/navbar/navbar';
 import { SidebarComponent } from './shared/layout/sidebar/sidebar/sidebar';
 import { filter } from 'rxjs';
@@ -10,7 +9,7 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, TopBarComponent, CreateTemplate,CommonModule],
+  imports: [RouterOutlet, SidebarComponent, TopBarComponent,CommonModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -26,6 +25,6 @@ export class AppComponent implements OnInit {
   }
 
   private updateLayout(url: string) {
-    this.showLayout.set(!url.startsWith('/login') && !url.startsWith('/register'));
+    this.showLayout.set(!url.startsWith('/login') && !url.startsWith('/register') && !url.startsWith('/forgot-password') && !url.startsWith('/reset-password'));
   }
 }

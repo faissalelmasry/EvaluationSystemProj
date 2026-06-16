@@ -27,6 +27,7 @@ using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Services.AssignmentService;
 using EvaluationSystem.Application.Services.CriteriaService;
 using EvaluationSystem.Application.Services.ReportService;
+using EvaluationSystem.Infrastructure.Seeds;
 
 namespace EvaluationSystem.Api
 {
@@ -169,11 +170,11 @@ namespace EvaluationSystem.Api
                 options.AddPolicy("AllowAngularFrontend",
                     policy => policy.WithOrigins("http://localhost:4200") // The default Angular port
                                     .AllowAnyMethod()
-                                    .AllowAnyHeader());
+                                    .AllowAnyHeader().AllowCredentials());
             });
             var app = builder.Build();
 
-            //await DataSeeder.InitializeAsync(app.Services);
+            await DataSeeder.InitializeAsync(app.Services);
 
             app.UseSerilogRequestLogging();
 
@@ -184,8 +185,8 @@ namespace EvaluationSystem.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseCors("AllowAngularFrontend");
             app.UseHttpsRedirection();
+            app.UseCors("AllowAngularFrontend");
 
             app.UseAuthentication();
 

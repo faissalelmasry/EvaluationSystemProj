@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../core/services/user';
 import { User } from '../../core/models/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-profile',
@@ -14,6 +15,8 @@ import { RouterLink } from '@angular/router';
 })
 export class Profile implements OnInit {
   private readonly userService = inject(UserService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   user = signal<User | null>(null);
   userFromToken = signal<{ fullName: string; email: string; role: string; id: number } | null>(null);
@@ -95,5 +98,23 @@ export class Profile implements OnInit {
     if (user.role) return user.role;
     if (user.roles?.length) return user.roles.join(', ');
     return this.userFromToken()?.role || '';
+  }
+
+  logout(): void {
+    if (confirm('Are you sure you want to logout?')) {
+      this.authService.logout().subscribe({
+        next: () => {
+          localStorage.removeItem('user');
+          localStorage.removeItem('jwt_token');
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          console.error('Logout error:', err);
+          localStorage.removeItem('user');
+          localStorage.removeItem('jwt_token');
+          this.router.navigate(['/login']);
+        },
+      });
+    }
   }
 }

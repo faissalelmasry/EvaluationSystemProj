@@ -8,5 +8,8 @@ namespace EvaluationSystem.Application.Services.ServiceInterfaces
         Task<AuthResponseDto> LoginAsync(LoginDto dto);
         Task<AuthResponseDto> RefreshTokenAsync(string refreshToken);
         Task RevokeTokenAsync(string refreshToken);
+        Task ChangePasswordAsync(string userId, ChangePasswordDto dto);
+        Task<string> ForgotPasswordAsync(string email);
+        Task ResetPasswordAsync(ResetPasswordDto dto);
     }
 }

@@ -14,6 +14,7 @@
         <button class="avatar" (click)="toggleProfileMenu()">{{ userInitials }}</button>
 
         <div class="profile-dropdown" *ngIf="showProfileMenu">
+
           <div class="dropdown-header">
             <div class="profile-info">
               <div class="avatar-large">{{ userInitials }}</div>
@@ -27,10 +28,6 @@
           <div class="dropdown-divider"></div>
 
           <div class="dropdown-menu">
-            <button class="menu-item" (click)="openSettings()">
-              <span class="icon">⚙️</span>
-              <span class="text">Settings</span>
-            </button>
             <button class="menu-item" (click)="openProfile()">
               <span class="icon">👤</span>
               <span class="text">My Profile</span>
@@ -43,12 +40,17 @@
 
           <div class="dropdown-divider"></div>
 
-          <div class="dropdown-footer">
-            <button class="logout-btn" (click)="logout()">
-              <span class="icon">🚪</span>
-              <span class="text">Logout</span>
-            </button>
-          </div>
+          <div class="dropdown-menu">
+
+<div class="dropdown-divider"></div>
+
+<div class="dropdown-footer">
+  <button class="logout-btn" (click)="logout()">
+    <span class="icon">🚪</span>
+    <span class="text">Logout</span>
+  </button>
+</div>
+
         </div>
       </div>
     </div>

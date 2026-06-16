@@ -1,4 +1,5 @@
-﻿using EvaluationSystem.Domain.Enums;
+﻿using EvaluationSystem.Domain.BaseModels;
+using EvaluationSystem.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace EvaluationSystem.Domain.Models

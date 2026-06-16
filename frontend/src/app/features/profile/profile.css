@@ -239,6 +239,12 @@
   margin: 0 0 16px;
 }
 
+.actions-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 16px 0;
+}
+
 .actions-row {
   display: flex;
   gap: 12px;
@@ -273,6 +279,18 @@
 
 .action-btn.secondary:hover {
   background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.action-btn.logout-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  width: 100%;
+  justify-content: center;
+}
+
+.action-btn.logout-btn:hover {
+  background: #fecaca;
   transform: translateY(-1px);
 }
 

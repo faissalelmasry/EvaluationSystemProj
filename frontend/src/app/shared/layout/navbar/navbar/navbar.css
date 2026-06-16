@@ -139,7 +139,10 @@
   margin: 0;
 }
 
-.dropdown-menu {
+.profile-dropdown .dropdown-menu {
+  display: block;
+  position: static;
+  width: auto;
   padding: 0.5rem 0;
 }
 

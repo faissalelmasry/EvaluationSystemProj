@@ -87,5 +87,31 @@ namespace EvaluationSystem.Api.Controllers
                 message = "Logged out successfully"
             });
         }
+        [HttpPost("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("User ID not found");
+
+            await _authService.ChangePasswordAsync(userId, dto);
+            return Ok(new AuthMessageDto { message = "Password changed successfully" });
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+        {
+            var token = await _authService.ForgotPasswordAsync(dto.Email);
+            // Send token via email service
+            return Ok(new { message = "Password reset token sent to your email", token });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            await _authService.ResetPasswordAsync(dto);
+            return Ok(new AuthMessageDto { message = "Password reset successfully" });
+        }
     }
 }
