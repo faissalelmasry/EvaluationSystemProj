@@ -18,5 +18,6 @@ namespace EvaluationSystem.Application.interfaces
         public IGenericRepo<User> Users { get; }
 
         Task<int> SaveChangesAsync();
+        Task ExecuteInTransactionAsync(Func<Task> operation);
     }
 }
