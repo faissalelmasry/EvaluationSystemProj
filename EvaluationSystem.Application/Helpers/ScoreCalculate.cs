@@ -10,32 +10,31 @@ namespace EvaluationSystem.Application.Helpers
 {
     public class ScoreCalculator
     {
-        public EvaluationResult CalculateFinalScore(int assignmentId, List<EvaluationResponse> responses)
+        public EvaluationResult CalculateFinalScore(int assignmentId, List<EvaluationResponse> responses, Dictionary<int, EvaluationCriteria> criteriaDictionary)
         {
             decimal totalScore = 0;
             decimal maxPossibleScore = 0;
 
             foreach (var response in responses)
             {
-                if (response.Criterion == null)
-                    throw new ArgumentNullException(nameof(response.Criterion), "Criteria must be loaded to calculate scores.");
+                if (!criteriaDictionary.TryGetValue(response.CriterionId, out var criterion))
+                    throw new ArgumentException($"Criterion with ID {response.CriterionId} was not found in the provided criteria dictionary.");
 
-                if (response.Criterion.QuestionType == QuestionType.RatingScale ||
-                    response.Criterion.QuestionType == QuestionType.SingleChoice)
+                if (criterion.QuestionType == QuestionType.RatingScale ||
+                    criterion.QuestionType == QuestionType.SingleChoice)
                 {
-                    totalScore += (response.Score * response.Criterion.Weight);
-                    maxPossibleScore += (response.Criterion.MaxScore * response.Criterion.Weight);
+                    totalScore += (response.Score * criterion.Weight);
+                    maxPossibleScore += (criterion.MaxScore * criterion.Weight);
                 }
-
-                else if (response.Criterion.QuestionType == QuestionType.Boolean)
+                else if (criterion.QuestionType == QuestionType.Boolean)
                 {
                     bool isYes = string.Equals(response.SelectedOption, "Yes", StringComparison.OrdinalIgnoreCase) ||
                                  string.Equals(response.SelectedOption, "True", StringComparison.OrdinalIgnoreCase);
 
-                    decimal earnedScore = isYes ? response.Criterion.MaxScore : 0;
+                    decimal earnedScore = isYes ? criterion.MaxScore : 0;
 
-                    totalScore += (earnedScore * response.Criterion.Weight);
-                    maxPossibleScore += (response.Criterion.MaxScore * response.Criterion.Weight);
+                    totalScore += (earnedScore * criterion.Weight);
+                    maxPossibleScore += (criterion.MaxScore * criterion.Weight);
                 }
             }
 

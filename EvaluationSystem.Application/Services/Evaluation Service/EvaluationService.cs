@@ -57,18 +57,15 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
             {
                 response.AssignmentId = assignmentId;
 
-                if (criteriaDictionary.TryGetValue(response.CriterionId, out var criterion))
-                {
-                    response.Criterion = criterion;
-                }
-                else
+                if (!criteriaDictionary.ContainsKey(response.CriterionId))
                 {
                     throw new NotFoundException($"Criterion with ID {response.CriterionId} was not found.");
                 }
 
                 await _unitOfWork.EvaluationResponses.AddAsync(response);
             }
-            var finalResult = _calculator.CalculateFinalScore(assignmentId, responses);
+
+            var finalResult = _calculator.CalculateFinalScore(assignmentId, responses, criteriaDictionary);
             await _unitOfWork.EvaluationResults.AddAsync(finalResult);
             assignment.Status = EvaluationStatus.Submitted;
             _unitOfWork.EvaluationAssignments.Update(assignment);
