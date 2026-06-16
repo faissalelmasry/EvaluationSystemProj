@@ -14,6 +14,26 @@
       >
     </li>
     <li
+  class="nav-item"
+  [ngClass]="{ active: activeRoute === 'assignments' }"
+  (click)="navigate('assignments')"
+>
+  <a href="javascript:void(0)">
+    <span class="icon">📋</span>
+    <span class="label">Assignments</span>
+  </a>
+</li>
+<li
+  class="nav-item"
+  [ngClass]="{ active: activeRoute === 'pending' }"
+  (click)="navigate('pending')"
+>
+  <a href="javascript:void(0)">
+    <span class="icon">⏳</span>
+    <span class="label">Pending Evaluations</span>
+  </a>
+</li>
+    <li
       class="nav-item"
       [ngClass]="{ active: activeRoute === 'evaluations' }"
       (click)="navigate('evaluations')"

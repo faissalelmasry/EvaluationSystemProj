@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { Department, DepartmentCreatePayload } from '../models/department.model';
 import { PagesResult } from '../models/pagination.model';
-import { SKIP_AUTH } from '../interceptors/auth-interceptor';
+import { SKIP_AUTH } from '../Interceptors/auth-interceptor';
 
 function normalizePagesResult<T>(raw: any): PagesResult<T> {
   return {
