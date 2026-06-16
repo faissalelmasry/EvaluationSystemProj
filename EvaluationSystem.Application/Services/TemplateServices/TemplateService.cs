@@ -85,21 +85,24 @@ namespace EvaluationSystem.Application.Services.TemplateServices
                 throw new BadRequestException("can't add template");
         }
 
-        public async Task UpdateTemplateAsync(int id,EvaluationTemplateDto dto)
+        public async Task UpdateTemplateAsync(int id, EvaluationTemplateDto dto)
         {
-            var conflict = await unitOfWork.EvaluationTemplates
-                .FindByCondition(c =>
-                    (c.Title == dto.Title))
-                .FirstOrDefaultAsync();
-            if (conflict != null)
+            var temp = await unitOfWork.EvaluationTemplates.GetByIdAsync(id);
+            if (temp == null)
+                throw new NotFoundException("Template isn't found");
+            var exists = await unitOfWork.EvaluationTemplates
+                .GetAll().Where(t => t.Title == dto.Title && t.Id != id)
+                .AnyAsync();
+            if (exists)
                 throw new BadRequestException("Template already exists");
-            TemplateValidationHelper.ValidateNewSections(dto.Sections);
-            TemplateValidationHelper.ValidateNewCriteria(dto.Sections);
-            await unitOfWork.EvaluationTemplates.AddAsync(mapper.Map<EvaluationTemplate>(dto));
+
+            mapper.Map(dto, temp);
+
             var AffectedRows = await unitOfWork.SaveChangesAsync();
             if (AffectedRows == 0)
-                throw new BadRequestException("can't add template");
+                throw new BadRequestException("can't update template");
         }
+
         public async Task UpdateTemplateAsync(int templateId, UpdateEvaluationTemplateDto dto)
         {
             await unitOfWork.ExecuteInTransactionAsync(async () =>
@@ -164,24 +167,6 @@ namespace EvaluationSystem.Application.Services.TemplateServices
             });
         }
 
-
-        public async Task UpdateTemplateAsync(int id,EvaluationTemplateDto dto)
-        {
-            var temp = await unitOfWork.EvaluationTemplates.GetByIdAsync(id);
-            if (temp == null)
-                throw new NotFoundException("Template isn't found");
-            var exists = await unitOfWork.EvaluationTemplates
-                .GetAll().Where(t => t.Title == dto.Title && t.Id != id)
-                .AnyAsync();
-            if(exists)
-                throw new BadRequestException("Template already exists");
-
-            mapper.Map(dto, temp);
-
-            var AffectedRows = await unitOfWork.SaveChangesAsync();
-            if (AffectedRows == 0)
-                throw new BadRequestException("can't update template");
-        }
         public async Task DeleteTemplateAsync(int id)
         {
             
