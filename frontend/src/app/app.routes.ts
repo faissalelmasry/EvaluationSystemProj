@@ -14,29 +14,31 @@ import { Assignmentlist } from './features/assignment/assignmentlist/assignmentl
 import { Assignmentform } from './features/assignment/assignmentform/assignmentform';
 import { roleGuard } from './core/guards/role-guard';
 import { EvaluationFormComponent } from './features/evaluation/evaluation-form/evaluation-form';
-import { MyEvaluationsComponent } from './features/my-evaluationdashboard/my-evaluations/my-evaluations';
 import { ManagerReviewComponent } from './features/Review/manager-review/manager-review';
 import { EvaluationResultComponent } from './features/results/evaluation-result-component/evaluation-result-component';
 import { Dashboard } from './features/dashbord/dashbord/dashboard';
 import { Report } from './features/reports/report/report';
 import { Pendingassignment } from './features/assignment/pendingassignment/pendingassignment';
-
+import { ReviewDashboardComponent } from './features/review-dashboard/review-dashboard';
+import { EvaluationHistoryComponent } from './features/evaluation-history/evaluation-history';
 export const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
   { 
     path: 'evaluation/:assignmentId/submit', 
     component: EvaluationFormComponent
   },
-  { path: 'admin', component: UserManagement },
   { 
-    path: 'my-evaluations', 
-    component: MyEvaluationsComponent 
+  path: 'reviews', 
+  component: ReviewDashboardComponent 
   },
+  { path: 'admin', component: UserManagement },
   { 
     path: 'evaluation/:assignmentId/review', 
     component: ManagerReviewComponent 
   },
-{ 
+  { path: 'history', component: EvaluationHistoryComponent },
+  
+ { 
     path: 'evaluation/:assignmentId/result', 
     component: EvaluationResultComponent 
   },

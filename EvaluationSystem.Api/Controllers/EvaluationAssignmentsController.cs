@@ -8,7 +8,7 @@ namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class EvaluationAssignmentsController : ControllerBase
     {
         private readonly IEvaluationAssignmentService _assignmentService;

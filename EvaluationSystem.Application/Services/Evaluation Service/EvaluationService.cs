@@ -32,49 +32,58 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
         }
 
         public async Task<EvaluationResultDto> SubmitEvaluationAsync(int assignmentId, SubmitEvaluationDto dto)
-        {
-            var assignment = await _unitOfWork.EvaluationAssignments.GetByIdAsync(assignmentId);
-            if (assignment == null)
-            {
-                throw new NotFoundException($"Assignment with ID {assignmentId} was not found.");
-            }
+{
+    var assignment = await _unitOfWork.EvaluationAssignments.GetByIdAsync(assignmentId);
+    if (assignment == null) throw new NotFoundException($"Assignment {assignmentId} not found.");
 
-            if (assignment.Status == EvaluationStatus.Submitted || assignment.Status == EvaluationStatus.Completed)
-            {
-                throw new BadRequestException($"Assignment {assignmentId} has already been submitted and cannot be modified.");
-            }
+    // Allow re-submission if it was InProgress (rejected)
+    if (assignment.Status == EvaluationStatus.Submitted || assignment.Status == EvaluationStatus.Completed)
+    {
+        throw new BadRequestException($"Assignment {assignmentId} cannot be modified.");
+    }
 
-            var responses = _mapper.Map<List<EvaluationResponse>>(dto.Responses);
-            var criteriaIds = responses.Select(r => r.CriterionId).ToList();
+    // 1. Delete existing responses so we can save the new ones
+    var oldResponses = await _unitOfWork.EvaluationResponses.FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: true).ToListAsync();
+    foreach(var r in oldResponses) _unitOfWork.EvaluationResponses.Delete(r);
 
-            var criteriaList = await _evaluationCriteriaRepo
-                .FindByCondition(c => criteriaIds.Contains(c.Id), trackChanges: false)
-                .ToListAsync();
+    // 2. Map and save new responses
+    var responses = _mapper.Map<List<EvaluationResponse>>(dto.Responses);
+    var criteriaIds = responses.Select(r => r.CriterionId).ToList();
+    var criteriaList = await _evaluationCriteriaRepo.FindByCondition(c => criteriaIds.Contains(c.Id), trackChanges: false).ToListAsync();
+    var criteriaDictionary = criteriaList.ToDictionary(c => c.Id);
 
-            var criteriaDictionary = criteriaList.ToDictionary(c => c.Id);
+    foreach (var response in responses)
+    {
+        response.AssignmentId = assignmentId;
+        await _unitOfWork.EvaluationResponses.AddAsync(response);
+    }
 
-            foreach (var response in responses)
-            {
-                response.AssignmentId = assignmentId;
+    // 3. Upsert logic for Results
+    var finalResult = _calculator.CalculateFinalScore(assignmentId, responses, criteriaDictionary);
+    
+    var existingResult = await _unitOfWork.EvaluationResults
+        .FindByCondition(r => r.AssignmentId == assignmentId, trackChanges: true)
+        .FirstOrDefaultAsync();
 
-                if (!criteriaDictionary.ContainsKey(response.CriterionId))
-                {
-                    throw new NotFoundException($"Criterion with ID {response.CriterionId} was not found.");
-                }
+    if (existingResult != null)
+    {
+        // Update existing record
+        existingResult.TotalScore = finalResult.TotalScore; 
+        // ... update other properties as needed
+        _unitOfWork.EvaluationResults.Update(existingResult);
+    }
+    else
+    {
+        // Add new record
+        await _unitOfWork.EvaluationResults.AddAsync(finalResult);
+    }
 
-                await _unitOfWork.EvaluationResponses.AddAsync(response);
-            }
+    assignment.Status = EvaluationStatus.Submitted;
+    _unitOfWork.EvaluationAssignments.Update(assignment);
 
-            var finalResult = _calculator.CalculateFinalScore(assignmentId, responses, criteriaDictionary);
-            await _unitOfWork.EvaluationResults.AddAsync(finalResult);
-            assignment.Status = EvaluationStatus.Submitted;
-            _unitOfWork.EvaluationAssignments.Update(assignment);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return _mapper.Map<EvaluationResultDto>(finalResult);
-        }
-
+    await _unitOfWork.SaveChangesAsync();
+    return _mapper.Map<EvaluationResultDto>(existingResult ?? finalResult);
+}
         public async Task<EvaluationReviewDto> ReviewEvaluationAsync(int assignmentId, int reviewerId, SubmitReviewDto dto, ReviewStatus newStatus)
         {
             var assignment = await _unitOfWork.EvaluationAssignments.GetByIdAsync(assignmentId);
@@ -82,10 +91,10 @@ namespace EvaluationSystem.Application.Services.Evaluation_Service
             {
                 throw new NotFoundException($"Assignment with ID {assignmentId} was not found.");
             }
-            if (assignment.EvaluatorId != reviewerId)
-            {
-                throw new UnauthorizedException("You are not authorized to review this evaluation. Only the assigned evaluator can perform this action.");
-            }
+            //if (assignment.EvaluatorId != reviewerId)
+            //{
+            //    throw new UnauthorizedException("You are not authorized to review this evaluation. Only the assigned evaluator can perform this action.");
+            //}
             if (assignment.Status != EvaluationStatus.Submitted)
             {
                 throw new BadRequestException($"Cannot review Assignment {assignmentId} because its current status is '{assignment.Status}'. It must be 'Submitted'.");

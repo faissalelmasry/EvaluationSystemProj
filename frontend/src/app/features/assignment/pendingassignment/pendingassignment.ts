@@ -48,8 +48,11 @@ export class Pendingassignment implements OnInit {
       }
     });
   }
-// change this method to navigate to the evaluation page
-  startEvaluation(id: number) {
-    this.router.navigate(['/evaluations/take', id]);
-  }
+startEvaluation(assignmentId: number, templateId: number) {
+  console.log('Navigating with Assignment ID:', assignmentId, 'and Template ID:', templateId);
+  
+  this.router.navigate(['/evaluation', assignmentId, 'submit'], {
+    queryParams: { templateId: templateId }
+  });
+}
 }
