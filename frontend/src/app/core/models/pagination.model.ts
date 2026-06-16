@@ -3,6 +3,10 @@ export interface PagesResult<T> {
   totalCount: number;
   pageNumber: number;
   pageSize: number;
+  Items?: T[];
+  TotalCount?: number;
+  PageNumber?: number;
+  PageSize?: number;
 }
 
 export interface SearchSortParams {

@@ -74,13 +74,13 @@ export class TopBarComponent implements OnInit {
       this.authService.logout().subscribe({
         next: () => {
           localStorage.removeItem('user');
-          localStorage.removeItem('token');
+          localStorage.removeItem('jwt_token');
           this.router.navigate(['/login']);
         },
         error: (err) => {
           console.error('Logout error:', err);
           localStorage.removeItem('user');
-          localStorage.removeItem('token');
+         localStorage.removeItem('jwt_token');
           this.router.navigate(['/login']);
         }
       });

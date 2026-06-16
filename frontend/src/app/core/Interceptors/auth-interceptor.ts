@@ -1,10 +1,17 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse, HttpContextToken } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
+export const SKIP_AUTH = new HttpContextToken<boolean>(() => false);
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
+
+  if (req.context.get(SKIP_AUTH)) {
+    return next(req);
+  }
+
   const token = localStorage.getItem('jwt_token');
   let authReq = req;
   if (token) {
@@ -16,8 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-            if (error.status === 401) {
-        console.error('Unauthorized! Your session has expired.');
+      if (error.status === 401) {
         localStorage.removeItem('jwt_token'); 
         router.navigate(['/login']);         
       } 
@@ -29,7 +35,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         alert(`Error: ${backendMessage}`); 
       }
       else if (error.status === 500) {
-        alert('A critical server error occurred. Please contact IT.');
+        // alert('A critical server error occurred. Please contact IT.');
       }
       return throwError(() => error);
     })

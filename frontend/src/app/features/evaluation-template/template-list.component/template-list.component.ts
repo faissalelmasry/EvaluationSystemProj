@@ -8,7 +8,7 @@ import { Signal } from '@angular/core';
   imports: [],
   standalone: true,
   templateUrl: './template-list.component.html',
-  styleUrl: './template-list.component.scss',
+  styleUrls: ['./template-list.component.scss'],
 })
 export class TemplateListComponent implements OnInit {
 public templates = signal<EvaluationTemplateList[]>([]);

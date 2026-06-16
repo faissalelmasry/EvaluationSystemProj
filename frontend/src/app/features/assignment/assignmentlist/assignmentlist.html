@@ -1,0 +1,132 @@
+<div class="container-fluid p-4 bg-light min-vh-100">
+  <div class="mb-4">
+    <h1 class="h3 fw-bold text-dark m-0">Evaluation Assignments</h1>
+    <p class="text-muted small mt-1">Manage, monitor completion rates, and export official performance reports.</p>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+      <div class="input-group input-group-sm max-w-md" style="max-width: 400px;">
+        <span class="input-group-text bg-white border-end-0 text-muted">
+          <i class="bi bi-search"></i>
+        </span>
+        <input 
+          type="text" 
+          class="form-control border-start-0 ps-0 rounded-end-2 shadow-none" 
+          placeholder="Search template, evaluator or evaluatee..." 
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"/>
+      </div>
+
+      <button 
+        type="button" 
+        class="btn btn-primary btn-sm rounded-2 px-3 py-2 fw-medium d-flex align-items-center gap-2 bg-emerald border-0"
+        (click)="onCreateAssignment()">
+        <i class="bi bi-plus-lg"></i>
+        Create Assignment
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle custom-table mb-0">
+        <thead class="table-light border-bottom border-2 text-secondary">
+          <tr>
+            <th scope="col" class="py-3 border-0">Evaluation Template</th>
+            <th scope="col" class="py-3 border-0">Evaluator</th>
+            <th scope="col" class="py-3 border-0">Evaluatee</th>
+            <th scope="col" class="py-3 border-0">Progress</th>
+            <th scope="col" class="py-3 border-0">Status</th>
+            <th scope="col" class="py-3 border-0 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let assignment of filteredAssignments" class="border-bottom">
+            <td class="py-3 fw-medium text-dark">
+              <div class="d-flex align-items-center gap-2">
+                <div class="icon-avatar d-flex align-items-center justify-content-center rounded-circle bg-emerald-light text-emerald">
+                  <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <span>{{ assignment.templateTitle }}</span>
+              </div>
+            </td>
+
+            <td class="py-3 text-secondary">
+              <div class="fw-semibold text-dark">{{ assignment.evaluatorName }}</div>
+            </td>
+
+            <td class="py-3 text-secondary">
+              <div class="fw-semibold text-dark">{{ assignment.evaluateeName }}</div>
+            </td>
+
+            <td class="py-3">
+              <div class="d-flex align-items-center gap-2" style="width: 150px;">
+                <div class="progress flex-grow-1 bg-light rounded-pill" style="height: 6px;">
+                  <div 
+                    class="progress-bar bg-success rounded-pill" 
+                    role="progressbar" 
+                    [style.width.%]="assignment.progress"
+                    aria-valuemin="0" 
+                    aria-valuemax="100">
+                  </div>
+                </div>
+                <span class="small fw-bold text-dark">{{ assignment.progress ?? 0 }}%</span>
+              </div>
+            </td>
+
+            <td class="py-3">
+             <span class="badge px-2.5 py-1.5 rounded-pill font-semibold border"
+      [ngClass]="{
+        'bg-warning-subtle text-warning border-warning-subtle': assignment.status === 'Pending' || assignment.status === 1 || assignment.status === '1',
+        'bg-primary-subtle text-primary border-primary-subtle': assignment.status === 'InProgress' || assignment.status === 2 || assignment.status === '2',
+        'bg-info-subtle text-info border-info-subtle': assignment.status === 'Submitted' || assignment.status === 3 || assignment.status === '3',
+        'bg-indigo-subtle text-indigo border-indigo-subtle': assignment.status === 'UnderReview' || assignment.status === 4 || assignment.status === '4',
+        'bg-success-subtle text-success border-success-subtle': assignment.status === 'Completed' || assignment.status === 5 || assignment.status === '5',
+        'bg-danger-subtle text-danger border-danger-subtle': assignment.status === 'Overdue' || assignment.status === 6 || assignment.status === '6'
+      }">
+  {{ 
+    assignment.status === 1 || assignment.status === '1' ? 'Pending' :
+    assignment.status === 2 || assignment.status === '2' ? 'InProgress' :
+    assignment.status === 3 || assignment.status === '3' ? 'Submitted' :
+    assignment.status === 4 || assignment.status === '4' ? 'UnderReview' :
+    assignment.status === 5 || assignment.status === '5' ? 'Completed' :
+    assignment.status === 6 || assignment.status === '6' ? 'Overdue' : assignment.status
+  }}
+</span>
+            </td>
+
+            <td class="py-3 text-center">
+              <div class="d-flex justify-content-center gap-1">
+                <button 
+                  type="button" 
+                  class="btn btn-link text-danger p-1 fs-5 shadow-none border-0" 
+                  title="Export PDF Report"
+                  [disabled]="(assignment.progress ?? 0) < 100"
+                  (click)="onDownloadPdf(assignment.id)">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </button>
+                
+                <button 
+                  type="button" 
+                  class="btn btn-link text-secondary p-1 fs-5 shadow-none border-0" 
+                  title="Edit Assignment"
+                  [disabled]="assignment.status === 'Completed'"
+                  (click)="onEditAssignment(assignment.id)">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="filteredAssignments.length === 0">
+            <td colspan="6" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+              No assignments found matching your search.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

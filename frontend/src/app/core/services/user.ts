@@ -1,9 +1,18 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { PagesResult } from '../models/pagination.model';
 import { CreateUserDto, User, UserCreatePayload } from '../models/user.model';
+
+function normalizePagesResult<T>(raw: any): PagesResult<T> {
+  return {
+    items: raw.Items ?? raw.items ?? [],
+    totalCount: raw.TotalCount ?? raw.totalCount ?? 0,
+    pageNumber: raw.PageNumber ?? raw.pageNumber ?? 1,
+    pageSize: raw.PageSize ?? raw.pageSize ?? 10,
+  };
+}
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +36,7 @@ export class UserService {
     }
     return this.http.get<PagesResult<User>>(`${this.apiUrl}`,{
       params
-    });
+    }).pipe(map(res => normalizePagesResult<User>(res)));
   }
   getById(id:number):Observable<User>{
     return this.http.get<User>(`${this.apiUrl}/${id}`);

@@ -1,158 +1,91 @@
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  class="card shadow-sm border-0 p-4 mx-auto"
-  style="max-width: 700px;">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-  <h3 class="text-center fw-bold mb-4">
-    Create User
-  </h3>
+  @if (errorMessage()) {
+    <div class="form-alert-error">⚠ {{ errorMessage() }}</div>
+  }
 
-  <div class="mb-4">
-    <label class="form-label fw-semibold">
-      Full Name
-    </label>
+  <div class="form-grid">
 
-    <input
-      type="text"
-      class="form-control form-control-lg"
-      formControlName="fullName" />
-
-    @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
-      <small class="text-danger d-block mt-1">
-        Full Name is required
-      </small>
-    }
-  </div>
-
-  <div class="mb-4">
-    <label class="form-label fw-semibold">
-      Username
-    </label>
-
-    <input
-      type="text"
-      class="form-control form-control-lg"
-      formControlName="username" />
-
-    @if (form.controls.username.touched && form.controls.username.invalid) {
-      <small class="text-danger d-block mt-1">
-        Username is required
-      </small>
-    }
-  </div>
-
-  <div class="mb-4">
-    <label class="form-label fw-semibold">
-      Email
-    </label>
-
-    <input
-      type="email"
-      class="form-control form-control-lg"
-      formControlName="email" />
-
-    @if (form.controls.email.touched && form.controls.email.invalid) {
-      <small class="text-danger d-block mt-1">
-        Enter a valid email
-      </small>
-    }
-  </div>
-
-  <div class="mb-4">
-    <label class="form-label fw-semibold">
-      Password
-    </label>
-
-    <input
-      type="password"
-      class="form-control form-control-lg"
-      autocomplete="new-password"
-      formControlName="password" />
-  </div>
-
-  <div class="mb-4">
-    <label class="form-label fw-semibold">
-      Department
-    </label>
-
-    <select
-      class="form-select form-select-lg"
-      formControlName="departmentId">
-
-      <option [value]="0">
-        Select Department
-      </option>
-
-      @for (department of departments(); track department.id) {
-        <option [value]="department.id">
-          {{ department.name }}
-        </option>
+    <div class="field-group">
+      <label class="field-label">Full Name</label>
+      <input type="text" class="field-input" formControlName="fullName" placeholder="John Doe" />
+      @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+        <small class="error-text">Full name is required (min. 3 characters)</small>
       }
-    </select>
+    </div>
 
-    @if (form.controls.departmentId.touched && form.controls.departmentId.invalid) {
-      <small class="text-danger d-block mt-1">
-        Department is required
-      </small>
-    }
-  </div>
-
-  <div class="mb-4">
-    <label class="form-label fw-semibold">
-      Job Title
-    </label>
-
-    <select
-      class="form-select form-select-lg"
-      formControlName="jobTitle">
-
-      <option [value]="0">
-        Select Job Title
-      </option>
-
-      @for (option of jobTitleOptions; track option.value) {
-        <option [value]="option.value">
-          {{ option.label }}
-        </option>
+    <div class="field-group">
+      <label class="field-label">Username</label>
+      <input type="text" class="field-input" formControlName="username" placeholder="johndoe" />
+      @if (form.controls.username.touched && form.controls.username.invalid) {
+        <small class="error-text">Username is required (min. 3 characters)</small>
       }
-    </select>
+    </div>
 
-    @if (form.controls.jobTitle.touched && form.controls.jobTitle.invalid) {
-      <small class="text-danger d-block mt-1">
-        Job Title is required
-      </small>
-    }
-  </div>
-
-  <div class="mb-4">
-    <label class="form-label fw-semibold">
-      Role
-    </label>
-
-    <select
-      class="form-select form-select-lg"
-      formControlName="role">
-
-      <option value="">
-        Select Role
-      </option>
-
-      @for (option of roleOptions; track option.value) {
-        <option [value]="option.value">
-          {{ option.label }}
-        </option>
+    <div class="field-group">
+      <label class="field-label">Email</label>
+      <input type="email" class="field-input" formControlName="email" placeholder="john@example.com" />
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <small class="error-text">Enter a valid email</small>
       }
-    </select>
+    </div>
+
+    @if (!isEdit) {
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" class="field-input" formControlName="password" autocomplete="new-password" placeholder="Min. 6 characters" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="error-text">Password is required (min. 6 characters)</small>
+        }
+      </div>
+    }
+
+    <div class="field-group">
+      <label class="field-label">Department</label>
+      <select class="field-input" formControlName="departmentId">
+        <option [value]="0">Select Department</option>
+        @for (dep of departments(); track dep.id) {
+          <option [value]="dep.id">{{ dep.name }}</option>
+        }
+      </select>
+      @if (form.controls.departmentId.touched && form.controls.departmentId.invalid) {
+        <small class="error-text">Please select a department</small>
+      }
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Job Title</label>
+      <select class="field-input" formControlName="jobTitle">
+        <option [value]="0">Select Job Title</option>
+        @for (opt of jobTitleOptions; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Role</label>
+      <select class="field-input" formControlName="role">
+        <option value="">Select Role</option>
+        @for (opt of roleOptions; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+        }
+      </select>
+      @if (form.controls.role.touched && form.controls.role.invalid) {
+        <small class="error-text">Please assign a role</small>
+      }
+    </div>
+
   </div>
 
-  <button
-    type="submit"
-    class="btn btn-primary btn-lg w-100 mt-2"
-    [disabled]="form.invalid">
-
-    Create User
-
-  </button>
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+    <button type="submit" class="btn-submit" [disabled]="loading()">
+      @if (loading()) {
+        <span class="spinner-sm"></span>
+      }
+      {{ isEdit ? 'Save Changes' : 'Create User' }}
+    </button>
+  </div>
 
 </form>
