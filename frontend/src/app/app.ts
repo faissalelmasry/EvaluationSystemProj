@@ -9,7 +9,7 @@ import { SidebarComponent } from './shared/layout/sidebar/sidebar/sidebar';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, TopBarComponent],
+  imports: [RouterOutlet, SidebarComponent, TopBarComponent, CreateTemplate],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

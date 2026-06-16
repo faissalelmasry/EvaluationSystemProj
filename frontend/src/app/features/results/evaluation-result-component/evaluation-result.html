@@ -1,0 +1,34 @@
+<div class="result-wrapper" *ngIf="!isLoading() && resultData()">
+  
+  <div class="header-banner" [ngClass]="{
+      'approved': resultData().status === 'Approved', 
+      'rejected': resultData().status === 'Rejected',
+      'pending': !resultData().status
+    }">
+    <h1>{{ resultData().status || 'Pending Manager Review' }}</h1>
+    <p>Assignment ID: {{ resultData().assignmentId }}</p>
+  </div>
+
+  <div class="content-grid">
+    <div class="score-card">
+      <h2>Your Performance</h2>
+      <div class="score-circle">
+        <span class="earned">{{ resultData().totalScore ?? '--' }}</span>
+      </div>
+      <p class="score-label">Out of {{ resultData().maxPossibleScore ?? '--' }} Points</p>
+      <p class="percentage-badge">Grade: <strong>{{ resultData().grade || 'N/A' }}</strong> ({{ resultData().percentage ?? 0 }}%)</p>
+    </div>
+
+    <div class="feedback-card" *ngIf="resultData().managerNotes">
+      <h3>Manager Feedback</h3>
+      <div class="quote-container">
+        <p class="manager-quote">"{{ resultData().managerNotes }}"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-area">
+    <button class="btn-back" (click)="goBackToDashboard()">Return to Dashboard</button>
+  </div>
+
+</div>

@@ -1,0 +1,38 @@
+<div class="dashboard-wrapper">
+  <div class="header">
+    <h2>My Pending Evaluations</h2>
+    <p>Select an assignment below to begin your evaluation.</p>
+  </div>
+
+  <div *ngIf="isLoading()" class="state-message loading">
+    <div class="spinner"></div>
+    <p>Loading your assignments...</p>
+  </div>
+
+  <div *ngIf="!isLoading() && assignments().length === 0" class="state-message empty">
+    <h3>🎉 All Caught Up!</h3>
+    <p>You have no pending evaluations to complete. Great job!</p>
+  </div>
+
+  <div class="cards-grid" *ngIf="!isLoading() && assignments().length > 0">
+    
+    <div class="eval-card" *ngFor="let assign of assignments()">
+      <div class="card-content">
+        <span class="badge pending">Pending</span>
+        <h3 class="card-title">{{ assign.templateTitle || 'Evaluation Form' }}</h3>
+        
+        <div class="card-details">
+          <p><strong>Evaluating:</strong> {{ assign.evaluateeName || 'Unknown User' }}</p>
+          <p><strong>Due Date:</strong> {{ assign.dueDate | date:'longDate' }}</p>
+        </div>
+      </div>
+      
+      <div class="card-actions">
+        <button class="start-btn" (click)="goToEvaluation(assign.id, assign.templateId)">
+          Start Evaluation
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

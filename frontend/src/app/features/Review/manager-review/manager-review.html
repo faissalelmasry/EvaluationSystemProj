@@ -1,0 +1,63 @@
+<div class="review-wrapper" *ngIf="!isLoading()">
+  
+  <div class="review-header">
+    <h2>Evaluation Review</h2>
+    <p>Reviewing submission for Assignment ID: {{ assignmentId }}</p>
+  </div>
+
+  <div *ngIf="responses().length === 0" class="empty-state">
+    <p>No answers were found for this evaluation.</p>
+  </div>
+
+  <div class="answers-list" *ngIf="responses().length > 0">
+    <div class="answer-card" *ngFor="let response of responses()">
+      
+      <h4 class="question-text">{{ response.criterionTitle || 'Unknown Question' }}</h4>
+      
+      <div class="answers-container">
+        
+        <div class="answer-block" *ngIf="response.score !== null && response.score !== undefined">
+          <span class="label">Given Score:</span>
+          <span class="value highlight">{{ response.score }}</span>
+        </div>
+
+        <div class="answer-block" *ngIf="response.selectedOption">
+          <span class="label">Selected Option:</span>
+          <span class="value">{{ response.selectedOption }}</span>
+        </div>
+
+        <div class="answer-block text-block" *ngIf="response.textAnswer">
+          <span class="label">Text Response:</span>
+          <p class="value quote">{{ response.textAnswer }}</p>
+        </div>
+
+        <div class="answer-block text-block" *ngIf="response.comment">
+          <span class="label">Additional Comment:</span>
+          <p class="value">{{ response.comment }}</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-panel">
+    <h3>Manager Decision</h3>
+    <div class="input-group">
+      <label>Feedback Notes (Required for Rejection)</label>
+      <textarea 
+        [(ngModel)]="managerNotes" 
+        rows="3" 
+        placeholder="Add your review notes here..."></textarea>
+    </div>
+
+    <div class="buttons-group">
+      <button class="btn reject" (click)="onReject()">Reject Evaluation</button>
+      <button class="btn approve" (click)="onApprove()">Approve Evaluation</button>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="isLoading()" class="loading-state">
+  <p>Loading answers...</p>
+</div>
