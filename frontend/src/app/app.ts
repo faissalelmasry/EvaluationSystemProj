@@ -10,7 +10,7 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent, TopBarComponent],
+  imports: [RouterOutlet, SidebarComponent, TopBarComponent, CreateTemplate,CommonModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

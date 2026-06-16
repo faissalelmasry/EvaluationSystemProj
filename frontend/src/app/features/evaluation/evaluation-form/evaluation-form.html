@@ -1,48 +1,53 @@
-<div class="form-wrapper" *ngIf="templateData">
+<div class="form-wrapper" *ngIf="templateData()">
   
   <div class="header">
-    <h2>{{ templateData.title }}</h2>
-    <p>Please rate your performance and provide comments.</p>
+    <h2>{{ templateData().title }}</h2>
+    <p>Please complete this evaluation carefully.</p>
   </div>
 
   <form [formGroup]="evaluationForm" (ngSubmit)="onSubmit()">
     
-    <div class="section-card" *ngFor="let section of templateData.sections">
-      <h3 class="section-title">{{ section.name }}</h3>
+    <div class="section-card" *ngFor="let section of templateData().sections">
+      <h3 class="section-title">{{ section.title }}</h3>
 
       <div class="question-row" *ngFor="let criterion of section.criteria">
-        <p class="question-text">{{ criterion.text }}</p>
+        <p class="question-text">{{ criterion.title }}</p>
 
         <ng-container [formGroup]="getQuestionGroup(criterion.id)">
           
-<ng-container [formGroup]="getQuestionGroup(criterion.id)">
-          
-          <div class="inputs-container" [ngSwitch]="criterion.type">
+         <div class="inputs-container" [ngSwitch]="criterion.questionType">
 
-            <div *ngSwitchCase="4" class="input-group">
-              <label>Score (1-5)</label>
-              <input type="number" formControlName="score" min="1" max="5" class="score-input">
-            </div>
+  <div *ngSwitchCase="1" class="input-group">
+    <label>Select Option</label>
+    <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." class="score-input" style="width: 100%;">
+  </div>
 
-            <div *ngSwitchCase="5" class="input-group radio-group">
-              <label><input type="radio" formControlName="selectedOption" value="Yes"> Yes</label>
-              <label><input type="radio" formControlName="selectedOption" value="No"> No</label>
-            </div>
+  <div *ngSwitchCase="3" class="input-group text-group">
+    <label>Your Answer</label>
+    <textarea formControlName="textAnswer" rows="3" placeholder="Type here..."></textarea>
+  </div>
 
-            <div *ngSwitchCase="3" class="input-group text-group">
-              <label>Your Answer</label>
-              <textarea formControlName="textAnswer" rows="3" placeholder="Type here..."></textarea>
-            </div>
+  <div *ngSwitchCase="4" class="input-group">
+    <label>Score (0-{{ criterion.maxScore }})</label>
+    <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input">
+  </div>
 
-            <div *ngIf="criterion.type !== 3" class="input-group text-group" style="margin-top: 10px;">
-              <label>Additional Comments (Optional)</label>
-              <textarea formControlName="textAnswer" rows="1"></textarea>
-            </div>
+  <div *ngSwitchCase="5" class="input-group radio-group">
+    <label><input type="radio" formControlName="selectedOption" value="Yes"> Yes</label>
+    <label><input type="radio" formControlName="selectedOption" value="No"> No</label>
+  </div>
 
-          </div>
+  <div *ngSwitchDefault class="input-group">
+    <label>Score (Default) (0-{{ criterion.maxScore }})</label>
+    <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input">
+  </div>
 
-        </ng-container>
+  <div *ngIf="criterion.questionType !== 3" class="input-group text-group" style="margin-top: 10px;">
+    <label>Additional Comments (Optional)</label>
+    <textarea formControlName="textAnswer" rows="1"></textarea>
+  </div>
 
+</div>
         </ng-container>
       </div>
     </div>

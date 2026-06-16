@@ -1,0 +1,75 @@
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { EvaluationService } from '../../../core/services/evaluation'; // Adjust path
+
+@Component({
+  selector: 'app-manager-review',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './manager-review.html',
+  styleUrl: './manager-review.css'
+})
+export class ManagerReviewComponent implements OnInit {
+  private evaluationService = inject(EvaluationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  assignmentId!: number;
+  
+  responses = signal<any[]>([]); 
+  isLoading = signal<boolean>(true);
+  managerNotes = '';
+
+  ngOnInit(): void {
+    this.assignmentId = Number(this.route.snapshot.paramMap.get('assignmentId'));
+    this.loadSubmission();
+  }
+
+  private loadSubmission(): void {
+    this.evaluationService.getEvaluationForReview(this.assignmentId).subscribe({
+      next: (data) => {
+        console.log('✅ Flat Responses Loaded:', data);
+        
+        const responsesArray = Array.isArray(data) ? data : (data.data || []);
+        
+        this.responses.set(responsesArray);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('❌ Failed to fetch submission details:', err);
+        alert('Could not load the submission details for review.');
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  onApprove(): void {
+    if (!confirm('Are you sure you want to approve this evaluation?')) return;
+
+    this.evaluationService.approveEvaluation(this.assignmentId, this.managerNotes).subscribe({
+      next: () => {
+        alert('Evaluation successfully approved!');
+        this.router.navigate(['/my-evaluations']);
+      },
+      error: () => alert('Failed to approve evaluation. Check console.')
+    });
+  }
+
+  onReject(): void {
+    if (!this.managerNotes.trim()) {
+      alert('Please provide a reason in the manager notes before rejecting.');
+      return;
+    }
+    if (!confirm('Are you sure you want to reject this evaluation?')) return;
+
+    this.evaluationService.rejectEvaluation(this.assignmentId, this.managerNotes).subscribe({
+      next: () => {
+        alert('Evaluation rejected and sent back for updates.');
+        this.router.navigate(['/my-evaluations']);
+      },
+      error: () => alert('Failed to reject evaluation.')
+    });
+  }
+}

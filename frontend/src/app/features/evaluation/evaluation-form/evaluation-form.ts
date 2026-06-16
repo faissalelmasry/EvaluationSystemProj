@@ -1,101 +1,103 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
-import { EvaluationService } from '../../../core/services/evaluation';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+
+import { TemplateService } from '../../../core/services/template.service';
+import { EvaluationService } from '../../../core/services/evaluation';
 
 @Component({
   selector: 'app-evaluation-form',
-  standalone: true, 
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './evaluation-form.html',
   styleUrls: ['./evaluation-form.scss'],
 })
 export class EvaluationFormComponent implements OnInit {
-  
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
-  private evaluationService = inject(EvaluationService); 
+  private evaluationService = inject(EvaluationService);
+  private templateService = inject(TemplateService);
 
+  evaluationForm: FormGroup = this.fb.group({
+    responses: this.fb.array([]),
+  });
 
-  evaluationForm!: FormGroup; 
   assignmentId!: number;
-  templateData: any; 
-
-  ngOnInit(): void {
-    this.assignmentId = Number(this.route.snapshot.paramMap.get('assignmentId'));
-
-    this.evaluationForm = this.fb.group({
-      responses: this.fb.array([]) 
-    });
-
-    this.loadMockTemplate();
-  }
-
-loadMockTemplate() {
-    this.templateData = {
-      id: 1,
-      title: "Mid-Year Developer Evaluation",
-      sections: [
-        {
-          id: 101,
-          name: "Technical Skills",
-          criteria: [
-            // Type 4: RatingScale
-            { id: 1001, text: "Rate your C# Clean Architecture knowledge.", type: 4 }, 
-            // Type 5: Boolean
-            { id: 1002, text: "Are you comfortable deploying to production?", type: 5 },
-            // Type 3: Text
-            { id: 1003, text: "What is your primary technical goal for next year?", type: 3 }
-          ]
-        }
-      ]
-    };
-
-    this.buildFormArray();
-  }
+  templateId!: number;
+  templateData = signal<any>(null);
 
   get responsesArray(): FormArray {
     return this.evaluationForm.get('responses') as FormArray;
   }
 
-buildFormArray() {
-    this.templateData.sections.forEach((section: any) => {
-      section.criteria.forEach((criterion: any) => {
-        
-        // We initialize all possible answers. 
-        // We will only use the ones that match the question type!
-        const questionGroup = this.fb.group({
-          criterionId: [criterion.id],
-          type: [criterion.type], // <--- Save the type so HTML knows what to draw
-          score: [null],          // For Type 4 (Rating)
-          selectedOption: [''],   // For Type 5 & 1 & 2 (Yes/No, Multiple Choice)
-          textAnswer: ['']        // For Type 3 (Text)
-        });
+  ngOnInit(): void {
+    this.assignmentId = Number(this.route.snapshot.paramMap.get('assignmentId'));
+    this.templateId = Number(this.route.snapshot.queryParamMap.get('templateId')) || 1;
+    this.loadTemplate();
+  }
 
-        this.responsesArray.push(questionGroup);
+  private loadTemplate(): void {
+    this.templateService.GetTemplateById(this.templateId).subscribe({
+      next: (data) => {
+        this.templateData.set(data);
+        this.buildFormArray(data);
+      },
+      error: () => alert('Could not find that Template ID in the database.'),
+    });
+  }
+
+  private buildFormArray(template: any): void {
+    template?.sections?.forEach((section: any) => {
+      section.criteria?.forEach((criterion: any) => {
+        this.responsesArray.push(
+          this.fb.group({
+            criterionId: [criterion.id],
+            questionType: [criterion.questionType],
+            maxScore: [criterion.maxScore || 5],
+            score: [null, [Validators.min(0), Validators.max(criterion.maxScore || 5)]],
+            selectedOption: [''],
+            textAnswer: [''],
+          })
+        );
       });
     });
   }
 
   getQuestionGroup(criterionId: number): FormGroup {
-    return this.responsesArray.controls.find(
-      control => control.value.criterionId === criterionId
+    const group = this.responsesArray.controls.find(
+      (control) => control.value.criterionId === criterionId
     ) as FormGroup;
+
+    return group ?? this.fb.group({
+      criterionId: [criterionId],
+      questionType: [null],
+      maxScore: [5],
+      score: [null],
+      selectedOption: [''],
+      textAnswer: [''],
+    });
   }
 
-  onSubmit() {
-    if (this.evaluationForm.valid) {
-      const payload = {
-        responses: this.evaluationForm.value.responses
-      };
+  onSubmit(): void {
+    if (this.evaluationForm.invalid) return;
 
-      this.evaluationService.submitEvaluation(this.assignmentId, payload).subscribe({
-        next: () => alert('Evaluation submitted successfully!'),
-        error: (err) => console.error('Submission failed', err)
-      });
-    }
+    const responses = this.evaluationForm.value.responses.map((res: any) => {
+      let score = res.score ?? 0;
+
+      if (res.questionType === 5 || res.questionType === 'Boolean') {
+        score = res.selectedOption === 'Yes' ? res.maxScore : 0;
+      }
+
+      const responseObj: any = { criterionId: res.criterionId, score };
+      if (res.textAnswer?.trim()) responseObj.textAnswer = res.textAnswer;
+
+      return responseObj;
+    });
+
+    this.evaluationService.submitEvaluation(this.assignmentId, { responses }).subscribe({
+      next: () => alert('Evaluation submitted successfully!'),
+      error: () => alert('Backend rejected the save! Check the console.'),
+    });
   }
 }

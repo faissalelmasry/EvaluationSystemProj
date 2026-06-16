@@ -10,9 +10,14 @@
     "frontend": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
-          "style": "css"
-        }
+"schematics": {
+  "@schematics/angular:component": {
+    "styles": [
+      "node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "src/styles.scss","css"
+    ]
+  }
+}
       },
       "root": "",
       "sourceRoot": "src",

@@ -26,8 +26,9 @@ export class TemplateService {
   {
     return this.client.post<AddTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/template`,dto);
   }
-  public GetTemplateById(id:number):Observable<GetTemplateDto>
+public GetTemplateById(id:number):Observable<GetTemplateDto>
   {
-    return this .client.get<GetTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/${id}`)
+    // UPDATED to match the exact Swagger URL format!
+    return this.client.get<GetTemplateDto>(`${environment.apiUrl}/EvaluationTemplate/id?id=${id}`)
   }
 }
