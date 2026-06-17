@@ -46,6 +46,10 @@
         <span class="label">Review Queue</span>
       </a>
     </li>
+    <li class="nav-item" [ngClass]="{ active: activeRoute === 'templates' }" (click)="navigate('templates')">
+      <a href="javascript:void(0)"
+        ><span class="icon">✍️</span><span class="label">Evaluation Templates</span></a
+      >
     
     <li 
       class="nav-item" 

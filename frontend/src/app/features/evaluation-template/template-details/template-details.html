@@ -1,7 +1,7 @@
 <div class="details-container">
 
   @if (isLoading()) {
-    <div class="loading">Loading...</div>
+    <div class="loading">Loading template details...</div>
   }
 
   @if (template()) {
@@ -9,22 +9,22 @@
     <div class="template-header">
 
       <div class="template-info">
-        <h2>📦 {{ template()?.title }}</h2>
+        <h2>{{ template()?.title }}</h2>
         <p>{{ template()?.description }}</p>
       </div>
 
       <div class="actions">
 
         <button class="btn btn-primary" [routerLink]="['/template/update', template()?.id]">
-          ✏️ Edit Template
+          <span class="icon-edit-white"></span> Edit Template
         </button>
 
         <button class="btn btn-danger" (click)="DeleteTemplate(template()?.id)">
-          🗑️ Delete Template 
+          <span class="icon-delete-red"></span> Delete Template 
         </button>
 
         <button class="btn btn-success" [routerLink]="['/section/add', template()?.id]">
-          + Add Section
+          <span class="icon-add-white"></span> Add Section
         </button>
 
       </div>
@@ -39,23 +39,23 @@
 
           <div class="section-header">
 
-            <div>
-              <h3>🧩 {{ section.title }}</h3>
+            <div class="section-info">
+              <h3>{{ section.title }}</h3>
               <p>{{ section.description }}</p>
             </div>
 
             <div class="section-actions">
 
-              <button class="btn-small" [routerLink]="['/section/update', section.id]">
-                ✏️ 
+              <button class="btn-small" [routerLink]="['/section/update', section.id]" title="Edit Section">
+                <span class="icon-pencil"></span>
               </button>
 
-              <button class="btn-small danger" (click)="DeleteSection(section.id)">
-                🗑️
+              <button class="btn-small danger" (click)="DeleteSection(section.id)" title="Delete Section">
+                <span class="icon-trash"></span>
               </button>
 
               <button class="btn-small success" [routerLink]="['/criteria/add', section.id]">
-                + Criteria
+                <span class="icon-plus"></span> Add Criteria
               </button>
 
             </div>
@@ -66,7 +66,7 @@
 
             @if (section.criteria.length === 0) {
               <div class="empty">
-                No criteria in this section
+                No evaluation criteria added to this section yet.
               </div>
             }
 
@@ -77,16 +77,18 @@
                 <div class="criteria-header">
 
                   <div class="criteria-title">
-                    ⭐ {{ c.title }}
+                    {{ c.title }}
                   </div>
 
                   <div class="criteria-actions">
 
-                    <button class="icon-btn" [routerLink]="['/criteria/update', c.id]">
-                      ✏️
+                    <button class="icon-btn" [routerLink]="['/criteria/update', c.id]" title="Edit Criteria">
+                      <span class="icon-pencil"></span>
                     </button>
 
-                    <button class="icon-btn danger" (click)="DeleteCriteria(section.id, c.id)">🗑️</button>
+                    <button class="icon-btn danger" (click)="DeleteCriteria(section.id, c.id)" title="Delete Criteria">
+                      <span class="icon-trash"></span>
+                    </button>
 
                   </div>
 
@@ -98,8 +100,8 @@
 
                 <div class="criteria-meta">
 
-                  <span>🎯 Score: {{ c.maxScore }}</span>
-                  <span>⚖️ Weight: {{ c.weight }}</span>
+                  <span>Max Score: <strong>{{ c.maxScore }}</strong></span>
+                  <span>Weight: <strong>{{ c.weight }}</strong></span>
 
                   <span class="badge">
                     {{ c.questionType }}

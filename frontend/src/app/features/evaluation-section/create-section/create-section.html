@@ -1,76 +1,80 @@
-<h2>
-  {{ isEditMode ? 'Update Section' : 'Create Section' }}
-</h2>
-<form [formGroup]="Form" (ngSubmit)="onSubmit()">
+<div class="form-container">
 
-  <div class="mb-3">
-    <label class="form-label">Title</label>
+  <div class="form-card">
 
-    <input
-      type="text"
-      class="form-control"
-      formControlName="title">
+    <h2>{{ isEditMode ? 'Update Section' : 'Create Section' }}</h2>
 
-    @if(f['title'].touched && f['title'].errors?.['required']){
-      <div class="text-danger">
-        Title is required
+    @if (BackEndError()) {
+      <div class="alert-danger">
+        {{ BackEndError() }}
       </div>
     }
 
-    @if(f['title'].touched && f['title'].errors?.['maxlength']){
-      <div class="text-danger">
-        Maximum 30 characters
+    <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="title"
+          placeholder="e.g., Technical Assessment">
+
+        @if(f['title'].touched && f['title'].errors?.['required']){
+          <div class="text-danger">Title is required</div>
+        }
+        @if(f['title'].touched && f['title'].errors?.['maxlength']){
+          <div class="text-danger">Maximum 30 characters</div>
+        }
       </div>
-    }
+
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea
+          rows="4"
+          class="form-control"
+          formControlName="description"
+          placeholder="Provide a brief description for this section..."></textarea>
+
+        @if(f['description'].touched && f['description'].errors?.['required']){
+          <div class="text-danger">Description is required</div>
+        }
+        @if(f['description'].touched && f['description'].errors?.['maxlength']){
+          <div class="text-danger">Maximum 100 characters</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Order Number</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="orderNo"
+          placeholder="e.g., 1">
+
+        @if(f['orderNo'].touched && f['orderNo'].errors?.['required']){
+          <div class="text-danger">Order Number is required</div>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="Form.invalid || IsSubmitting === true">
+          
+          @if (IsSubmitting === true) {
+            <span class="spinner"></span>
+            <span>Saving...</span>
+          } @else {
+            {{ isEditMode ? 'Update Section' : 'Create Section' }}
+          }
+
+        </button>
+      </div>
+
+    </form>
+
   </div>
 
-  <div class="mb-3">
-    <label class="form-label">Description</label>
-
-    <textarea
-      rows="4"
-      class="form-control"
-      formControlName="description">
-    </textarea>
-
-    @if(f['description'].touched && f['description'].errors?.['required']){
-      <div class="text-danger">
-        Description is required
-      </div>
-    }
-
-    @if(f['description'].touched && f['description'].errors?.['maxlength']){
-      <div class="text-danger">
-        Maximum 100 characters
-      </div>
-    }
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Order Number</label>
-
-    <input
-      type="number"
-      class="form-control"
-      formControlName="orderNo">
-
-    @if(f['orderNo'].touched && f['orderNo'].errors?.['required']){
-      <div class="text-danger">
-        Order Number is required
-      </div>
-    }
-  </div>
-  @if (BackEndError()) {
-  <div class="alert alert-danger">
-    {{ BackEndError() }}
-  </div>
-}
-
-  <button
-    type="submit"
-    class="btn btn-primary"
-    [disabled]="Form.invalid || IsSubmitting===true">
-    {{ isEditMode ? 'Update Section' : 'Create Section' }}
-  </button>
-
-</form>
+</div>

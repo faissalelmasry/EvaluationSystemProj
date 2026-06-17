@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CriteriaService } from '../../../core/services/criteria-service';
 import { QuestionType } from '../../../core/enums/question-type';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -31,7 +31,8 @@ export class CreateCriteria implements OnInit {
   public constructor(
   private fb: FormBuilder,
   private service: CriteriaService,
-  private route: ActivatedRoute
+  private route: ActivatedRoute,
+  private router:Router
 ) {}
   ngOnInit(): void {
 
@@ -72,10 +73,11 @@ export class CreateCriteria implements OnInit {
     this.service
       .EditCriterion(this.criteriaId, this.Form.value)
       .subscribe({
-        next: () => {
+        next: (res) => {
 
           this.IsSubmitting.set(false);
           this.BackEndError.set('');
+          this.router.navigateByUrl(`/templates`)
 
         },
         error: err => {
@@ -96,7 +98,8 @@ export class CreateCriteria implements OnInit {
 
           this.IsSubmitting.set(false);
           this.BackEndError.set('');
-          this.Form.reset();
+          this.router.navigateByUrl(`/templates`)
+
 
         },
         error: err => {
