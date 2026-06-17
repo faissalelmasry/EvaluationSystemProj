@@ -24,7 +24,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost("{assignmentId}/submit")]
-        //[Authorize("Evaluator")]
+        [Authorize(Roles = "Evaluator")]
         public async Task<IActionResult> SubmitEvaluation(int assignmentId, [FromBody] SubmitEvaluationDto dto)
         {
             var result = await _evaluationService.SubmitEvaluationAsync(assignmentId, dto);
@@ -32,7 +32,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet("{assignmentId}/responses")]
-        //[Authorize("Manager")]
+        [Authorize(Roles ="Reviewer")]
         public async Task<IActionResult> GetResponses(int assignmentId)
         {
             var responses = await _evaluationService.GetResponsesByAssignmentAsync(assignmentId);
@@ -40,7 +40,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet("{assignmentId}/result")]
-        //[Authorize("Evaluatee")]
+        [Authorize(Roles ="Evaluatee")]
         public async Task<IActionResult> GetResult(int assignmentId)
         {
             var result = await _evaluationService.GetResultByAssignmentAsync(assignmentId);
@@ -48,7 +48,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost("{assignmentId}/approve")]
-        //[Authorize("Manager")]
+        [Authorize(Roles = "Reviewer")]
         public async Task<IActionResult> ApproveEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
         {
             var reviewerId = User.GetUserId();
@@ -56,7 +56,7 @@ namespace EvaluationSystem.API.Controllers
             return Ok(reviewResult);
         }
         [HttpPost("{assignmentId}/reject")]
-        //[Authorize("Manager")]
+        [Authorize(Roles = "Reviewer")]
         public async Task<IActionResult> RejectEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
         {
             var reviewerId = User.GetUserId();
