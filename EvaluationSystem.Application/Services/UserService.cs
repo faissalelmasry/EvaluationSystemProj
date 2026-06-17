@@ -222,7 +222,6 @@ namespace EvaluationSystem.Application.Services
                 .Take(searchSort.PageSize)
                 .ToListAsync();
 
-            // Optimized: Removed .Result inside LINQ to prevent thread starvation/deadlocks
             var userDtos = new List<UserDto>();
             foreach (var u in users)
             {

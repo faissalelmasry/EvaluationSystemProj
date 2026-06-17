@@ -56,7 +56,7 @@
           </div> -->
           <div class="detail-row">
             <span class="detail-label">Job Title</span>
-            <span class="detail-value">{{ user() ? getJobTitleLabel(user()!.jobTitle) : '-' }}</span>
+            <span class="detail-value">{{ user()?.jobTitle}}</span>
           </div>
         </div>
       </div>
@@ -96,10 +96,6 @@
     <div class="actions-section">
       <h2 class="section-title">Quick Actions</h2>
       <div class="actions-row">
-        <a routerLink="/profile" class="action-btn">
-          <span class="action-icon">👤</span>
-          <span>Edit Profile</span>
-        </a>
         <a routerLink="/change-password" class="action-btn">
           <span class="action-icon">🔐</span>
           <span>Change Password</span>

@@ -13,8 +13,7 @@ using EvaluationSystem.API.Extensions;
 namespace EvaluationSystem.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    [Authorize] 
+    [ApiController] 
     public class EvaluationsController : ControllerBase
     {
         private readonly IEvaluationService _evaluationService;
@@ -25,6 +24,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost("{assignmentId}/submit")]
+        //[Authorize("Evaluator")]
         public async Task<IActionResult> SubmitEvaluation(int assignmentId, [FromBody] SubmitEvaluationDto dto)
         {
             var result = await _evaluationService.SubmitEvaluationAsync(assignmentId, dto);
@@ -32,6 +32,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet("{assignmentId}/responses")]
+        //[Authorize("Manager")]
         public async Task<IActionResult> GetResponses(int assignmentId)
         {
             var responses = await _evaluationService.GetResponsesByAssignmentAsync(assignmentId);
@@ -39,6 +40,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet("{assignmentId}/result")]
+        //[Authorize("Evaluatee")]
         public async Task<IActionResult> GetResult(int assignmentId)
         {
             var result = await _evaluationService.GetResultByAssignmentAsync(assignmentId);
@@ -46,6 +48,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost("{assignmentId}/approve")]
+        //[Authorize("Manager")]
         public async Task<IActionResult> ApproveEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
         {
             var reviewerId = User.GetUserId();
@@ -53,6 +56,7 @@ namespace EvaluationSystem.API.Controllers
             return Ok(reviewResult);
         }
         [HttpPost("{assignmentId}/reject")]
+        //[Authorize("Manager")]
         public async Task<IActionResult> RejectEvaluation(int assignmentId, [FromBody] SubmitReviewDto dto)
         {
             var reviewerId = User.GetUserId();

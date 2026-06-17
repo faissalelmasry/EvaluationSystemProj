@@ -43,7 +43,7 @@
             class="form-select shadow-none"
             [class.is-invalid]="assignmentForm.get('evaluatorId')?.invalid && (assignmentForm.get('evaluatorId')?.touched || isSubmitted)">
             <option value="" disabled selected>Select the evaluator...</option>
-            <option *ngFor="let u of usersLookup" [ngValue]="u.id">
+            <option *ngFor="let u of evaluatorsLookup" [ngValue]="u.id">
               {{ u.name || u.fullName || u.username }}
             </option>
           </select>
@@ -59,7 +59,7 @@
             class="form-select shadow-none"
             [class.is-invalid]="assignmentForm.get('evaluateeId')?.invalid && (assignmentForm.get('evaluateeId')?.touched || isSubmitted)">
             <option value="" disabled selected>Select the target user...</option>
-            <option *ngFor="let u of usersLookup" [ngValue]="u.id">
+            <option *ngFor="let u of evaluateesLookup" [ngValue]="u.id">
               {{ u.name || u.fullName || u.username }}
             </option>
           </select>

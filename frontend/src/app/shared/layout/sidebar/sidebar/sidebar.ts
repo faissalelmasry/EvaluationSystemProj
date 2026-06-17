@@ -12,7 +12,7 @@ import { AuthService } from '../../../../core/services/auth';
 })
 export class SidebarComponent implements OnInit {
   activeRoute: string = 'dashboard';
-  userRole: string = '';
+  userRole!: string | null;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
     const userData = localStorage.getItem('user');
     if (userData) {
       const user = JSON.parse(userData);
-      this.userRole = user.role || (Array.isArray(user.roles) ? user.roles.join(', ') : user.roles?.toString() || '');
+      this.userRole=this.authService.getUserRole();
     }
     this.setActiveRoute();
   }
@@ -58,6 +58,7 @@ export class SidebarComponent implements OnInit {
     else if (currentUrl.includes('/departments')) this.activeRoute = 'departments';
     else if (currentUrl.includes('/assignments')) this.activeRoute = 'assignments';
     else if (currentUrl.includes('/pending')) this.activeRoute = 'pending';
-    else this.activeRoute = 'dashboard';
+    else if (currentUrl.includes('/dashboard')) this.activeRoute = 'dashboard';
+    else this.activeRoute = 'notfound';
   }
 }

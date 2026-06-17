@@ -17,7 +17,7 @@ export class TemplateListComponent implements OnInit {
   public pageNumber = signal<number>(1);
   public isLoading = signal<boolean>(false);
   public errorMessage = signal<string>('');
-  public pageSize = signal<number>(10);
+  public pageSize = signal<number>(9);
   public searchTerm = signal('');
 
   constructor(private templateService: TemplateService,private router:Router) {}

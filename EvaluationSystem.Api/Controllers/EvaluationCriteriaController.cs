@@ -8,7 +8,7 @@ namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize(Roles ="Admin")]
     public class EvaluationCriteriaController : ControllerBase
     {
         private IEvaluationCriteriaService CriteriaService { get; set; }

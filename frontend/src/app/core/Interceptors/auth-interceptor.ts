@@ -28,13 +28,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         router.navigate(['/login']);         
       } 
       else if (error.status === 403) {
-        alert('Access Denied: You do not have permission to perform this action.');
-      }
-      else if (error.status === 400 || error.status === 404) {
-        // Components handle these errors inline — no alert needed
+        router.navigate(['/404']); 
       }
       else if (error.status === 500) {
-        // alert('A critical server error occurred. Please contact IT.');
       }
       return throwError(() => error);
     })
