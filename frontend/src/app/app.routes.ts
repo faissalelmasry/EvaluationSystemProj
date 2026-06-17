@@ -43,7 +43,6 @@ export const routes: Routes = [
     component: ManagerReviewComponent 
   },
   { path: 'history', component: EvaluationHistoryComponent },
-  
  { 
     path: 'evaluation/:assignmentId/result', 
     component: EvaluationResultComponent 

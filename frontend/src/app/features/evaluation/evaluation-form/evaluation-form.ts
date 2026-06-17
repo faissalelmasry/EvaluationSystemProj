@@ -48,7 +48,9 @@ export class EvaluationFormComponent implements OnInit {
   private loadTemplate(): void {
     this.templateService.GetTemplateById(this.templateId).subscribe({
       next: (data) => {
+        
         this.templateData.set(data);
+        console.log('📦 Fetched Template Data:', data);
         this.buildFormArray(data);
       },
       error: () => alert(`Could not find Template ID ${this.templateId} in the database.`),

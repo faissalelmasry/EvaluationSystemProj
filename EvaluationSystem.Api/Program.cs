@@ -27,7 +27,6 @@ using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Services.AssignmentService;
 using EvaluationSystem.Application.Services.CriteriaService;
 using EvaluationSystem.Application.Services.ReportService;
-using EvaluationSystem.Infrastructure.Seeds;
 
 namespace EvaluationSystem.Api
 {
@@ -175,7 +174,7 @@ namespace EvaluationSystem.Api
             });
             var app = builder.Build();
 
-            await DataSeeder.InitializeAsync(app.Services);
+            //await DataSeeder.InitializeAsync(app.Services);
 
             app.UseSerilogRequestLogging();
 
