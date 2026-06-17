@@ -17,79 +17,105 @@
           
           <div class="inputs-container" [ngSwitch]="criterion.questionType">
 
-            <ng-container *ngSwitchCase="1"><ng-container *ngTemplateOutlet="singleChoiceTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'SingleChoice'"><ng-container *ngTemplateOutlet="singleChoiceTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'1'"><ng-container *ngTemplateOutlet="singleChoiceTemplate"></ng-container></ng-container>
-
-            <ng-template #singleChoiceTemplate>
-              <div class="input-group">
-                <label>Select Option <span class="text-danger">*</span></label>
-                <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." class="score-input w-100"
-                       [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched}">
-                
-                <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small">
-                  This choice is required.
-                </div>
+            <div *ngSwitchCase="1" class="input-group">
+              <label>Select Option <span class="text-danger">*</span></label>
+              <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." class="score-input" style="width: 100%;"
+                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched}">
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small">
+                This choice is required.
               </div>
-            </ng-template>
-
-            <ng-container *ngSwitchCase="3"><ng-container *ngTemplateOutlet="textTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'Text'"><ng-container *ngTemplateOutlet="textTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'3'"><ng-container *ngTemplateOutlet="textTemplate"></ng-container></ng-container>
-
-            <ng-template #textTemplate>
-              <div class="input-group text-group">
-                <label>Your Answer <span class="text-danger">*</span></label>
-                <textarea formControlName="textAnswer" rows="3" placeholder="Type here..." class="form-control"
-                          [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched}"></textarea>
-                
-                <div *ngIf="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched" class="text-danger mt-1 small">
-                  A text answer is required.
-                </div>
+            </div>
+            
+            <div *ngSwitchCase="'SingleChoice'" class="input-group">
+              <label>Select Option <span class="text-danger">*</span></label>
+              <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." class="score-input" style="width: 100%;"
+                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched}">
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small">
+                This choice is required.
               </div>
-            </ng-template>
-
-            <ng-container *ngSwitchCase="4"><ng-container *ngTemplateOutlet="ratingTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'RatingScale'"><ng-container *ngTemplateOutlet="ratingTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'4'"><ng-container *ngTemplateOutlet="ratingTemplate"></ng-container></ng-container>
-
-            <ng-template #ratingTemplate>
-              <div class="input-group">
-                <label>Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
-                <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input"
-                       [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched}">
-                
-                <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="text-danger mt-1 small">
-                  <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
-                  <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
-                  <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
-                </div>
-              </div>
-            </ng-template>
-
-            <ng-container *ngSwitchCase="5"><ng-container *ngTemplateOutlet="booleanTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'Boolean'"><ng-container *ngTemplateOutlet="booleanTemplate"></ng-container></ng-container>
-            <ng-container *ngSwitchCase="'5'"><ng-container *ngTemplateOutlet="booleanTemplate"></ng-container></ng-container>
-
-            <ng-template #booleanTemplate>
-              <div class="input-group radio-group">
-                <label class="d-block mb-2">Select Yes or No <span class="text-danger">*</span></label>
-                <label><input type="radio" formControlName="selectedOption" value="Yes"> Yes</label>
-                <label><input type="radio" formControlName="selectedOption" value="No"> No</label>
-                
-                <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small d-block">
-                  Please select Yes or No.
-                </div>
-              </div>
-            </ng-template>
-
-            <div *ngSwitchDefault class="alert alert-warning py-2 mt-2">
-              ⚠️ Error: Unknown Question Type ({{ criterion.questionType }})
             </div>
 
-            <div *ngIf="criterion.questionType !== 3 && criterion.questionType !== 'Text' && criterion.questionType !== '3'" class="input-group text-group mt-3">
-              <label class="text-muted small">Additional Comments (Optional)</label>
-              <textarea formControlName="textAnswer" rows="1" class="form-control" placeholder="Any additional thoughts?"></textarea>
+            <div *ngSwitchCase="3" class="input-group text-group">
+              <label>Your Answer <span class="text-danger">*</span></label>
+              <textarea formControlName="textAnswer" rows="3" placeholder="Type here..."
+                        [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched}"></textarea>
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched" class="text-danger mt-1 small">
+                A text answer is required.
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'Text'" class="input-group text-group">
+              <label>Your Answer <span class="text-danger">*</span></label>
+              <textarea formControlName="textAnswer" rows="3" placeholder="Type here..."
+                        [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched}"></textarea>
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched" class="text-danger mt-1 small">
+                A text answer is required.
+              </div>
+            </div>
+
+            <div *ngSwitchCase="4" class="input-group">
+              <label>Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
+              <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input"
+                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched}">
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="text-danger mt-1 small">
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'Rating'" class="input-group">
+              <label>Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
+              <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input"
+                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched}">
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="text-danger mt-1 small">
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="5" class="input-group radio-group">
+              <label class="d-block mb-2">Select Yes or No <span class="text-danger">*</span></label>
+              <label><input type="radio" formControlName="selectedOption" value="Yes"> Yes</label>
+              <label><input type="radio" formControlName="selectedOption" value="No"> No</label>
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small d-block">
+                Please select Yes or No.
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'Boolean'" class="input-group radio-group">
+              <label class="d-block mb-2">Select Yes or No <span class="text-danger">*</span></label>
+              <label><input type="radio" formControlName="selectedOption" value="Yes"> Yes</label>
+              <label><input type="radio" formControlName="selectedOption" value="No"> No</label>
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small d-block">
+                Please select Yes or No.
+              </div>
+            </div>
+
+            <div *ngSwitchDefault class="input-group">
+              <label>Score (Default) (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
+              <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input"
+                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched}">
+              
+              <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="text-danger mt-1 small">
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
+                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
+              </div>
+            </div>
+
+            <div *ngIf="criterion.questionType !== 3 && criterion.questionType !== 'Text'" class="input-group text-group" style="margin-top: 10px;">
+              <label class="text-muted">Additional Comments (Optional)</label>
+              <textarea formControlName="textAnswer" rows="1"></textarea>
             </div>
 
           </div>
