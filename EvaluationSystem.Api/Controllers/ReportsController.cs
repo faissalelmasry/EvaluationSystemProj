@@ -1,4 +1,5 @@
 ﻿using EvaluationSystem.Application.interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +7,7 @@ namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class ReportsController : ControllerBase
     {
         private readonly IEvaluationReportService _reportService;

@@ -138,7 +138,7 @@ namespace EvaluationSystem.Application.Services.AssignmentService
         {
             var pendingAssignments = await _unitOfWork.EvaluationAssignments
                  .FindByCondition(a => a.EvaluatorId == evaluatorId &&
-                                      (a.Status == EvaluationStatus.Pending || a.Status == EvaluationStatus.InProgress),
+                                      (a.Status == EvaluationStatus.Pending || a.Status == EvaluationStatus.InProgress ),
                                   trackChanges: false)
                  .Include(a => a.Template)
                  .Include(a => a.Evaluatee)

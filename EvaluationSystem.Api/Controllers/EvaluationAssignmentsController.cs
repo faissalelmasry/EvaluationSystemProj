@@ -8,7 +8,6 @@ namespace EvaluationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
     public class EvaluationAssignmentsController : ControllerBase
     {
         private readonly IEvaluationAssignmentService _assignmentService;
@@ -18,6 +17,7 @@ namespace EvaluationSystem.Api.Controllers
             _assignmentService = assignmentService;
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAssignment([FromBody] CreateAssignmentDto dto, [FromQuery] int adminId)
         {
             try
@@ -33,12 +33,14 @@ namespace EvaluationSystem.Api.Controllers
             }
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllAssignments()
         {
             var assignments = await _assignmentService.GetAllAssignmentsAsync();
             return Ok(assignments);
         }
         [HttpGet("my-pending")]
+        [Authorize(Roles = "Evaluator ,Evaluatee")]
         public async Task<IActionResult> GetMyPendingEvaluations([FromQuery] int evaluatorId)
         {
             try
@@ -61,6 +63,7 @@ namespace EvaluationSystem.Api.Controllers
             }
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetAssignmentById(int id)
         {
             try
@@ -74,6 +77,7 @@ namespace EvaluationSystem.Api.Controllers
             }
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAssignment(int id, [FromBody] CreateAssignmentDto dto)
         {
             try

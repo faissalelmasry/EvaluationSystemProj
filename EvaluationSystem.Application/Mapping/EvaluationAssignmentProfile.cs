@@ -26,7 +26,9 @@ namespace EvaluationSystem.Application.Mapping
 
 
                 .ForMember(dest => dest.EvaluateeName,
-                           opt => opt.MapFrom(src => src.Evaluatee != null ? src.Evaluatee.FullName : string.Empty));
+                           opt => opt.MapFrom(src => src.Evaluatee != null ? src.Evaluatee.FullName : string.Empty))
+                .ForMember(dest=> dest.EvaluateeId,opt => opt.MapFrom(src => src.EvaluateeId))
+                .ForMember(dest => dest.EvaluatorId, opt => opt.MapFrom(src => src.EvaluatorId));
             CreateMap<CreateAssignmentDto, EvaluationAssignment>();
         }
 

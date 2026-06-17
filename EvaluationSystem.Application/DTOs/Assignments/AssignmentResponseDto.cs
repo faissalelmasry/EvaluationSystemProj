@@ -13,7 +13,9 @@ namespace EvaluationSystem.Application.DTOs.Assignments
         public int TemplateId { get; set; }
         public string TemplateTitle { get; set; }
         public string EvaluatorName { get; set; }
+        public int EvaluatorId { get; set; }
         public string EvaluateeName { get; set; }
+        public int EvaluateeId { get; set; }
         public EvaluationStatus Status { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime CreatedAt { get; set; }

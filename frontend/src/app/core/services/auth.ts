@@ -52,7 +52,6 @@ isLoggedIn(): boolean {
 clearToken() {
   localStorage.removeItem('jwt_token');
 }
-// Add this inside AuthService
   getUserId(): number | null {
     const token = this.getToken();
     if (!token) return null;
@@ -70,4 +69,20 @@ clearToken() {
       return null;
     }
   }
+  getUserRole(): string | null {
+  const token = this.getToken();
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    const role = payload['role'] ||
+                 payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+    return role ?? null;
+  } catch (e) {
+    console.error('Failed to decode JWT token', e);
+    return null;
+  }
+}
 }

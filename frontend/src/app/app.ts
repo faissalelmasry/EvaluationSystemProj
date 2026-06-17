@@ -9,6 +9,7 @@ import { CreateCriteria } from "./features/evaluation-criteria/create-criteria/c
 import { TemplateDetails } from "./features/evaluation-template/template-details/template-details";
 import { UpdateTemplate } from "./features/evaluation-template/update-template/update-template";
 import { filter } from 'rxjs';
+import { AuthService } from './core/services/auth';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,10 @@ export class AppComponent implements OnInit {
   title = signal('Evaluation System');
   showLayout = signal(true);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   ngOnInit() {
+    
     this.updateLayout(this.router.url);
     this.router.events.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => this.updateLayout(event.urlAfterRedirects));

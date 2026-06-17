@@ -55,6 +55,7 @@ export class Profile implements OnInit {
     this.userService.getById(userId).subscribe({
       next: (user) => {
         this.user.set(user);
+        console.log(this.user()?.jobTitle);
         this.loading.set(false);
       },
       error: (err: HttpErrorResponse) => {
