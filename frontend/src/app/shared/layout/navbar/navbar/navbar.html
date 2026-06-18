@@ -1,54 +1,69 @@
-<div class="top-bar">
+<!-- Top Bar Shell -->
+<header class="top-bar d-flex align-items-center justify-content-between px-3 px-md-4 fixed-top">
+  
   <div class="top-bar-left">
-    <h2 class="page-title">{{ pageTitle }}</h2>
+    <h2 class="page-title m-0">{{ pageTitle }}</h2>
   </div>
 
-  <div class="top-bar-right">
-    <div class="user-section">
-      <div class="user-info">
+  <div class="top-bar-right d-flex align-items-center gap-3">
+    <div class="user-section d-flex align-items-center gap-3">
+      
+      <!-- User Info: Hidden on screens smaller than large (Bootstrap 'd-none d-lg-block') -->
+      <div class="user-info text-end d-none d-lg-block">
         <div class="user-name">{{ userName }}</div>
         <div class="user-role">{{ userRole }}</div>
       </div>
 
-      <div class="profile-container">
-        <button class="avatar" (click)="toggleProfileMenu()">{{ userInitials }}</button>
+      <!-- Profile Dropdown Container -->
+      <div class="profile-container position-relative">
+        <button 
+          class="avatar btn p-0 rounded-circle border-0 d-flex align-items-center justify-content-center text-white fw-bold" 
+          (click)="toggleProfileMenu()">
+          {{ userInitials }}
+        </button>
 
-        <div class="profile-dropdown" *ngIf="showProfileMenu">
-          <div class="dropdown-header">
-            <div class="profile-info">
-              <div class="avatar-large">{{ userInitials }}</div>
-              <div>
-                <p class="name">{{ userName }}</p>
-                <p class="email">{{ userEmail }}</p>
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown position-absolute bg-white rounded-4 shadow-lg overflow-hidden" *ngIf="showProfileMenu">
+          
+          <div class="dropdown-header p-4 bg-light">
+            <div class="profile-info d-flex align-items-center gap-3">
+              <div class="avatar-large rounded-circle d-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0">
+                {{ userInitials }}
+              </div>
+              <div class="flex-grow-1">
+                <p class="name mb-1 fw-bold">{{ userName }}</p>
+                <p class="email mb-0 text-muted small">{{ userEmail }}</p>
               </div>
             </div>
           </div>
 
-          <div class="dropdown-divider"></div>
+          <hr class="dropdown-divider m-0 border-light">
 
-          <div class="dropdown-menu">
-            <button class="menu-item" (click)="openProfile()">
-              <span class="icon">👤</span>
+          <div class="dropdown-menu-custom py-2">
+            <button class="menu-item btn w-100 text-start d-flex align-items-center gap-3 rounded-0 border-0" (click)="openProfile()">
+              <i class="bi bi-person icon"></i>
               <span class="text">My Profile</span>
             </button>
-            <button class="menu-item" (click)="openChangePassword()">
-              <span class="icon">🔐</span>
+            <button class="menu-item btn w-100 text-start d-flex align-items-center gap-3 rounded-0 border-0" (click)="openChangePassword()">
+              <i class="bi bi-lock icon"></i>
               <span class="text">Change Password</span>
             </button>
           </div>
 
-          <div class="dropdown-divider"></div>
+          <hr class="dropdown-divider m-0 border-light">
 
-          <div class="dropdown-footer">
-            <button class="logout-btn" (click)="logout()">
-              <span class="icon">🚪</span>
-              <span class="text">Logout</span>
+          <div class="dropdown-footer py-2">
+            <button class="logout-btn btn w-100 text-start d-flex align-items-center gap-3 rounded-0 border-0" (click)="logout()">
+              <i class="bi bi-box-arrow-right icon"></i>
+              <span class="text fw-semibold">Logout</span>
             </button>
           </div>
+
         </div>
       </div>
     </div>
   </div>
 
-  <div class="dropdown-overlay" *ngIf="showProfileMenu" (click)="closeDropdown()"></div>
-</div>
+  <!-- Transparent overlay to catch clicks outside the dropdown -->
+  <div class="dropdown-overlay position-fixed top-0 start-0 w-100 h-100" *ngIf="showProfileMenu" (click)="closeDropdown()"></div>
+</header>

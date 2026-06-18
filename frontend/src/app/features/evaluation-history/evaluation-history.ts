@@ -70,4 +70,41 @@ export class EvaluationHistoryComponent implements OnInit {
   viewResults(assignmentId: number) {
     this.router.navigate(['/evaluation', assignmentId, 'result']);
   }
+  // --- Pagination State ---
+  currentPage = 1;
+  itemsPerPage = 5; // Adjust how many history items show per page
+
+  get totalPages(): number {
+    const total = this.historyList()?.length || 0;
+    return total === 0 ? 1 : Math.ceil(total / this.itemsPerPage);
+  }
+
+  // Use this in your @for loop
+  get paginatedHistory(): any[] {
+    const allItems = this.historyList() || [];
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return allItems.slice(start, start + this.itemsPerPage);
+  }
+
+  // Display helpers for the table footer
+  get startIndex(): number {
+    return this.historyList().length === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+
+  get endIndex(): number {
+    const end = this.currentPage * this.itemsPerPage;
+    return end > this.historyList().length ? this.historyList().length : end;
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
 }

@@ -18,7 +18,7 @@ $border-color: #e2e8f0;
   letter-spacing: 0.08em;
 }
 
-// --- Buttons ---
+// --- Button Overrides (Matches Form Styling) ---
 .custom-submit-btn {
   background: linear-gradient(135deg, $primary-blue 0%, $primary-blue-dark 100%);
   border: none;
@@ -31,15 +31,7 @@ $border-color: #e2e8f0;
   }
 }
 
-.hover-lift {
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  &:hover {
-    transform: translateY(-1px);
-    background-color: #e2e8f0 !important;
-  }
-}
-
-// --- Header Inputs (Search & Rows) ---
+// --- Search Input ---
 .search-group {
   .input-group-text, .custom-search-input {
     border-color: transparent;
@@ -52,35 +44,22 @@ $border-color: #e2e8f0;
       border-color: $primary-blue;
     }
     .custom-search-input {
-      box-shadow: none; 
+      box-shadow: none; // Prevent standard BS glow, handled by border
     }
     box-shadow: 0 0 0 4px rgba($primary-blue, 0.12);
     border-radius: 0.5rem;
   }
 }
 
-.custom-select-sm {
-  border-radius: 8px;
-  border: 1.5px solid $border-color;
-  box-shadow: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
-  &:focus {
-    border-color: $primary-blue;
-    box-shadow: 0 0 0 3px rgba($primary-blue, 0.12);
-  }
-}
-
-// --- Table "Card" Styling ---
+// --- Custom Table "Card" Styling ---
 .custom-table {
   border-collapse: separate;
-  border-spacing: 0 0.5rem; 
+  border-spacing: 0 0.5rem; // Pushes rows apart to look like individual cards
 
   tbody tr {
     transition: all 0.2s ease;
     
-    &:hover:not(.opacity-50) {
+    &:hover {
       background-color: #ffffff !important;
       box-shadow: 0 4px 12px rgba(20, 32, 70, 0.04);
       transform: translateY(-1px);
@@ -96,12 +75,10 @@ $border-color: #e2e8f0;
 // --- Icon Buttons ---
 .hover-icon-btn {
   transition: all 0.2s ease;
-  
   &:hover {
     background-color: #e2e8f0 !important;
     transform: scale(1.05);
   }
-  
   &:disabled {
     opacity: 0.5;
     transform: none;
@@ -125,7 +102,7 @@ $border-color: #e2e8f0;
 // --- Modal Upgrades ---
 .modal-overlay {
   z-index: 1050;
-  background: rgba(21, 41, 79, 0.4); // Dark blue tint
+  background: rgba(21, 41, 79, 0.4); // Dark blue tint instead of black
   backdrop-filter: blur(8px); // Glassmorphism backdrop
   animation: fadeIn 0.2s ease-out forwards;
 }

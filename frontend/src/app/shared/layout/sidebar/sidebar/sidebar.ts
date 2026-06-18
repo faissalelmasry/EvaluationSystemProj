@@ -8,7 +8,7 @@ import { AuthService } from '../../../../core/services/auth';
   standalone: true,
   imports: [NgClass],
   templateUrl: './sidebar.html',
-  styleUrls: ['./sidebar.css']
+  styleUrls: ['./sidebar.scss']
 })
 export class SidebarComponent implements OnInit {
   activeRoute: string = 'dashboard';

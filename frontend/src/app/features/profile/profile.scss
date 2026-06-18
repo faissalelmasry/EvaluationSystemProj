@@ -1,0 +1,91 @@
+// --- Shared Theme Variables ---
+$primary-dark: #15294f;
+$primary-blue: #4f6ef6;
+$primary-blue-dark: #3d5fe8;
+$bg-color: #f8fafc;
+$danger-color: #dc2626;
+
+.profile-page {
+  background-color: $bg-color;
+}
+
+.text-primary-custom {
+  color: $primary-blue !important;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+// --- Animations ---
+.animation-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// --- Profile Header ---
+.profile-header-card {
+  background: linear-gradient(135deg, $primary-blue 0%, $primary-blue-dark 100%);
+  position: relative;
+  overflow: hidden;
+  
+  // Adds a subtle shine effect to the background
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+}
+
+.avatar-circle {
+  width: 84px;
+  height: 84px;
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 2rem;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+// --- Buttons ---
+.custom-submit-btn {
+  background: linear-gradient(135deg, $primary-blue 0%, $primary-blue-dark 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(79, 110, 246, 0.2);
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(79, 110, 246, 0.3);
+  }
+}
+
+.hover-icon-btn {
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+  
+  &:hover {
+    background-color: #f1f5f9 !important;
+    transform: translateY(-1px);
+  }
+}
+
+// Custom soft-danger button for Logout
+.btn-danger-soft {
+  background-color: #fef2f2;
+  color: $danger-color;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #fee2e2;
+    transform: translateY(-1px);
+  }
+}

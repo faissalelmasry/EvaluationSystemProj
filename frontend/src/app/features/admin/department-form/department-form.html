@@ -1,33 +1,42 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="department-form">
 
-  <div *ngIf="errorMessage()" class="form-alert-error">⚠ {{ errorMessage() }}</div>
+  <div *ngIf="errorMessage()" class="alert alert-danger d-flex align-items-center gap-2 mb-4 border-0 rounded-4" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span>{{ errorMessage() }}</span>
+  </div>
 
-  <div class="field-group">
-    <label class="field-label">Department Name</label>
+  <div class="mb-4">
+    <label class="form-label fw-semibold text-dark">Department Name</label>
     <input
       type="text"
-      class="field-input"
-      [class.field-error]="form.controls.name.touched && form.controls.name.invalid"
+      class="form-control custom-input"
+      [class.is-invalid]="form.controls.name.touched && form.controls.name.invalid"
       formControlName="name"
       placeholder="e.g. Engineering"
     />
-    <small *ngIf="form.controls.name.touched && form.controls.name.invalid" class="error-text">Department name is required (min. 2 characters)</small>
+    <div *ngIf="form.controls.name.touched && form.controls.name.invalid" class="invalid-feedback custom-error">
+      Department name is required (min. 2 characters)
+    </div>
   </div>
 
-  <div class="field-group">
-    <label class="field-label">Description <span class="optional">(optional)</span></label>
+  <div class="mb-4">
+    <label class="form-label fw-semibold text-dark">
+      Description <span class="text-muted fw-normal small ms-1">(optional)</span>
+    </label>
     <textarea
       rows="3"
-      class="field-input"
+      class="form-control custom-input"
       formControlName="description"
       placeholder="Brief description of this department..."
     ></textarea>
   </div>
 
-  <div class="form-actions">
-    <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
-    <button type="submit" class="btn-submit" [disabled]="loading()">
-      <span *ngIf="loading()" class="spinner-sm"></span>
+  <div class="d-flex justify-content-end gap-3 mt-5 pt-4 border-top border-light">
+    <button type="button" class="btn custom-cancel-btn px-4 py-2 fw-semibold rounded-3" (click)="onCancel()">
+      Cancel
+    </button>
+    <button type="submit" class="btn custom-submit-btn px-4 py-2 fw-bold rounded-3 d-flex align-items-center gap-2" [disabled]="loading()">
+      <span *ngIf="loading()" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       {{ isEdit ? 'Save Changes' : 'Create Department' }}
     </button>
   </div>

@@ -1,0 +1,111 @@
+// --- Shared Theme Variables ---
+$primary-dark: #15294f;
+$primary-blue: #4f6ef6;
+$primary-blue-dark: #3d5fe8;
+$danger-color: #dc2626;
+$input-bg: #f8fafc;
+$input-border: #e2e8f0;
+
+// --- Layout & Card ---
+.auth-wrapper {
+  background: linear-gradient(135deg, $primary-dark 0%, #1c3566 100%);
+}
+
+.auth-card {
+  padding: 2.5rem;
+  border-radius: 20px;
+  
+  @media (max-width: 576px) {
+    padding: 2rem 1.5rem;
+  }
+}
+
+// --- Brand Typography ---
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, $primary-blue 0%, $primary-blue-dark 100%);
+}
+
+.tracking-tight { letter-spacing: -0.03em; }
+.tracking-wider { letter-spacing: 0.05em; font-size: 0.9rem; }
+
+// --- Links & Icons ---
+.auth-link {
+  color: $primary-blue;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: $primary-blue-dark;
+    text-decoration: underline !important;
+  }
+}
+
+.hover-text-blue {
+  transition: color 0.2s ease;
+  &:hover { color: $primary-blue !important; }
+}
+
+.eye-btn {
+  padding: 0.5rem 0.75rem;
+  z-index: 5; 
+}
+
+// --- Inputs & Buttons ---
+.custom-input {
+  background-color: $input-bg;
+  border: 1.5px solid $input-border;
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.95rem;
+  color: $primary-dark;
+  transition: all 0.2s ease;
+  box-shadow: none;
+
+  &::placeholder { color: #94a3b8; }
+
+  &:focus {
+    background-color: #ffffff;
+    border-color: $primary-blue;
+    box-shadow: 0 0 0 4px rgba($primary-blue, 0.12); 
+  }
+
+  &.is-invalid {
+    border-color: $danger-color;
+    background-image: none; 
+    &:focus { box-shadow: 0 0 0 4px rgba($danger-color, 0.12); }
+  }
+}
+
+.custom-error {
+  font-size: 0.82rem;
+  color: $danger-color;
+  margin-top: 0.4rem;
+  font-weight: 500;
+}
+
+.alert-danger {
+  background-color: #fef2f2;
+  color: $danger-color;
+}
+
+.custom-submit-btn {
+  background: linear-gradient(135deg, $primary-blue 0%, $primary-blue-dark 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(79, 110, 246, 0.25);
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(79, 110, 246, 0.35);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: #94a3b8;
+    box-shadow: none;
+    transform: none;
+  }
+}

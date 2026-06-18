@@ -11,7 +11,7 @@ import { AuthService } from '../../core/services/auth';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './profile.html',
-  styleUrls: ['./profile.css'],
+  styleUrls: ['./profile.scss'],
 })
 export class Profile implements OnInit {
   private readonly userService = inject(UserService);

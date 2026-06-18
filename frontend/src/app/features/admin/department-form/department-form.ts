@@ -10,7 +10,7 @@ import { Department } from '../../../core/models/department.model';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './department-form.html',
-  styleUrls: ['./department-form.css'],
+  styleUrls: ['./department-form.scss'],
 })
 export class DepartmentForm implements OnChanges {
   private departmentService = inject(DepartmentService);

@@ -1,138 +1,216 @@
-<div class="form-wrapper" *ngIf="templateData()">
+<div class="evaluation-page container-fluid py-5 px-3 min-vh-100 d-flex flex-column" *ngIf="templateData()">
   
-  <div class="header">
-    <h2>{{ templateData().title }}</h2>
-    <p>Please complete this evaluation carefully.</p>
-  </div>
-
-  <form [formGroup]="evaluationForm" (ngSubmit)="onSubmit()">
+  <div class="mx-auto w-100 form-container" style="max-width: 850px;">
     
-    <div class="section-card" *ngFor="let section of templateData().sections">
-      <h3 class="section-title">{{ section.title }}</h3>
+    <div class="mb-4 text-center text-md-start animation-fade-in">
+      <h1 class="h2 fw-bolder text-dark mb-2 tracking-tight">{{ templateData().title }}</h1>
+      <p class="text-muted fw-medium fs-6 m-0">Please complete this evaluation carefully.</p>
+    </div>
 
-      <div class="question-row" *ngFor="let criterion of section.criteria">
-        <p class="question-text">{{ criterion.title }}</p>
-
-        <ng-container [formGroup]="getQuestionGroup(criterion.id)">
-          
-          <div class="inputs-container" [ngSwitch]="criterion.questionType">
-
-            <div *ngSwitchCase="1" class="input-group">
-              <label>Select Option <span class="text-danger">*</span></label>
-              <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." class="score-input" style="width: 100%;"
-                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched}">
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small">
-                This choice is required.
-              </div>
-            </div>
-            
-            <div *ngSwitchCase="'SingleChoice'" class="input-group">
-              <label>Select Option <span class="text-danger">*</span></label>
-              <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." class="score-input" style="width: 100%;"
-                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched}">
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small">
-                This choice is required.
-              </div>
-            </div>
-
-            <div *ngSwitchCase="3" class="input-group text-group">
-              <label>Your Answer <span class="text-danger">*</span></label>
-              <textarea formControlName="textAnswer" rows="3" placeholder="Type here..."
-                        [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched}"></textarea>
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched" class="text-danger mt-1 small">
-                A text answer is required.
-              </div>
-            </div>
-
-            <div *ngSwitchCase="'Text'" class="input-group text-group">
-              <label>Your Answer <span class="text-danger">*</span></label>
-              <textarea formControlName="textAnswer" rows="3" placeholder="Type here..."
-                        [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched}"></textarea>
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched" class="text-danger mt-1 small">
-                A text answer is required.
-              </div>
-            </div>
-
-            <div *ngSwitchCase="4" class="input-group">
-              <label>Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
-              <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input"
-                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched}">
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="text-danger mt-1 small">
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
-              </div>
-            </div>
-
-            <div *ngSwitchCase="'Rating'" class="input-group">
-              <label>Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
-              <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input"
-                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched}">
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="text-danger mt-1 small">
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
-              </div>
-            </div>
-
-            <div *ngSwitchCase="5" class="input-group radio-group">
-              <label class="d-block mb-2">Select Yes or No <span class="text-danger">*</span></label>
-              <label><input type="radio" formControlName="selectedOption" value="Yes"> Yes</label>
-              <label><input type="radio" formControlName="selectedOption" value="No"> No</label>
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small d-block">
-                Please select Yes or No.
-              </div>
-            </div>
-
-            <div *ngSwitchCase="'Boolean'" class="input-group radio-group">
-              <label class="d-block mb-2">Select Yes or No <span class="text-danger">*</span></label>
-              <label><input type="radio" formControlName="selectedOption" value="Yes"> Yes</label>
-              <label><input type="radio" formControlName="selectedOption" value="No"> No</label>
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger mt-1 small d-block">
-                Please select Yes or No.
-              </div>
-            </div>
-
-            <div *ngSwitchDefault class="input-group">
-              <label>Score (Default) (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
-              <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" class="score-input"
-                     [ngClass]="{'border-danger border': getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched}">
-              
-              <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="text-danger mt-1 small">
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
-                <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
-              </div>
-            </div>
-
-            <div *ngIf="criterion.questionType !== 3 && criterion.questionType !== 'Text'" class="input-group text-group" style="margin-top: 10px;">
-              <label class="text-muted">Additional Comments (Optional)</label>
-              <textarea formControlName="textAnswer" rows="1"></textarea>
-            </div>
-
-          </div>
-        </ng-container>
+    <div class="mb-4 animation-fade-in">
+      <div class="d-flex justify-content-between text-muted small fw-bold mb-2">
+        <span>Progress</span>
+        <span>Step {{ currentSectionIndex + 1 }} of {{ templateData().sections.length }}</span>
+      </div>
+      <div class="progress shadow-sm" style="height: 8px; border-radius: 10px;">
+        <div class="progress-bar custom-submit-btn" role="progressbar" 
+             [style.width.%]="progressPercentage" 
+             [attr.aria-valuenow]="progressPercentage" 
+             aria-valuemin="0" aria-valuemax="100"
+             style="transition: width 0.4s ease;">
+        </div>
       </div>
     </div>
 
-    <div class="submit-area mt-4">
-      <button type="submit" class="submit-btn px-5 py-2 fw-bold" [disabled]="evaluationForm.invalid" 
-              [ngClass]="{'btn-secondary': evaluationForm.invalid, 'btn-success': !evaluationForm.invalid}">
-        Submit Evaluation
-      </button>
+    <form [formGroup]="evaluationForm" (ngSubmit)="onSubmit()" novalidate class="evaluation-form animation-slide-up">
       
-      <div *ngIf="evaluationForm.invalid" class="text-danger mt-2 small text-center">
-        Please complete all required fields correctly to submit.
-      </div>
-    </div>
+      <ng-container *ngFor="let section of templateData().sections; let i = index">
+        <div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden section-card" *ngIf="i === currentSectionIndex">
+          
+          <div class="card-header section-header-gradient p-4 p-md-5 border-0">
+            <h2 class="h4 fw-bold text-white m-0 tracking-wider">{{ section.title }}</h2>
+          </div>
 
-  </form>
+          <div class="card-body p-0 bg-white">
+            <div class="question-row p-4 p-md-5 border-bottom border-light" *ngFor="let criterion of section.criteria; let last = last" [class.border-bottom-0]="last">
+              
+              <h3 class="h6 fw-bold text-dark mb-4 lh-base d-flex gap-3">
+                <i class="bi bi-record-circle text-primary-custom mt-1 fs-6"></i>
+                <span>{{ criterion.title }}</span>
+              </h3>
+
+              <ng-container [formGroup]="getQuestionGroup(criterion.id)">
+                <div class="inputs-container ps-md-5" [ngSwitch]="criterion.questionType">
+
+                  <div *ngSwitchCase="1" class="mb-3">
+                    <label class="form-label fw-semibold text-muted small">Select Option <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." 
+                           class="form-control custom-input"
+                           [class.is-invalid]="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched">
+                    <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="invalid-feedback custom-error">
+                      This choice is required.
+                    </div>
+                  </div>
+                  
+                  <div *ngSwitchCase="'SingleChoice'" class="mb-3">
+                    <label class="form-label fw-semibold text-muted small">Select Option <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="selectedOption" placeholder="Type your choice here..." 
+                           class="form-control custom-input"
+                           [class.is-invalid]="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched">
+                    <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="invalid-feedback custom-error">
+                      This choice is required.
+                    </div>
+                  </div>
+
+                  <div *ngSwitchCase="3" class="mb-3">
+                    <label class="form-label fw-semibold text-muted small">Your Answer <span class="text-danger">*</span></label>
+                    <textarea formControlName="textAnswer" rows="4" placeholder="Type your detailed answer here..."
+                              class="form-control custom-input"
+                              [class.is-invalid]="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched"></textarea>
+                    <div *ngIf="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched" class="invalid-feedback custom-error">
+                      A text answer is required.
+                    </div>
+                  </div>
+
+                  <div *ngSwitchCase="'Text'" class="mb-3">
+                    <label class="form-label fw-semibold text-muted small">Your Answer <span class="text-danger">*</span></label>
+                    <textarea formControlName="textAnswer" rows="4" placeholder="Type your detailed answer here..."
+                              class="form-control custom-input"
+                              [class.is-invalid]="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched"></textarea>
+                    <div *ngIf="getQuestionGroup(criterion.id).get('textAnswer')?.invalid && getQuestionGroup(criterion.id).get('textAnswer')?.touched" class="invalid-feedback custom-error">
+                      A text answer is required.
+                    </div>
+                  </div>
+
+                  <div *ngSwitchCase="4" class="row g-3">
+                    <div class="col-12 col-sm-6 col-md-4">
+                      <label class="form-label fw-semibold text-muted small">Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
+                      <div class="position-relative">
+                        <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" 
+                               class="form-control custom-input fw-bold fs-5 py-3"
+                               [class.is-invalid]="getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched">
+                      </div>
+                      <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="invalid-feedback custom-error">
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngSwitchCase="'Rating'" class="row g-3">
+                    <div class="col-12 col-sm-6 col-md-4">
+                      <label class="form-label fw-semibold text-muted small">Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
+                      <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" 
+                             class="form-control custom-input fw-bold fs-5 py-3"
+                             [class.is-invalid]="getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched">
+                      <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="invalid-feedback custom-error">
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngSwitchCase="5" class="mb-3">
+                    <label class="form-label fw-semibold text-muted small d-block mb-3">Select Yes or No <span class="text-danger">*</span></label>
+                    <div class="d-flex gap-4">
+                      <div class="form-check custom-radio">
+                        <input class="form-check-input" type="radio" formControlName="selectedOption" value="Yes" [id]="'yes-5-'+criterion.id">
+                        <label class="form-check-label fw-medium text-dark ps-2" [for]="'yes-5-'+criterion.id">Yes</label>
+                      </div>
+                      <div class="form-check custom-radio">
+                        <input class="form-check-input" type="radio" formControlName="selectedOption" value="No" [id]="'no-5-'+criterion.id">
+                        <label class="form-check-label fw-medium text-dark ps-2" [for]="'no-5-'+criterion.id">No</label>
+                      </div>
+                    </div>
+                    <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger custom-error mt-2 d-block small fw-medium">
+                      Please select Yes or No.
+                    </div>
+                  </div>
+
+                  <div *ngSwitchCase="'Boolean'" class="mb-3">
+                    <label class="form-label fw-semibold text-muted small d-block mb-3">Select Yes or No <span class="text-danger">*</span></label>
+                    <div class="d-flex gap-4">
+                      <div class="form-check custom-radio">
+                        <input class="form-check-input" type="radio" formControlName="selectedOption" value="Yes" [id]="'yes-bool-'+criterion.id">
+                        <label class="form-check-label fw-medium text-dark ps-2" [for]="'yes-bool-'+criterion.id">Yes</label>
+                      </div>
+                      <div class="form-check custom-radio">
+                        <input class="form-check-input" type="radio" formControlName="selectedOption" value="No" [id]="'no-bool-'+criterion.id">
+                        <label class="form-check-label fw-medium text-dark ps-2" [for]="'no-bool-'+criterion.id">No</label>
+                      </div>
+                    </div>
+                    <div *ngIf="getQuestionGroup(criterion.id).get('selectedOption')?.invalid && getQuestionGroup(criterion.id).get('selectedOption')?.touched" class="text-danger custom-error mt-2 d-block small fw-medium">
+                      Please select Yes or No.
+                    </div>
+                  </div>
+
+                  <div *ngSwitchDefault class="row g-3">
+                    <div class="col-12 col-sm-6 col-md-4">
+                      <label class="form-label fw-semibold text-muted small">Score (0-{{ criterion.maxScore }}) <span class="text-danger">*</span></label>
+                      <input type="number" formControlName="score" min="0" [max]="criterion.maxScore" 
+                             class="form-control custom-input fw-bold fs-5 py-3"
+                             [class.is-invalid]="getQuestionGroup(criterion.id).get('score')?.invalid && getQuestionGroup(criterion.id).get('score')?.touched">
+                      <div *ngIf="getQuestionGroup(criterion.id).get('score')?.invalid && (getQuestionGroup(criterion.id).get('score')?.dirty || getQuestionGroup(criterion.id).get('score')?.touched)" class="invalid-feedback custom-error">
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('required')">A score is required.</span>
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('min')">Score cannot be less than 0.</span>
+                        <span *ngIf="getQuestionGroup(criterion.id).get('score')?.hasError('max')">Score cannot exceed {{ criterion.maxScore }}.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div> <div *ngIf="criterion.questionType !== 3 && criterion.questionType !== 'Text'" class="mt-4 pt-4 border-top border-light border-opacity-75 ps-md-5">
+                  <label class="form-label fw-semibold text-muted small d-flex align-items-center gap-2">
+                    <i class="bi bi-chat-left-text"></i> Additional Comments <span class="fw-normal opacity-75">(Optional)</span>
+                  </label>
+                  <textarea formControlName="textAnswer" rows="2" class="form-control custom-input bg-light" placeholder="Provide context or justification for your rating..."></textarea>
+                </div>
+
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="card border-0 shadow-lg rounded-4 p-4 mt-5 bg-white mb-5 sticky-submit">
+        <div class="d-flex align-items-center justify-content-between gap-3">
+          
+          <div style="min-width: 120px;">
+            <button type="button" class="btn btn-light px-4 py-3 fw-bold rounded-3 d-flex align-items-center gap-2 text-dark" 
+                    *ngIf="!isFirstSection" (click)="prevSection()">
+              <i class="bi bi-arrow-left"></i> Previous
+            </button>
+          </div>
+
+          <div class="text-center d-none d-md-block" *ngIf="isLastSection">
+            <span *ngIf="evaluationForm.invalid" class="text-danger small fw-semibold d-flex align-items-center gap-2">
+              <i class="bi bi-exclamation-triangle-fill fs-5"></i> 
+              <span>Please complete all required fields correctly.</span>
+            </span>
+            <span *ngIf="!evaluationForm.invalid" class="text-success small fw-semibold d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill fs-5"></i> 
+              <span>Ready to submit!</span>
+            </span>
+          </div>
+
+          <div style="min-width: 120px;" class="text-end">
+            <button type="button" class="btn px-4 py-3 fw-bold d-inline-flex align-items-center gap-2 rounded-3 text-white custom-submit-btn" 
+                    *ngIf="!isLastSection" (click)="nextSection()">
+              Next <i class="bi bi-arrow-right"></i>
+            </button>
+
+            <button type="submit" *ngIf="isLastSection"
+                    class="btn px-5 py-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2 text-uppercase tracking-wider rounded-3 text-white"
+                    [ngClass]="evaluationForm.invalid ? 'btn-secondary opacity-50' : 'custom-submit-btn'"
+                    [disabled]="evaluationForm.invalid">
+              <i class="bi bi-send-fill"></i> Submit
+            </button>
+          </div>
+          
+        </div>
+      </div>
+
+    </form>
+  </div>
 </div>

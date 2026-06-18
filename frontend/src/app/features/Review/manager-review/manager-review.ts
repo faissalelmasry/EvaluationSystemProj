@@ -9,7 +9,7 @@ import { EvaluationService } from '../../../core/services/evaluation'; // Adjust
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './manager-review.html',
-  styleUrl: './manager-review.css'
+  styleUrl: './manager-review.scss'
 })
 export class ManagerReviewComponent implements OnInit {
   private evaluationService = inject(EvaluationService);
@@ -71,5 +71,38 @@ export class ManagerReviewComponent implements OnInit {
       },
       error: () => alert('Failed to reject evaluation.')
     });
+  }
+  // --- Pagination State ---
+  currentPage = 1;
+  itemsPerPage = 3; // Adjust this number to show more/fewer answers per page
+
+  get totalPages(): number {
+    const total = this.responses()?.length || 0;
+    return total === 0 ? 1 : Math.ceil(total / this.itemsPerPage);
+  }
+
+  get paginatedResponses(): any[] {
+    const allResponses = this.responses() || [];
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return allResponses.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get progressPercentage(): number {
+    if (this.totalPages === 0) return 0;
+    return (this.currentPage / this.totalPages) * 100;
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 }

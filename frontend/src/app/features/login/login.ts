@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './login.html',
-  styleUrls: ['./login.css'],
+  styleUrls: ['./login.scss'],
 })
 export class Login {
   private readonly authService = inject(AuthService);

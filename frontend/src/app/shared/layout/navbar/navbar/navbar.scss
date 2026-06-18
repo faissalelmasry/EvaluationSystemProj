@@ -1,0 +1,144 @@
+// --- Global Component Variables ---
+$primary-dark: #15294f;
+$primary-blue: #4f6ef6;
+$primary-blue-dark: #3d5fe8;
+$text-muted: #62748a;
+$border-color: #e7eef8;
+$hover-bg: #f2f6ff;
+$danger-color: #dc2626;
+$danger-hover: #fef2f2;
+
+$sidebar-width-desktop: 260px;
+$sidebar-width-tablet: 70px;
+
+// --- Top Bar Styles ---
+.top-bar {
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(12px); // Pro-touch: Glassmorphism effect
+  border-bottom: 1px solid $border-color;
+  box-shadow: 0 4px 20px rgba(20, 32, 70, 0.03); // Smoother, lighter shadow
+  left: $sidebar-width-desktop;
+  z-index: 500;
+  height: 76px;
+  transition: left 0.3s ease;
+
+  @media (max-width: 1024px) {
+    left: $sidebar-width-tablet;
+    height: 70px;
+  }
+  
+  @media (max-width: 640px) {
+    left: 0; // Assuming sidebar hides on mobile
+  }
+}
+
+.page-title {
+  font-size: 1.30rem;
+  font-weight: 700;
+  color: $primary-dark;
+  letter-spacing: -0.02em; // Tightens letter spacing for a modern look
+}
+
+.user-info {
+  .user-name {
+    font-weight: 700;
+    color: $primary-dark;
+    font-size: 0.95rem;
+  }
+  .user-role {
+    font-size: 0.8rem;
+    color: $text-muted;
+  }
+}
+
+// --- Shared Avatar Gradient & Hover ---
+%avatar-shared {
+  background: linear-gradient(135deg, $primary-blue 0%, $primary-blue-dark 100%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.avatar {
+  @extend %avatar-shared;
+  width: 44px;
+  height: 44px;
+  font-size: 0.95rem;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 110, 246, 0.3); // Glow effect
+  }
+}
+
+.avatar-large {
+  @extend %avatar-shared;
+  width: 52px;
+  height: 52px;
+  font-size: 1.1rem;
+}
+
+// --- Dropdown Styles ---
+.profile-dropdown {
+  top: calc(100% + 10px); // Adds a slight gap below the navbar
+  right: 0;
+  width: 320px;
+  border: 1px solid rgba(219, 227, 239, 0.8);
+  z-index: 1001;
+  animation: dropdownFadeIn 0.2s ease cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top right;
+
+  @media (max-width: 640px) {
+    width: calc(100vw - 2rem);
+    right: 1rem; // Prevents it from touching screen edges
+  }
+
+  .dropdown-header .name { 
+    color: $primary-dark; 
+  }
+}
+
+// --- Dropdown Menu Items ---
+.menu-item {
+  color: #243652;
+  font-size: 0.93rem;
+  transition: all 0.2s ease;
+  padding: 0.75rem 1.25rem !important;
+
+  &:hover {
+    background-color: $hover-bg;
+    color: $primary-blue;
+    padding-left: 1.75rem !important; // Smooth push-right effect
+  }
+  
+  .icon {
+    font-size: 1.15rem;
+  }
+}
+
+.logout-btn {
+  color: $danger-color;
+  font-size: 0.93rem;
+  transition: all 0.2s ease;
+  padding: 0.75rem 1.25rem !important;
+
+  &:hover {
+    background-color: $danger-hover;
+    padding-left: 1.75rem !important;
+  }
+}
+
+.dropdown-overlay {
+  z-index: 999;
+  cursor: default;
+}
+
+// --- Keyframes ---
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

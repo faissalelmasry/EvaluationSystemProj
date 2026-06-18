@@ -1,143 +1,114 @@
-<div class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo">📊 EvalSystem</div>
+<div class="sidebar d-flex flex-column vh-100 position-fixed start-0 top-0 overflow-y-auto shadow-lg">
+  
+  <div class="sidebar-header p-4 mb-2 border-bottom border-light border-opacity-10">
+    <div class="logo d-flex align-items-center gap-2 text-white">
+      <i class="bi bi-bar-chart-fill text-primary-custom"></i>
+      <span class="logo-text">EvalSystem</span>
+    </div>
   </div>
 
-  <ul class="sidebar-nav">
-  @if(userRole === 'Admin')
-  {
+  <ul class="sidebar-nav list-unstyled flex-grow-1 m-0 p-0">
+    @if(userRole === 'Admin') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'dashboard' }" (click)="navigate('dashboard')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-speedometer2 icon"></i>
+          <span class="label">Dashboard</span>
+        </a>
+      </li>
+    }
 
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'dashboard' }"
-      (click)="navigate('dashboard')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">📈</span><span class="label">Dashboard</span>
-      </a>
-    </li>
-  }
-  @if(userRole === 'Admin')
-  {
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'assignments' }"
-      (click)="navigate('assignments')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">📋</span>
-        <span class="label">Assignments</span>
-      </a>
-    </li>
-  }
-  @if(userRole === 'Reviewer')
-  {
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'reviews' }"
-      (click)="navigate('reviews')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">📋</span>
-        <span class="label">Reviews</span>
-      </a>
-    </li>
-  }
-  @if(userRole === 'Evaluator')
-  {
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'pending' }"
-      (click)="navigate('pending')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">⏳</span>
-        <span class="label">Pending Evaluations</span>
-      </a>
-    </li>
-  }
-    @if(userRole === 'Manager')
-    {
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'reviews' }"
-      (click)="navigate('reviews')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">🔎</span>
-        <span class="label">Review Queue</span>
-      </a>
-    </li>
+    @if(userRole === 'Admin') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'assignments' }" (click)="navigate('assignments')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-journal-text icon"></i>
+          <span class="label">Assignments</span>
+        </a>
+      </li>
+    }
+
+    @if(userRole === 'Reviewer') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'reviews' }" (click)="navigate('reviews')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-clipboard-check icon"></i>
+          <span class="label">Reviews</span>
+        </a>
+      </li>
+    }
+
+    @if(userRole === 'Evaluator') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'pending' }" (click)="navigate('pending')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-hourglass-split icon"></i>
+          <span class="label">Pending Evaluations</span>
+        </a>
+      </li>
+    }
+
+    @if(userRole === 'Manager') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'reviews' }" (click)="navigate('reviews')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-search icon"></i>
+          <span class="label">Review Queue</span>
+        </a>
+      </li>
     } 
-    @if(userRole === 'Admin')
-    {
-    <li class="nav-item" [ngClass]="{ active: activeRoute === 'templates' }" (click)="navigate('templates')">
-      <a href="javascript:void(0)">
-        <span class="icon">✍️</span>
-        <span class="label">Evaluation Templates</span>
-      </a>
-    </li>
+
+    @if(userRole === 'Admin') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'templates' }" (click)="navigate('templates')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-file-earmark-richtext icon"></i>
+          <span class="label">Evaluation Templates</span>
+        </a>
+      </li>
     }
-  @if(userRole === 'Evaluatee')
-  {
-    <li 
-      class="nav-item" 
-      [ngClass]="{ active: activeRoute === 'history' }" 
-      (click)="navigate('history')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">🏆</span><span class="label">My History</span>
-      </a>
-    </li>
-  }
-  @if(userRole === 'Admin')
-  {
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'reports' }"
-      (click)="navigate('reports')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">📊</span><span class="label">Reports</span>
-      </a>
-    </li>
-  }
-    @if(userRole === 'Admin')
-    {   
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'admin' }"
-      (click)="navigate('admin')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">⚙️</span><span class="label">Admin Panel</span>
-      </a>
-    </li>
+
+    @if(userRole === 'Evaluatee') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'history' }" (click)="navigate('history')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-clock-history icon"></i>
+          <span class="label">My History</span>
+        </a>
+      </li>
     }
-  @if(userRole === 'Admin')
-  {
-    <li
-      class="nav-item"
-      [ngClass]="{ active: activeRoute === 'departments' }"
-      (click)="navigate('departments')"
-    >
-      <a href="javascript:void(0)">
-        <span class="icon">🏢</span>
-        <span class="label">Departments</span>
-      </a>
-    </li>
-  }
+
+    @if(userRole === 'Admin') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'reports' }" (click)="navigate('reports')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-graph-up-arrow icon"></i>
+          <span class="label">Reports</span>
+        </a>
+      </li>
+    }
+
+    @if(userRole === 'Admin') { 
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'admin' }" (click)="navigate('admin')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-gear icon"></i>
+          <span class="label">Admin Panel</span>
+        </a>
+      </li>
+    }
+
+    @if(userRole === 'Admin') {
+      <li class="nav-item" [ngClass]="{ active: activeRoute === 'departments' }" (click)="navigate('departments')">
+        <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+          <i class="bi bi-building icon"></i>
+          <span class="label">Departments</span>
+        </a>
+      </li>
+    }
     
-    <li class="nav-divider"></li>
+    <hr class="nav-divider border-light border-opacity-10 my-4 mx-3">
     
-    <li class="nav-item" (click)="logout()">
-      <a href="javascript:void(0)">
-        <span class="icon">🚪</span><span class="label">Logout</span>
+    <li class="nav-item logout-item" (click)="logout()">
+      <a href="javascript:void(0)" class="d-flex align-items-center gap-3 text-decoration-none w-100">
+        <i class="bi bi-box-arrow-left icon"></i>
+        <span class="label">Logout</span>
       </a>
     </li>
   </ul>
 
-  <div class="sidebar-footer">
-    <div class="version">v1.0.0</div>
+  <div class="sidebar-footer p-4 border-top border-light border-opacity-10 text-center">
+    <div class="version text-white-50 small">v1.0.0</div>
   </div>
 </div>

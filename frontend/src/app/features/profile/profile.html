@@ -1,111 +1,102 @@
-<div class="profile-page">
+<div class="profile-page container-fluid py-4 px-md-4 min-vh-100 d-flex flex-column">
 
-  <!-- Loading State -->
-  <div *ngIf="loading()" class="loading-container">
-    <div class="spinner"></div>
-    <p>Loading profile...</p>
+  <div *ngIf="loading()" class="py-5 d-flex flex-column align-items-center justify-content-center text-muted gap-3 flex-grow-1">
+    <div class="spinner-border text-primary-custom" role="status"></div>
+    <span class="fw-medium">Loading profile...</span>
   </div>
 
-  <!-- Error State -->
-  <div *ngIf="errorMessage() && !loading()" class="error-container">
-    <div class="error-card">
-      <div class="error-icon">⚠️</div>
-      <h3>Unable to Load Profile</h3>
-      <p>{{ errorMessage() }}</p>
-      <a routerLink="/admin" class="back-link">Back to Dashboard</a>
+  <div *ngIf="errorMessage() && !loading()" class="d-flex justify-content-center align-items-center flex-grow-1 py-5">
+    <div class="card border-0 shadow-sm rounded-4 p-5 text-center w-100" style="max-width: 450px;">
+      <i class="bi bi-exclamation-triangle-fill text-danger display-4 mb-3 opacity-75"></i>
+      <h3 class="h5 fw-bold text-dark mb-2">Unable to Load Profile</h3>
+      <p class="text-muted small mb-4">{{ errorMessage() }}</p>
+      <a routerLink="/admin" class="btn custom-submit-btn rounded-3 px-4 py-2 fw-bold text-decoration-none">
+        Back to Dashboard
+      </a>
     </div>
   </div>
 
-  <!-- Profile Content -->
-  <div *ngIf="!loading() && !errorMessage()" class="profile-content">
+  <div *ngIf="!loading() && !errorMessage()" class="profile-content animation-fade-in flex-grow-1 mx-auto w-100" style="max-width: 900px;">
 
-    <!-- Profile Header Card -->
-    <div class="profile-header-card">
-      <div class="profile-avatar">
-        <div class="avatar-circle">
-          {{ getInitials(user()?.fullName || userFromToken()?.fullName || '') }}
-        </div>
+    <div class="profile-header-card text-white rounded-4 p-4 p-md-5 mb-4 shadow-lg d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
+      <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm flex-shrink-0">
+        {{ getInitials(user()?.fullName || userFromToken()?.fullName || '') }}
       </div>
-      <div class="profile-header-info">
-        <h1 class="profile-name">{{ user()?.fullName || userFromToken()?.fullName || 'User' }}</h1>
-        <p class="profile-email">{{ user()?.email || userFromToken()?.email || '' }}</p>
-        <span class="role-badge">{{ getUserRole(user()!) || userFromToken()?.role }}</span>
+      <div class="profile-header-info flex-grow-1">
+        <h1 class="h3 fw-bolder mb-1">{{ user()?.fullName || userFromToken()?.fullName || 'User' }}</h1>
+        <p class="mb-3 text-white-50 fw-medium">{{ user()?.email || userFromToken()?.email || '' }}</p>
+        <span class="badge bg-white text-primary-custom rounded-pill px-3 py-2 fw-bold tracking-wider text-uppercase small shadow-sm">
+          {{ getUserRole(user()!) || userFromToken()?.role }}
+        </span>
       </div>
     </div>
 
-    <!-- Details Grid -->
-    <div class="details-grid">
-      <!-- Personal Information -->
-      <div class="detail-card">
-        <div class="card-header">
-          <span class="card-icon">👤</span>
-          <h2>Personal Information</h2>
-        </div>
-        <div class="card-body">
-          <div class="detail-row">
-            <span class="detail-label">Full Name</span>
-            <span class="detail-value">{{ user()?.fullName || userFromToken()?.fullName || '-' }}</span>
+    <div class="row g-4 mb-4">
+      
+      <div class="col-12 col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+          <div class="card-header bg-white border-bottom border-light p-4 d-flex align-items-center gap-3 rounded-top-4">
+            <i class="bi bi-person-circle text-primary-custom fs-5"></i>
+            <h2 class="h6 fw-bold text-dark m-0">Personal Information</h2>
           </div>
-          <div class="detail-row">
-            <span class="detail-label">Email Address</span>
-            <span class="detail-value">{{ user()?.email || userFromToken()?.email || '-' }}</span>
-          </div>
-          <!-- <div class="detail-row">
-            <span class="detail-label">Username</span>
-            <span class="detail-value">{{ user()?.username || '-' }}</span>
-          </div> -->
-          <div class="detail-row">
-            <span class="detail-label">Job Title</span>
-            <span class="detail-value">{{ user()?.jobTitle}}</span>
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-light">
+              <span class="text-muted small fw-semibold">Full Name</span>
+              <span class="text-dark fw-medium text-end">{{ user()?.fullName || userFromToken()?.fullName || '-' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
+              <span class="text-muted small fw-semibold">Email Address</span>
+              <span class="text-dark fw-medium text-end text-break ms-3">{{ user()?.email || userFromToken()?.email || '-' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center pt-3">
+              <span class="text-muted small fw-semibold">Job Title</span>
+              <span class="text-dark fw-medium text-end">{{ user()?.jobTitle || '-' }}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Account Information -->
-      <div class="detail-card">
-        <div class="card-header">
-          <span class="card-icon">⚙️</span>
-          <h2>Account Details</h2>
-        </div>
-        <div class="card-body">
-          <div class="detail-row">
-            <span class="detail-label">Role</span>
-            <span class="detail-value">{{ getUserRole(user()!) || userFromToken()?.role || '-' }}</span>
+      <div class="col-12 col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+          <div class="card-header bg-white border-bottom border-light p-4 d-flex align-items-center gap-3 rounded-top-4">
+            <i class="bi bi-gear-fill text-primary-custom fs-5"></i>
+            <h2 class="h6 fw-bold text-dark m-0">Account Details</h2>
           </div>
-          <div class="detail-row">
-            <span class="detail-label">Department</span>
-            <span class="detail-value">{{ user()?.department || '-' }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Status</span>
-            <span class="detail-value">
-              <span class="status-indicator" [class.active]="user()?.isActive" [class.inactive]="!user()?.isActive">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-light">
+              <span class="text-muted small fw-semibold">Role</span>
+              <span class="text-dark fw-medium text-end">{{ getUserRole(user()!) || userFromToken()?.role || '-' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
+              <span class="text-muted small fw-semibold">Department</span>
+              <span class="text-dark fw-medium text-end">{{ user()?.department || '-' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
+              <span class="text-muted small fw-semibold">Status</span>
+              <span class="badge rounded-pill px-3 py-2 fw-semibold"
+                    [ngClass]="user()?.isActive ? 'bg-success bg-opacity-10 text-success' : 'bg-danger bg-opacity-10 text-danger'">
+                <i class="bi me-1" [ngClass]="user()?.isActive ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
                 {{ user()?.isActive ? 'Active' : 'Inactive' }}
               </span>
-            </span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Member Since</span>
-            <span class="detail-value">{{ user()?.createdAt ? (user()!.createdAt | date:'mediumDate') : '-' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center pt-3">
+              <span class="text-muted small fw-semibold">Member Since</span>
+              <span class="text-dark fw-medium text-end">{{ user()?.createdAt ? (user()!.createdAt | date:'mediumDate') : '-' }}</span>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
 
-    <!-- Quick Actions -->
-    <div class="actions-section">
-      <h2 class="section-title">Quick Actions</h2>
-      <div class="actions-row">
-        <a routerLink="/change-password" class="action-btn">
-          <span class="action-icon">🔐</span>
-          <span>Change Password</span>
+    <div class="card border-0 shadow-sm rounded-4 p-4">
+      <h2 class="h6 fw-bold text-dark mb-4">Quick Actions</h2>
+      <div class="d-flex flex-column flex-sm-row gap-3">
+        <a routerLink="/change-password" class="btn btn-light text-primary-custom fw-semibold px-4 py-2 d-flex align-items-center justify-content-center gap-2 rounded-3 hover-icon-btn border-0 shadow-sm">
+          <i class="bi bi-shield-lock"></i> Change Password
         </a>
-      </div>
-      <div class="actions-divider"></div>
-      <div class="actions-row">
-        <button class="action-btn logout-btn" (click)="logout()">
-          <span class="action-icon">🚪</span>
-          <span>Logout</span>
+        <button class="btn btn-danger-soft fw-semibold px-4 py-2 d-flex align-items-center justify-content-center gap-2 rounded-3 border-0 shadow-sm ms-sm-auto" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Logout
         </button>
       </div>
     </div>

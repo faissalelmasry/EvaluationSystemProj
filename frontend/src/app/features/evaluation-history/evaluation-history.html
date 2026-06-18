@@ -30,8 +30,8 @@
             </tr>
           </thead>
           <tbody>
-            @for (item of historyList(); track item.id) {
-              <tr class="border-bottom border-light">
+            @for (item of paginatedHistory; track item.id) {
+              <tr class="border-bottom border-light transition-hover">
                 <td class="px-4 py-3.5">
                   <div class="d-flex align-items-center gap-3">
                     <div class="bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
@@ -44,12 +44,12 @@
                   <span class="text-dark font-medium">{{ item.evaluatorName || 'N/A' }}</span>
                 </td>
                 <td class="px-4 py-3.5">
-                  <span class="badge px-2.5 py-1.5 rounded-pill font-semibold border bg-success-subtle text-success border-success-subtle">
+                  <span class="badge px-3 py-2 rounded-pill font-semibold border bg-success-subtle text-success border-success-subtle">
                     Completed
                   </span>
                 </td>
                 <td class="px-4 py-3.5 text-center">
-                  <button (click)="viewResults(item.id)" class="btn btn-outline-success rounded-3 btn-sm px-4 fw-medium text-nowrap">
+                  <button (click)="viewResults(item.id)" class="btn btn-outline-success rounded-3 btn-sm px-4 py-2 fw-medium text-nowrap shadow-sm">
                     View Grade
                   </button>
                 </td>
@@ -59,14 +59,40 @@
             @if (historyList().length === 0) {
               <tr>
                 <td colspan="4" class="text-center py-5 text-muted">
-                  <div class="mb-2"><i class="bi bi-clock-history fs-2 text-secondary"></i></div>
-                  <p class="m-0 small">You don't have any completed evaluations yet.</p>
+                  <div class="mb-3"><i class="bi bi-clock-history display-4 text-secondary opacity-50"></i></div>
+                  <p class="m-0 fw-medium">You don't have any completed evaluations yet.</p>
                 </td>
               </tr>
             }
           </tbody>
         </table>
       </div>
+
+      @if (historyList().length > 0) {
+        <div class="card-footer bg-white border-top border-light p-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
+          
+          <span class="text-muted small fw-medium">
+            Showing <span class="text-dark fw-bold">{{ startIndex }}</span> to <span class="text-dark fw-bold">{{ endIndex }}</span> of <span class="text-dark fw-bold">{{ historyList().length }}</span> entries
+          </span>
+          
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-light fw-bold px-3 py-2 border rounded-3 text-dark d-flex align-items-center gap-1 shadow-sm" 
+                    (click)="prevPage()" 
+                    [disabled]="currentPage === 1"
+                    [class.opacity-50]="currentPage === 1">
+              <i class="bi bi-chevron-left small"></i> Prev
+            </button>
+            <button class="btn btn-sm btn-light fw-bold px-3 py-2 border rounded-3 text-dark d-flex align-items-center gap-1 shadow-sm" 
+                    (click)="nextPage()" 
+                    [disabled]="currentPage === totalPages"
+                    [class.opacity-50]="currentPage === totalPages">
+              Next <i class="bi bi-chevron-right small"></i>
+            </button>
+          </div>
+
+        </div>
+      }
+      
     </div>
   }
 </div>

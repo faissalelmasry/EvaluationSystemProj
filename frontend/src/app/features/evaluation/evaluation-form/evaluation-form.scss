@@ -1,15 +1,132 @@
-.form-wrapper { max-width: 800px; margin: 2rem auto; font-family: sans-serif; }
-.header { margin-bottom: 2rem; border-bottom: 2px solid #eee; padding-bottom: 1rem; }
-.section-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
-.section-title { color: #2563eb; margin-top: 0; border-bottom: 1px solid #bfdbfe; padding-bottom: 0.5rem; }
-.question-row { background: white; padding: 1rem; border-radius: 6px; border: 1px solid #e5e7eb; margin-bottom: 1rem; }
-.question-text { font-weight: bold; font-size: 1.1rem; margin-top: 0; }
-.inputs-container { display: flex; gap: 1.5rem; margin-top: 1rem; }
-.input-group { display: flex; flex-direction: column; }
-.text-group { flex-grow: 1; }
-label { font-size: 0.85rem; color: #6b7280; margin-bottom: 0.25rem; font-weight: bold; }
-input, textarea { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; }
-.score-input { width: 80px; }
-.submit-area { display: flex; justify-content: flex-end; margin-top: 2rem; }
-.submit-btn { background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-.submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+// --- Shared Theme Variables ---
+$primary-dark: #15294f;
+$primary-blue: #4f6ef6;
+$primary-blue-dark: #3d5fe8;
+$bg-color: #f8fafc;
+$danger-color: #dc2626;
+$input-bg: #f8fafc;
+$input-border: #e2e8f0;
+
+.evaluation-page {
+  background-color: $bg-color;
+}
+
+// --- Typography Utilities ---
+.text-primary-custom { color: $primary-blue !important; }
+.tracking-tight { letter-spacing: -0.03em; }
+.tracking-wider { letter-spacing: 0.05em; font-size: 0.9rem; }
+
+// --- Animations ---
+.animation-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animation-slide-up {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0; // Starts hidden before animation kicks in
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// --- Section Header Styling ---
+.section-header-gradient {
+  background: linear-gradient(135deg, $primary-blue 0%, $primary-blue-dark 100%);
+  position: relative;
+  
+  // Adds a subtle pattern/shine to the section header
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+}
+
+// --- Inputs & Radios ---
+.custom-input {
+  background-color: $input-bg;
+  border: 1.5px solid $input-border;
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.95rem;
+  color: $primary-dark;
+  transition: all 0.2s ease;
+  box-shadow: none;
+
+  &::placeholder { color: #94a3b8; }
+
+  &:focus {
+    background-color: #ffffff;
+    border-color: $primary-blue;
+    box-shadow: 0 0 0 4px rgba($primary-blue, 0.12); 
+  }
+
+  &.is-invalid {
+    border-color: $danger-color;
+    background-image: none; // Remove standard Bootstrap red exclamation point
+    &:focus { box-shadow: 0 0 0 4px rgba($danger-color, 0.12); }
+  }
+}
+
+// Modern Radio Button Styling
+.custom-radio {
+  .form-check-input {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.15rem;
+    border: 2px solid $input-border;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:checked {
+      background-color: $primary-blue;
+      border-color: $primary-blue;
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 4px rgba($primary-blue, 0.15);
+    }
+  }
+  
+  .form-check-label {
+    cursor: pointer;
+  }
+}
+
+.custom-error {
+  font-size: 0.85rem;
+  color: $danger-color;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+// --- Sticky Footer Submit Button ---
+.sticky-submit {
+  position: sticky;
+  bottom: 2rem;
+  z-index: 100;
+  border: 1px solid rgba($primary-blue, 0.1) !important;
+}
+
+.custom-submit-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%); // Emerald green for submission
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+  }
+}

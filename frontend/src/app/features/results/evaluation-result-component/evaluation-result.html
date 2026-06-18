@@ -1,34 +1,78 @@
-<div class="result-wrapper" *ngIf="!isLoading() && resultData()">
+<div class="container-fluid py-5 px-3 min-vh-100 d-flex align-items-center justify-content-center bg-light">
   
-  <div class="header-banner" [ngClass]="{
-      'approved': resultData().status === 'Approved', 
-      'rejected': resultData().status === 'Rejected',
-      'pending': !resultData().status
-    }">
-    <h1>{{ resultData().status || 'Pending Manager Review' }}</h1>
-    <p>Assignment ID: {{ resultData().assignmentId }}</p>
-  </div>
-
-  <div class="content-grid">
-    <div class="score-card">
-      <h2>Your Performance</h2>
-      <div class="score-circle">
-        <span class="earned">{{ resultData().totalScore ?? '--' }}</span>
-      </div>
-      <p class="score-label">Out of {{ resultData().maxPossibleScore ?? '--' }} Points</p>
-      <p class="percentage-badge">Grade: <strong>{{ resultData().grade || 'N/A' }}</strong> ({{ resultData().percentage ?? 0 }}%)</p>
+  <div class="card border-0 shadow-lg rounded-4 overflow-hidden w-100 result-card" *ngIf="!isLoading() && resultData()">
+    
+    <div class="p-4 p-md-5 text-center text-white position-relative"
+         [ngClass]="{
+           'bg-success': resultData().status === 'Approved',
+           'bg-danger': resultData().status === 'Rejected',
+           'bg-secondary': !resultData().status || resultData().status === 'Pending'
+         }">
+      
+      <i class="bi display-3 mb-3 d-block opacity-75"
+         [ngClass]="{
+           'bi-check-circle-fill': resultData().status === 'Approved',
+           'bi-x-circle-fill': resultData().status === 'Rejected',
+           'bi-hourglass-split': !resultData().status || resultData().status === 'Pending'
+         }"></i>
+      
+      <h1 class="h2 fw-bolder mb-2 tracking-tight">{{ resultData().status || 'Pending Manager Review' }}</h1>
+      <p class="m-0 opacity-75 small text-uppercase tracking-wider fw-semibold">
+        Assignment ID: {{ resultData().assignmentId }}
+      </p>
     </div>
 
-    <div class="feedback-card" *ngIf="resultData().managerNotes">
-      <h3>Manager Feedback</h3>
-      <div class="quote-container">
-        <p class="manager-quote">"{{ resultData().managerNotes }}"</p>
+    <div class="card-body p-4 p-md-5 bg-white">
+      <div class="row g-4 align-items-stretch">
+        
+        <div class="col-12" [ngClass]="resultData().managerNotes ? 'col-md-5' : 'col-md-12'">
+          <div class="h-100 p-4 rounded-4 bg-light border border-light d-flex flex-column align-items-center justify-content-center text-center shadow-sm">
+            <h2 class="h6 fw-bold text-muted text-uppercase tracking-wider mb-4">Your Performance</h2>
+            
+            <div class="score-circle shadow-sm mb-4 d-flex flex-column align-items-center justify-content-center bg-white rounded-circle position-relative"
+                 [ngClass]="{
+                   'border-success text-success': resultData().status === 'Approved',
+                   'border-danger text-danger': resultData().status === 'Rejected',
+                   'border-secondary text-secondary': !resultData().status || resultData().status === 'Pending'
+                 }">
+              <span class="display-4 fw-bolder lh-1 m-0">{{ resultData().totalScore ?? '--' }}</span>
+              <span class="small fw-semibold text-muted mt-1 tracking-wider">out of {{ resultData().maxPossibleScore ?? '--' }}</span>
+            </div>
+            
+            <div class="badge rounded-pill px-4 py-2 fs-6 fw-bold border"
+                 [ngClass]="{
+                   'bg-success bg-opacity-10 text-success border-success border-opacity-25': resultData().status === 'Approved',
+                   'bg-danger bg-opacity-10 text-danger border-danger border-opacity-25': resultData().status === 'Rejected',
+                   'bg-secondary bg-opacity-10 text-secondary border-secondary border-opacity-25': !resultData().status || resultData().status === 'Pending'
+                 }">
+              Grade: {{ resultData().grade || 'N/A' }} 
+              <span class="ms-1 opacity-75">({{ resultData().percentage ?? 0 }}%)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-7" *ngIf="resultData().managerNotes">
+          <div class="h-100 p-4 p-md-5 rounded-4 custom-feedback-bg d-flex flex-column shadow-sm">
+            <h3 class="h6 fw-bold text-primary-custom mb-4 d-flex align-items-center gap-2 text-uppercase tracking-wider">
+              <i class="bi bi-chat-right-quote-fill fs-5"></i> Manager Feedback
+            </h3>
+            
+            <div class="manager-quote flex-grow-1 position-relative px-4 py-3 border-start custom-border-primary border-4 rounded-end-3 bg-white shadow-sm">
+              <p class="m-0 fs-5 text-dark fst-italic lh-base fw-medium">
+                "{{ resultData().managerNotes }}"
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
 
-  <div class="action-area">
-    <button class="btn-back" (click)="goBackToDashboard()">Return to Dashboard</button>
-  </div>
+    <div class="card-footer bg-white border-top border-light p-4 px-md-5 text-center text-md-end">
+      <button class="btn btn-light border border-2 fw-bold px-4 py-2 d-inline-flex align-items-center justify-content-center gap-2 rounded-3 hover-icon-btn text-secondary" (click)="goBackToDashboard()">
+        <i class="bi bi-arrow-left"></i> Return to Dashboard
+      </button>
+    </div>
 
+  </div>
 </div>

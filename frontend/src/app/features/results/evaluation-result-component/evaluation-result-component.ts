@@ -8,7 +8,7 @@ import { EvaluationService } from '../../../core/services/evaluation'; // Adjust
   standalone: true,
   imports: [CommonModule],
   templateUrl: './evaluation-result.html',
-  styleUrl: './evaluation-result.css'
+  styleUrl: './evaluation-result.scss'
 })
 export class EvaluationResultComponent implements OnInit {
   private evaluationService = inject(EvaluationService);
@@ -40,5 +40,6 @@ export class EvaluationResultComponent implements OnInit {
   }
 
   goBackToDashboard() {
+    this.router.navigate(['/history']);
   }
 }

@@ -50,4 +50,41 @@ export class ReviewDashboardComponent implements OnInit {
   goToReview(assignmentId: number) {
     this.router.navigate(['/evaluation', assignmentId, 'review']);
   }
+  // --- Pagination State ---
+  currentPage = 1;
+  itemsPerPage = 5; // Set how many rows you want per page
+
+  get totalPages(): number {
+    const total = this.reviewQueue?.length || 0;
+    return total === 0 ? 1 : Math.ceil(total / this.itemsPerPage);
+  }
+
+  // Use this getter in your HTML instead of reviewQueue
+  get paginatedQueue(): any[] {
+    const allItems = this.reviewQueue || [];
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return allItems.slice(start, start + this.itemsPerPage);
+  }
+
+  // Display helpers for the table footer
+  get startIndex(): number {
+    return this.reviewQueue.length === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+
+  get endIndex(): number {
+    const end = this.currentPage * this.itemsPerPage;
+    return end > this.reviewQueue.length ? this.reviewQueue.length : end;
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
 }

@@ -55,4 +55,40 @@ startEvaluation(assignmentId: number, templateId: number) {
     queryParams: { templateId: templateId }
   });
 }
+// --- Pagination State ---
+  currentPage = 1;
+  itemsPerPage = 5; 
+
+  get totalPages(): number {
+    const total = this.pendingAssignments?.length || 0;
+    return total === 0 ? 1 : Math.ceil(total / this.itemsPerPage);
+  }
+
+  get paginatedPending(): any[] {
+    const allItems = this.pendingAssignments || [];
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return allItems.slice(start, start + this.itemsPerPage);
+  }
+
+  get startIndex(): number {
+    return (this.pendingAssignments?.length || 0) === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+
+  get endIndex(): number {
+    const end = this.currentPage * this.itemsPerPage;
+    const total = this.pendingAssignments?.length || 0;
+    return end > total ? total : end;
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
 }

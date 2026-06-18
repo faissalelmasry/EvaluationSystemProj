@@ -12,7 +12,7 @@ import { forkJoin } from 'rxjs';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './assignmentform.html',
-  styleUrl: './assignmentform.css',
+  styleUrl: './assignmentform.scss',
 })
 export class Assignmentform implements OnInit {
   private assignmentService = inject(Assignment);

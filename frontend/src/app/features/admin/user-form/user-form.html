@@ -1,61 +1,95 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="user-form">
 
   @if (errorMessage()) {
-    <div class="form-alert-error">⚠ {{ errorMessage() }}</div>
+    <div class="alert alert-danger d-flex align-items-center gap-2 mb-4 border-0 rounded-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ errorMessage() }}</span>
+    </div>
   }
 
-  <div class="form-grid">
+  <div class="row g-4">
 
-    <div class="field-group">
-      <label class="field-label">Full Name</label>
-      <input type="text" class="field-input" formControlName="fullName" placeholder="John Doe" />
+    <div class="col-12 col-sm-6">
+      <label class="form-label fw-semibold text-dark">Full Name</label>
+      <input 
+        type="text" 
+        class="form-control custom-input" 
+        [class.is-invalid]="form.controls.fullName.touched && form.controls.fullName.invalid" 
+        formControlName="fullName" 
+        placeholder="John Doe" 
+      />
       @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
-        <small class="error-text">Full name is required (min. 3 characters)</small>
+        <div class="invalid-feedback custom-error">Full name is required (min. 3 characters)</div>
       }
     </div>
 
-    <div class="field-group">
-      <label class="field-label">Username</label>
-      <input type="text" class="field-input" formControlName="username" placeholder="johndoe" />
-      @if (form.controls.username.touched && form.controls.username.invalid) {
-        <small class="error-text">Username is required (min. 3 characters)</small>
-      }
+    <div class="col-12 col-sm-6">
+      <label class="form-label fw-semibold text-dark">Username</label>
+      <div class="input-group">
+        <span class="input-group-text bg-light border-end-0 text-muted ps-3 pe-2"><i class="bi bi-person"></i></span>
+        <input 
+          type="text" 
+          class="form-control custom-input border-start-0 ps-1" 
+          [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid" 
+          formControlName="username" 
+          placeholder="johndoe" 
+        />
+        @if (form.controls.username.touched && form.controls.username.invalid) {
+          <div class="invalid-feedback custom-error">Username is required (min. 3 characters)</div>
+        }
+      </div>
     </div>
 
-    <div class="field-group">
-      <label class="field-label">Email</label>
-      <input type="email" class="field-input" formControlName="email" placeholder="john@example.com" />
+    <div class="col-12 col-sm-6">
+      <label class="form-label fw-semibold text-dark">Email</label>
+      <input 
+        type="email" 
+        class="form-control custom-input" 
+        [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid" 
+        formControlName="email" 
+        placeholder="john@example.com" 
+      />
       @if (form.controls.email.touched && form.controls.email.invalid) {
-        <small class="error-text">Enter a valid email</small>
+        <div class="invalid-feedback custom-error">Enter a valid email</div>
       }
     </div>
 
     @if (!isEdit) {
-      <div class="field-group">
-        <label class="field-label">Password</label>
-        <input type="password" class="field-input" formControlName="password" autocomplete="new-password" placeholder="Min. 6 characters" />
+      <div class="col-12 col-sm-6">
+        <label class="form-label fw-semibold text-dark">Password</label>
+        <input 
+          type="password" 
+          class="form-control custom-input" 
+          [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid" 
+          formControlName="password" 
+          autocomplete="new-password" 
+          placeholder="Min. 6 characters" 
+        />
         @if (form.controls.password.touched && form.controls.password.invalid) {
-          <small class="error-text">Password is required (min. 6 characters)</small>
+          <div class="invalid-feedback custom-error">Password is required (min. 6 characters)</div>
         }
       </div>
     }
 
-    <div class="field-group">
-      <label class="field-label">Department</label>
-      <select class="field-input" formControlName="departmentId">
+    <div class="col-12 col-sm-6">
+      <label class="form-label fw-semibold text-dark">Department</label>
+      <select 
+        class="form-select custom-input" 
+        [class.is-invalid]="form.controls.departmentId.touched && form.controls.departmentId.invalid" 
+        formControlName="departmentId">
         <option [value]="0">Select Department</option>
         @for (dep of departments(); track dep.id) {
           <option [value]="dep.id">{{ dep.name }}</option>
         }
       </select>
       @if (form.controls.departmentId.touched && form.controls.departmentId.invalid) {
-        <small class="error-text">Please select a department</small>
+        <div class="invalid-feedback custom-error">Please select a department</div>
       }
     </div>
 
-    <div class="field-group">
-      <label class="field-label">Job Title</label>
-      <select class="field-input" formControlName="jobTitle">
+    <div class="col-12 col-sm-6">
+      <label class="form-label fw-semibold text-dark">Job Title</label>
+      <select class="form-select custom-input" formControlName="jobTitle">
         <option [value]="0">Select Job Title</option>
         @for (opt of jobTitleOptions; track opt.value) {
           <option [value]="opt.value">{{ opt.label }}</option>
@@ -63,26 +97,31 @@
       </select>
     </div>
 
-    <div class="field-group">
-      <label class="field-label">Role</label>
-      <select class="field-input" formControlName="role">
+    <div class="col-12 col-sm-6">
+      <label class="form-label fw-semibold text-dark">Role</label>
+      <select 
+        class="form-select custom-input" 
+        [class.is-invalid]="form.controls.role.touched && form.controls.role.invalid" 
+        formControlName="role">
         <option value="">Select Role</option>
         @for (opt of roleOptions; track opt.value) {
           <option [value]="opt.value">{{ opt.label }}</option>
         }
       </select>
       @if (form.controls.role.touched && form.controls.role.invalid) {
-        <small class="error-text">Please assign a role</small>
+        <div class="invalid-feedback custom-error">Please assign a role</div>
       }
     </div>
 
   </div>
 
-  <div class="form-actions">
-    <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
-    <button type="submit" class="btn-submit" [disabled]="loading()">
+  <div class="d-flex justify-content-end gap-3 mt-5 pt-4 border-top border-light">
+    <button type="button" class="btn custom-cancel-btn px-4 py-2 fw-semibold rounded-3" (click)="onCancel()">
+      Cancel
+    </button>
+    <button type="submit" class="btn custom-submit-btn px-4 py-2 fw-bold rounded-3 d-flex align-items-center gap-2" [disabled]="loading()">
       @if (loading()) {
-        <span class="spinner-sm"></span>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       }
       {{ isEdit ? 'Save Changes' : 'Create User' }}
     </button>

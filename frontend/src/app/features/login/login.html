@@ -1,65 +1,81 @@
-<div class="auth-wrapper">
-  <div class="auth-card">
+<div class="auth-wrapper min-vh-100 d-flex align-items-center justify-content-center p-3">
+  
+  <div class="card auth-card border-0 shadow-lg bg-white w-100">
 
-    <div class="auth-brand">
-      <div class="brand-icon">⚡</div>
-      <h1 class="brand-name">EvalSystem</h1>
+    <div class="d-flex align-items-center gap-2 mb-4 pb-2">
+      <div class="brand-icon rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm">
+        <i class="bi bi-lightning-charge-fill fs-5"></i>
+      </div>
+      <h1 class="brand-name h4 fw-bolder text-dark m-0 tracking-tight">EvalSystem</h1>
     </div>
 
-    <h2 class="auth-title">Welcome back</h2>
-    <p class="auth-subtitle">Sign in to your account to continue</p>
+    <h2 class="auth-title h3 fw-bold text-dark mb-1">Welcome back</h2>
+    <p class="text-muted small mb-4 pb-2">Sign in to your account to continue</p>
 
-    <div *ngIf="errorMessage()" class="alert-error">
-      <span class="alert-icon">⚠</span>
-      {{ errorMessage() }}
+    <div *ngIf="errorMessage()" class="alert alert-danger d-flex align-items-center gap-2 border-0 rounded-3 py-2 px-3 mb-4">
+      <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+      <span class="small fw-semibold">{{ errorMessage() }}</span>
     </div>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
-      <div class="field-group">
-        <label class="field-label">Email address</label>
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark small mb-1">Email address</label>
         <input
           type="email"
-          class="field-input"
-          [class.field-error]="form.controls.email.touched && form.controls.email.invalid"
+          class="form-control custom-input"
+          [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
           formControlName="email"
           placeholder="you@example.com"
           autocomplete="email"
         />
-        <small *ngIf="form.controls.email.touched && form.controls.email.invalid" class="error-text">Please enter a valid email address</small>
+        <div *ngIf="form.controls.email.touched && form.controls.email.invalid" class="invalid-feedback custom-error">
+          Please enter a valid email address
+        </div>
       </div>
 
-      <div class="field-group">
-        <div class="label-row">
-          <label class="field-label">Password</label>
-          <a routerLink="/forgot-password" class="forgot-link">Forgot password?</a>
+      <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label class="form-label fw-semibold text-dark small m-0">Password</label>
+          <a routerLink="/forgot-password" class="forgot-link small fw-semibold text-decoration-none">Forgot password?</a>
         </div>
-        <div class="input-with-icon">
+        
+        <div class="position-relative">
           <input
             [type]="showPassword() ? 'text' : 'password'"
-            class="field-input"
-            [class.field-error]="form.controls.password.touched && form.controls.password.invalid"
+            class="form-control custom-input pe-5"
+            [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid"
             formControlName="password"
             placeholder="Enter your password"
             autocomplete="current-password"
           />
-          <button type="button" class="eye-btn" (click)="togglePassword()">
-            {{ showPassword() ? '🙈' : '👁' }}
+          <button 
+            type="button" 
+            class="btn eye-btn position-absolute top-50 end-0 translate-middle-y border-0 text-muted shadow-none" 
+            (click)="togglePassword()">
+            <i class="bi fs-5 hover-text-blue" [ngClass]="showPassword() ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
           </button>
         </div>
-        <small *ngIf="form.controls.password.touched && form.controls.password.invalid" class="error-text">Password is required</small>
+        
+        <div *ngIf="form.controls.password.touched && form.controls.password.invalid" class="invalid-feedback custom-error">
+          Password is required
+        </div>
       </div>
 
-      <button type="submit" class="submit-btn" [disabled]="loading()">
-        <span *ngIf="loading()" class="spinner"></span>
+      <button 
+        type="submit" 
+        class="btn custom-submit-btn w-100 rounded-3 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 text-uppercase tracking-wider" 
+        [disabled]="loading()">
+        <span *ngIf="loading()" class="spinner-border spinner-border-sm" role="status"></span>
+        <i *ngIf="!loading()" class="bi bi-box-arrow-in-right fs-5"></i>
         <span>{{ loading() ? 'Signing in...' : 'Sign In' }}</span>
       </button>
 
     </form>
 
-    <p class="auth-footer">
+    <p class="text-center text-muted small m-0 mt-4 pt-3 border-top border-light">
       Don't have an account?
-      <a routerLink="/register" class="auth-link">Create one here</a>
+      <a routerLink="/register" class="auth-link fw-bold text-decoration-none ms-1">Create one here</a>
     </p>
 
   </div>

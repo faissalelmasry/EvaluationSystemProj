@@ -8,7 +8,7 @@ import { AuthService } from '../../../../core/services/auth';
   standalone: true,
   imports: [NgIf],
   templateUrl: './navbar.html',
-  styleUrls: ['./navbar.css']
+  styleUrls: ['./navbar.scss']
 })
 export class TopBarComponent implements OnInit {
   pageTitle: string = 'Dashboard';

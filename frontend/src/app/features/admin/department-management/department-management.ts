@@ -11,7 +11,7 @@ import { DepartmentForm } from '../department-form/department-form';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DepartmentForm],
   templateUrl: './department-management.html',
-  styleUrls: ['./department-management.css'],
+  styleUrls: ['./department-management.scss'],
 })
 export class DepartmentManagement implements OnInit {
   private departmentService = inject(DepartmentService);

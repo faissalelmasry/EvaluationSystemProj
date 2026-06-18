@@ -9,7 +9,7 @@ using EvaluationSystem.Application.Validators;
 using EvaluationSystem.Domain.Models;
 using EvaluationSystem.Infrastructure.Data;
 using EvaluationSystem.Infrastructure.Repositories;
-//using EvaluationSystem.Infrastructure.Seeds;
+using EvaluationSystem.Infrastructure.Seeds;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -174,7 +174,7 @@ namespace EvaluationSystem.Api
             });
             var app = builder.Build();
 
-            //await DataSeeder.InitializeAsync(app.Services);
+            await DataSeeder.InitializeAsync(app.Services);
 
             app.UseSerilogRequestLogging();
 

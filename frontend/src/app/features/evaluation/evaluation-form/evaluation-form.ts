@@ -97,19 +97,30 @@ export class EvaluationFormComponent implements OnInit {
       textAnswer: [''],
     });
   }
-
-  onSubmit(): void {
+onSubmit(): void {
     if (this.evaluationForm.invalid) return;
 
     const responses = this.evaluationForm.value.responses.map((res: any) => {
-      let score = res.score ?? 0;
+      let score = Number(res.score) || 0;
+      const qType = String(res.questionType).toLowerCase();
 
-      if (res.questionType === 5 || res.questionType === 'Boolean') {
-        score = res.selectedOption === 'Yes' ? res.maxScore : 0;
+      if (qType === '5' || qType === 'boolean') {
+        const isYes = String(res.selectedOption).toLowerCase() === 'yes';
+        score = isYes ? Number(res.maxScore) : 0;
       }
 
-      const responseObj: any = { criterionId: res.criterionId, score };
-      if (res.textAnswer?.trim()) responseObj.textAnswer = res.textAnswer;
+      const responseObj: any = { 
+        criterionId: res.criterionId, 
+        score: score 
+      };
+      
+      if (res.textAnswer?.trim()) {
+        responseObj.textAnswer = res.textAnswer;
+      }
+      
+      if (res.selectedOption?.trim()) {
+        responseObj.selectedOption = res.selectedOption;
+      }
 
       return responseObj;
     });
@@ -124,5 +135,36 @@ export class EvaluationFormComponent implements OnInit {
         alert('Backend rejected the save! Check the browser console for details.');
       }
     });
+  }
+  // --- Pagination State ---
+  currentSectionIndex = 0;
+
+  get isFirstSection(): boolean {
+    return this.currentSectionIndex === 0;
+  }
+
+  get isLastSection(): boolean {
+    const sections = this.templateData()?.sections || [];
+    return this.currentSectionIndex === sections.length - 1;
+  }
+
+  get progressPercentage(): number {
+    const sections = this.templateData()?.sections || [];
+    if (sections.length === 0) return 0;
+    return ((this.currentSectionIndex + 1) / sections.length) * 100;
+  }
+
+  nextSection(): void {
+    if (!this.isLastSection) {
+      this.currentSectionIndex++;
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top of next section
+    }
+  }
+
+  prevSection(): void {
+    if (!this.isFirstSection) {
+      this.currentSectionIndex--;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 }

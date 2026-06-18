@@ -1,0 +1,125 @@
+// --- Sidebar Variables ---
+$sidebar-bg: #15294f; // Matches Top Bar text color for unity
+$sidebar-text: rgba(248, 250, 252, 0.7);
+$sidebar-text-hover: #ffffff;
+$primary-blue: #4f6ef6;
+$sidebar-width-desktop: 260px;
+$sidebar-width-tablet: 70px;
+
+.sidebar {
+  width: $sidebar-width-desktop;
+  min-width: $sidebar-width-desktop;
+  background: $sidebar-bg;
+  z-index: 1000;
+  transition: width 0.3s ease;
+
+  .text-primary-custom {
+    color: $primary-blue !important;
+  }
+}
+
+.logo {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+}
+
+// --- Navigation Items ---
+.nav-item {
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+
+  a {
+    padding: 0.85rem 1.5rem;
+    color: $sidebar-text;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    
+    a {
+      color: $sidebar-text-hover;
+      padding-left: 1.85rem; // Subtle push-right effect
+    }
+  }
+
+  &.active {
+    background: linear-gradient(90deg, rgba(79, 110, 246, 0.15) 0%, rgba(79, 110, 246, 0) 100%);
+    border-left-color: $primary-blue;
+
+    a {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    
+    .icon {
+      color: $primary-blue;
+    }
+  }
+}
+
+.logout-item {
+  &:hover a {
+    color: #ff6b6b; // Soft red on hover for logout
+  }
+}
+
+.icon {
+  font-size: 1.15rem;
+  min-width: 1.5rem;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.label {
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+// --- Responsive Rules ---
+@media (max-width: 1024px) {
+  .sidebar {
+    width: $sidebar-width-tablet;
+    min-width: $sidebar-width-tablet;
+
+    .sidebar-header {
+      padding: 1.5rem 0.5rem !important;
+      justify-content: center;
+    }
+
+    .logo-text, .label, .sidebar-footer, .nav-divider {
+      display: none;
+    }
+
+    .nav-item {
+      a {
+        justify-content: center;
+        padding: 0.85rem 0;
+      }
+      &:hover a {
+        padding-left: 0; // Disable push-right on small screens
+      }
+    }
+  }
+}
+
+// --- Custom Scrollbar ---
+.sidebar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
