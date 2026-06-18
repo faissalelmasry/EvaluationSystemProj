@@ -25,11 +25,8 @@ export class Assignmentform implements OnInit {
 
   assignmentForm!: FormGroup;
   templatesLookup: any[] = [];
-  
-  // 👥 SPLIT LOOKUPS FOR CLEANER DROPDOWNS
   evaluatorsLookup: any[] = [];
   evaluateesLookup: any[] = [];
-  
   isLoading: boolean = false;
   isSubmitted: boolean = false;
   errorMessage: string | null = null;
@@ -60,26 +57,8 @@ export class Assignmentform implements OnInit {
         this.templatesLookup = res.templates;
         const allUsers = res.users.items || [];
         
-        // 🔎 FILTER: Evaluators Only
-        this.evaluatorsLookup = allUsers.filter((u: any) => {
-          const roleStr = u.role || '';
-          const rolesArr = Array.isArray(u.roles) ? u.roles : [];
-          return roleStr.toLowerCase() === 'evaluator' || 
-                 rolesArr.some((r: any) => r.toString().toLowerCase() === 'evaluator');
-        });
-
-        // 🔎 FILTER: Evaluatees Only
-        this.evaluateesLookup = allUsers.filter((u: any) => {
-          const roleStr = u.role || '';
-          const rolesArr = Array.isArray(u.roles) ? u.roles : [];
-          return roleStr.toLowerCase() === 'evaluatee' || 
-                 rolesArr.some((r: any) => r.toString().toLowerCase() === 'evaluatee');
-        });
-        
-        // Fallback check: If the filters return absolutely nothing because of a role string mismatch,
-        // we fill them with all users so the UI doesn't completely break.
-        if (this.evaluatorsLookup.length === 0) this.evaluatorsLookup = allUsers;
-        if (this.evaluateesLookup.length === 0) this.evaluateesLookup = allUsers;
+        this.evaluatorsLookup = allUsers;
+        this.evaluateesLookup = allUsers;
 
         this.route.queryParams.subscribe(params => {
           if (params['id']) {
@@ -114,7 +93,6 @@ export class Assignmentform implements OnInit {
         let evaluatorIdValue = res.evaluatorId || res.evaluator?.id || res.evaluatorID;
         let evaluateeIdValue = res.evaluateeId || res.evaluatee?.id || res.evaluateeID;
 
-        // Combining lookups here to ensure edit mode can still search all active users
         const combinedUsers = [...this.evaluatorsLookup, ...this.evaluateesLookup];
 
         if (!evaluatorIdValue && res.evaluatorName) {

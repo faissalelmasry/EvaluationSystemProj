@@ -40,6 +40,9 @@ export class Report implements OnInit {
     }).subscribe({
       next: (res: any) => {
         this.isLoading = false;
+        
+        console.log('=== RAW BACKEND RESPONSE ===', res);
+
         setTimeout(() => {
           this.destroyCharts();
           this.initializeCharts(res);
@@ -47,7 +50,7 @@ export class Report implements OnInit {
         }, 50);
       },
       error: (err) => {
-        console.error(err);
+        console.error('API Error:', err);
         this.errorMessage = 'Failed to load report analytics. Please verify backend endpoints.';
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -66,10 +69,11 @@ export class Report implements OnInit {
     }
 
     const dash = res.dashboard?.data || res.dashboard?.result || res.dashboard;
+    const compData = res.completion?.data || res.completion?.result || res.completion;
     
-    const deptArray = Array.isArray(res.departments) ? res.departments : (res.departments?.items || res.departments?.data || []);
-    const deptLabels = deptArray.map((d: any) => d.departmentName || d.DepartmentName || '');
-    const deptScores = deptArray.map((d: any) => d.averageScore || d.AverageScore || 0);
+    const deptArray = Array.isArray(res.departments) ? res.departments : (res.departments?.data || []);
+    const deptLabels = deptArray.map((d: any) => d.departmentName || d.name || d.Name || '');
+    const deptScores = deptArray.map((d: any) => d.averageScore || d.totalScore || d.score || 0);
 
     const c1 = new Chart(this.deptChartRef.nativeElement, {
       type: 'bar',
@@ -86,9 +90,9 @@ export class Report implements OnInit {
     });
     this.chartInstances.push(c1);
 
-    const compData = res.completion?.data || res.completion?.result || res.completion;
-    const completed = compData?.completedEvaluations || compData?.completedAssignments || dash?.completedEvaluations || 0;
-    const pending = compData?.pendingEvaluations || compData?.pendingAssignments || dash?.pendingEvaluations || 0;
+    const completed = compData?.completedAssignments || dash?.completedEvaluations || 0;
+    const total = compData?.totalAssignments || 0;
+    const pending = total > 0 ? (total - completed) : (compData?.pendingEvaluations || dash?.pendingEvaluations || 0);
     
     const c2 = new Chart(this.completionChartRef.nativeElement, {
       type: 'doughnut',
@@ -103,9 +107,9 @@ export class Report implements OnInit {
     });
     this.chartInstances.push(c2);
 
-    const topScoresArray = Array.isArray(res.topScores) ? res.topScores : (res.topScores?.data || res.topScores?.items || dash?.topScoreEvaluations || []);
-    const topLabels = topScoresArray.map((u: any) => u.evaluateeName || u.name || u.employeeName || '');
-    const topValues = topScoresArray.map((u: any) => u.score || u.Score || u.averageScore || 0);
+    const topScoresArray = res.topScores?.topEvaluatees || [];
+    const topLabels = topScoresArray.map((u: any) => u.evaluateeName || u.fullName || u.name || '');
+    const topValues = topScoresArray.map((u: any) => u.score || u.totalScore || u.percentage || u.averageScore || 0);
 
     const c3 = new Chart(this.topEvaluateesChartRef.nativeElement, {
       type: 'bar',
@@ -122,9 +126,9 @@ export class Report implements OnInit {
     });
     this.chartInstances.push(c3);
 
-    const lowScoresArray = dash?.lowScoreEvaluations || dash?.lowScores || [];
-    const lowLabels = lowScoresArray.map((u: any) => u.evaluateeName || u.name || u.employeeName || '');
-    const lowValues = lowScoresArray.map((u: any) => u.score || u.Score || 0);
+    const lowScoresArray = res.topScores?.lowScoreEvaluations || [];
+    const lowLabels = lowScoresArray.map((u: any) => u.evaluateeName || u.fullName || u.name || '');
+    const lowValues = lowScoresArray.map((u: any) => u.score || u.totalScore || u.percentage || 0);
 
     const c4 = new Chart(this.lowScoresChartRef.nativeElement, {
       type: 'bar',
@@ -141,24 +145,46 @@ export class Report implements OnInit {
     });
     this.chartInstances.push(c4);
 
-    const monthlyTrends = dash?.monthlyTrends || dash?.MonthlyTrends || [];
-    const trendLabels = monthlyTrends.map((t: any) => t.month || t.Month || t.label || '');
-    const trendValues = monthlyTrends.map((t: any) => t.rate || t.Rate || t.count || t.value || 0);
+    const monthlyTrends = compData?.monthlyTrends || dash?.monthlyTrends || [];
+    const trendLabels = monthlyTrends.map((t: any) => t.month || '');
+    const createdValues = monthlyTrends.map((t: any) => t.totalCreated || 0);
+    const completedValues = monthlyTrends.map((t: any) => t.totalCompleted || 0);
 
     const c5 = new Chart(this.trendsChartRef.nativeElement, {
       type: 'line',
       data: {
         labels: trendLabels,
-        datasets: [{
-          label: 'Evaluation Activity Rate',
-          data: trendValues,
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          fill: true,
-          tension: 0.3
-        }]
+        datasets: [
+          {
+            label: 'Assignments Created',
+            data: createdValues,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.05)',
+            fill: true,
+            tension: 0.3
+          },
+          {
+            label: 'Assignments Completed',
+            data: completedValues,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+            tension: 0.3
+          }
+        ]
       },
-      options: { responsive: true, maintainAspectRatio: false }
+      options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
     });
     this.chartInstances.push(c5);
   }
