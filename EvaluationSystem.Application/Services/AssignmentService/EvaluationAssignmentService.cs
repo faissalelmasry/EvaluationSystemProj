@@ -47,11 +47,6 @@ namespace EvaluationSystem.Application.Services.AssignmentService
                 throw new NotFoundException("The operating admin was not found in the system.");
             }
 
-            //if (admin.JobTitle != JobTitle.Manager)
-            //{
-            //    throw new BadRequestException("The provided Admin ID does not have the authority to assign evaluations.");
-            //}
-
             var template = await _evalutionTemplate.GetByIdAsync(dto.TemplateId);
             if (template == null)
             {
@@ -66,19 +61,35 @@ namespace EvaluationSystem.Application.Services.AssignmentService
                 throw new NotFoundException("The evaluator or evaluatee was not found in the system.");
             }
 
-            if (evaluatee.JobTitle == JobTitle.Manager && evaluator.JobTitle != JobTitle.Manager)
+            if ((int)evaluator.JobTitle == 0)
             {
-                throw new BadRequestException("Only managers are authorized to evaluate other managers.");
+                throw new BadRequestException("Administrators are not authorized to evaluate anyone.");
             }
 
-            if (evaluator.JobTitle == JobTitle.Student && evaluatee.JobTitle != JobTitle.Student)
+            if (evaluator.JobTitle == JobTitle.Teacher && evaluatee.JobTitle != JobTitle.Student)
             {
-                throw new BadRequestException("Students are only allowed to evaluate peer students.");
+                throw new BadRequestException("Teachers are only authorized to evaluate students.");
             }
-
-            if (evaluator.JobTitle == JobTitle.Client && (evaluatee.JobTitle == JobTitle.Manager || evaluatee.JobTitle == JobTitle.Teacher))
+            else if (evaluator.JobTitle == JobTitle.Student &&
+                     evaluatee.JobTitle != JobTitle.Teacher &&
+                     evaluatee.JobTitle != JobTitle.Student)
             {
-                throw new BadRequestException("Clients cannot evaluate academic or managerial staff.");
+                throw new BadRequestException("Students are only authorized to evaluate teachers or peer students.");
+            }
+            else if (evaluator.JobTitle == JobTitle.Manager &&
+                     evaluatee.JobTitle != JobTitle.Manager &&
+                     evaluatee.JobTitle != JobTitle.Teacher &&
+                     evaluatee.JobTitle != JobTitle.Employee)
+            {
+                throw new BadRequestException("Managers are only authorized to evaluate other managers, teachers, or employees.");
+            }
+            else if (evaluator.JobTitle == JobTitle.Client && evaluatee.JobTitle != JobTitle.Employee)
+            {
+                throw new BadRequestException("Clients are only authorized to evaluate employees.");
+            }
+            else if (evaluator.JobTitle == JobTitle.Employee)
+            {
+                throw new BadRequestException("Regular employees are not authorized to perform evaluations.");
             }
 
             var assignment = new EvaluationAssignment

@@ -6,6 +6,7 @@ import { TemplateService } from '../../../core/services/template.service';
 import { UserService } from '../../../core/services/user';
 import { Router, ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { CreateAssignmentDto, AssignmentResponseDto } from '../../../core/models/assignmentmodels';
 
 @Component({
   selector: 'app-assignmentform',
@@ -27,6 +28,7 @@ export class Assignmentform implements OnInit {
   templatesLookup: any[] = [];
   evaluatorsLookup: any[] = [];
   evaluateesLookup: any[] = [];
+  private allUsersCache: any[] = [];
   isLoading: boolean = false;
   isSubmitted: boolean = false;
   errorMessage: string | null = null;
@@ -55,10 +57,24 @@ export class Assignmentform implements OnInit {
     }).subscribe({
       next: (res) => {
         this.templatesLookup = res.templates;
-        const allUsers = res.users.items || [];
+        this.allUsersCache = res.users.items || [];
         
-        this.evaluatorsLookup = allUsers;
-        this.evaluateesLookup = allUsers;
+        this.evaluatorsLookup = this.allUsersCache.filter(u => {
+          const isEmployee = u.jobTitle === 4 || u.jobTitle === 'Employee';
+          const isAdminJob = u.jobTitle === 0 || u.jobTitle === 'Admin' || u.jobTitle === null || u.jobTitle === undefined;
+          
+          const roleStr = (u.role || '').toLowerCase();
+          const rolesArr = Array.isArray(u.roles) ? u.roles.map((r: any) => r.toString().toLowerCase()) : [];
+          const isAdminRole = roleStr === 'admin' || rolesArr.includes('admin') || u.roleId === 2;
+
+          return !isEmployee && !isAdminJob && !isAdminRole;
+        });
+
+        this.evaluateesLookup = this.allUsersCache;
+
+        this.assignmentForm.get('evaluatorId')?.valueChanges.subscribe(evaluatorId => {
+          this.filterEvaluateesByEvaluator(evaluatorId);
+        });
 
         this.route.queryParams.subscribe(params => {
           if (params['id']) {
@@ -79,9 +95,35 @@ export class Assignmentform implements OnInit {
     });
   }
 
+  private filterEvaluateesByEvaluator(evaluatorId: any) {
+    if (!evaluatorId) {
+      this.evaluateesLookup = this.allUsersCache;
+      return;
+    }
+
+    const evaluator = this.allUsersCache.find(u => u.id === Number(evaluatorId));
+    if (!evaluator) return;
+
+    const role = evaluator.jobTitle;
+
+    if (role === 1 || role === 'Teacher') {
+      this.evaluateesLookup = this.allUsersCache.filter(u => u.jobTitle === 2 || u.jobTitle === 'Student');
+    } else if (role === 2 || role === 'Student') {
+      this.evaluateesLookup = this.allUsersCache.filter(u => u.jobTitle === 1 || u.jobTitle === 'Teacher' || u.jobTitle === 2 || u.jobTitle === 'Student');
+    } else if (role === 3 || role === 'Manager') {
+      this.evaluateesLookup = this.allUsersCache.filter(u => u.jobTitle === 3 || u.jobTitle === 'Manager' || u.jobTitle === 1 || u.jobTitle === 'Teacher' || u.jobTitle === 4 || u.jobTitle === 'Employee');
+    } else if (role === 5 || role === 'Client') {
+      this.evaluateesLookup = this.allUsersCache.filter(u => u.jobTitle === 4 || u.jobTitle === 'Employee');
+    } else {
+      this.evaluateesLookup = [];
+    }
+
+    this.cdr.detectChanges();
+  }
+
   private loadAssignmentForEdit(id: number) {
     this.assignmentService.getAssignmentById(id).subscribe({
-      next: (data) => {
+      next: (data: AssignmentResponseDto) => {
         const res = data as any;
 
         let formattedDate = '';
@@ -93,10 +135,8 @@ export class Assignmentform implements OnInit {
         let evaluatorIdValue = res.evaluatorId || res.evaluator?.id || res.evaluatorID;
         let evaluateeIdValue = res.evaluateeId || res.evaluatee?.id || res.evaluateeID;
 
-        const combinedUsers = [...this.evaluatorsLookup, ...this.evaluateesLookup];
-
         if (!evaluatorIdValue && res.evaluatorName) {
-          const foundUser = combinedUsers.find(u => 
+          const foundUser = this.allUsersCache.find(u => 
             u.name === res.evaluatorName || 
             u.fullName === res.evaluatorName || 
             u.username === res.evaluatorName
@@ -107,7 +147,7 @@ export class Assignmentform implements OnInit {
         }
 
         if (!evaluateeIdValue && res.evaluateeName) {
-          const foundUser = combinedUsers.find(u => 
+          const foundUser = this.allUsersCache.find(u => 
             u.name === res.evaluateeName || 
             u.fullName === res.evaluateeName || 
             u.username === res.evaluateeName
@@ -146,7 +186,7 @@ export class Assignmentform implements OnInit {
     this.isLoading = true;
     
     const formValues = this.assignmentForm.value;
-    const dto = {
+    const dto: CreateAssignmentDto = {
       templateId: Number(formValues.templateId),
       evaluatorId: Number(formValues.evaluatorId),
       evaluateeId: Number(formValues.evaluateeId),
