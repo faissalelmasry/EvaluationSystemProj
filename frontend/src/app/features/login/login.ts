@@ -4,6 +4,7 @@ import { AuthService } from '../../core/services/auth';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +53,7 @@ export class Login {
           localStorage.setItem('user', JSON.stringify(userInfo));
         }
         this.loading.set(false);
-        this.router.navigate(['/admin']);
+        this.redirectBasedOnRole();
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
@@ -100,4 +101,20 @@ export class Login {
       return null;
     }
   }
+  private redirectBasedOnRole() {
+  const token = this.authService.getToken();
+  const decoded: any = jwtDecode(token!);
+  const role = (
+    decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ||
+    decoded['role'] || ''
+  ).toLowerCase();
+
+  switch (role) {
+    case 'admin':     this.router.navigate(['/admin']); break;
+    case 'evaluator': this.router.navigate(['/pending']); break;
+    case 'evaluatee': this.router.navigate(['/history']); break;
+    case 'reviewer':  this.router.navigate(['/reviews']); break;
+    default:          this.router.navigate(['/login']); break;
+  }
+}
 }

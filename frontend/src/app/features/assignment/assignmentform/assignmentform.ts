@@ -60,17 +60,18 @@ export class Assignmentform implements OnInit {
         this.allUsersCache = res.users.items || [];
         
         this.evaluatorsLookup = this.allUsersCache.filter(u => {
-          const isEmployee = u.jobTitle === 4 || u.jobTitle === 'Employee';
-          const isAdminJob = u.jobTitle === 0 || u.jobTitle === 'Admin' || u.jobTitle === null || u.jobTitle === undefined;
-          
           const roleStr = (u.role || '').toLowerCase();
           const rolesArr = Array.isArray(u.roles) ? u.roles.map((r: any) => r.toString().toLowerCase()) : [];
-          const isAdminRole = roleStr === 'admin' || rolesArr.includes('admin') || u.roleId === 2;
-
-          return !isEmployee && !isAdminJob && !isAdminRole;
+          
+          return roleStr === 'evaluator' || rolesArr.includes('evaluator') || u.roleId === 3;
         });
 
-        this.evaluateesLookup = this.allUsersCache;
+        this.evaluateesLookup = this.allUsersCache.filter(u => {
+          const roleStr = (u.role || '').toLowerCase();
+          const rolesArr = Array.isArray(u.roles) ? u.roles.map((r: any) => r.toString().toLowerCase()) : [];
+          
+          return roleStr === 'evaluatee' || rolesArr.includes('evaluatee') || u.roleId === 4;
+        });
 
         this.assignmentForm.get('evaluatorId')?.valueChanges.subscribe(evaluatorId => {
           this.filterEvaluateesByEvaluator(evaluatorId);
